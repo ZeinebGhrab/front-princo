@@ -37,7 +37,7 @@ export default function SignUp() {
     
     return(
         <div className='ds-flex ds-flex-col ds-center p-3'>
-        <form className='ds-blur4 p-4 border rounded ds-w-35 ds-m-30'>
+        <form className='ds-blur4 p-4 border rounded ds-w-35 ds-m-1'>
         <Text 
             text='Inscription'
             className='ds-flex ds-mb-25 ds-justify-center ds-text-primary'

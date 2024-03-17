@@ -4,7 +4,7 @@ import RequireAuthentication from './routes/RequireAuthentication'
 import PageNotFound from './routes/PageNotFound'
 import ConnectorsList from './components/ConnectorsList'
 import SignUp from './components/SignUp'
-import Profile from './components/Profile'
+import ProfileDetails from './components/ProfileDetails'
 import InvoiceDetails from './components/InvoiceDetails'
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
           <Route path='/sign' element={<SignUp/>}/>
           <Route element={<RequireAuthentication/>}>
             <Route path='/' element={<ConnectorsList/>}/>
-            <Route path='/profile' element={<Profile/>}/>
+            <Route path='/profile' element={<ProfileDetails/>}/>
             <Route path='/invoiceDetails' element={<InvoiceDetails/>}/>
             <Route path='*' element={<PageNotFound/>}/>
           </Route>

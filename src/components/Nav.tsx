@@ -27,7 +27,7 @@ export default function Nav() {
                         size={Size.small}
                         onClick={()=>navigate('/')} />
                     <Text
-                        text='Mon Profil'
+                        text='Mon profil'
                         className='ds-flex ds-justify-center ds-text-primary'
                         type={TextType['type-4']} />
                 </div>
@@ -35,7 +35,8 @@ export default function Nav() {
                     type={Type.secondary}
                     text='Modifier'
                     className="ds-mr-20"
-                    size={Size.small} />
+                    size={Size.small} 
+                />
             </div>
             <Navbar
             className="ds-bg-white p-4"

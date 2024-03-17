@@ -4,7 +4,7 @@ import User from "../../interfaces/User";
 import SignUser from "../../interfaces/SignUser";
 
 const initialState = {
-    data:[] as User[],
+    data:{} as User ,
     status: "idle", 
     error : {},
   };
@@ -22,6 +22,27 @@ export const createUser = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+    }
+    catch(error){
+      console.log(error);
+      if (error instanceof AxiosError && error.response) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      } 
+      throw error;
+    }
+    }
+  );
+
+  export const getUser = createAsyncThunk(
+    '/getUser',
+    async ( { id ,token }: {id: string | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
+    try{
+      const response = await axios.get(`http://localhost:5000/users/${id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
     }
     catch(error){
       console.log(error);
@@ -86,6 +107,16 @@ export const deleteUser = createAsyncThunk(
         state.status = 'succeeded';
       })
       .addCase(createUser.rejected, (state, action) => {
+        state.error = action.error.message || 'error occurred';
+      })
+      .addCase(getUser.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(getUser.rejected, (state, action) => {
         state.error = action.error.message || 'error occurred';
       })
       .addCase(deleteUser.pending, (state) => {

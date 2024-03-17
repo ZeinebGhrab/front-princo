@@ -1,4 +1,4 @@
-import { Navbar, NavbarPosition } from "@piximind/ds-p-23";
+import { Icon, Navbar, NavbarPosition } from "@piximind/ds-p-23";
 
 export default function NavBar () {
 
@@ -11,8 +11,8 @@ export default function NavBar () {
 
 
     return(
-        <>
-         <Navbar 
+        <>  
+        <Navbar 
          position={NavbarPosition.left}
          className="ds-blur1 p-4"  
          links={links}
@@ -20,9 +20,8 @@ export default function NavBar () {
          btnText='Acheter crédit' 
          onClick={()=>console.log('ee')}
          withIcon={true}
-         icons= {[{isAvatar:true , img:'https://storage.googleapis.com/uscimages/account.png'}]}
-         
          />
+         <Icon icon='https://storage.googleapis.com/uscimages/account.png'/>
         </>
     )
 }

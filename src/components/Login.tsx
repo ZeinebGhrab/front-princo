@@ -36,7 +36,7 @@ export default function Login() {
 
     return (
         <div className='ds-flex ds-flex-col ds-center p-5'>
-            <form className='ds-blur4 p-4 border rounded ds-w-35 ds-m-80'>
+            <form className='ds-blur4 p-4 border rounded ds-w-35 ds-m-40'>
                 <Text 
                     text='Connexion'
                     className='ds-flex ds-mb-30 ds-justify-center ds-text-primary'

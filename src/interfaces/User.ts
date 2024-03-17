@@ -5,7 +5,7 @@ export default interface User {
     email: string,
     gander?: string,
     tel?: string,
-    birthDate: Date,
+    birthDate: string,
     country: string,
     profile: string,
     password: string,
