@@ -1,19 +1,18 @@
 import NavBar from "./NavBar";
-import { ETypesInput, Size,  TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
-import { Button, Text, Avatar, Col, Row, Radio, Modal, ModalRefType, Input, Checkbox } from '@piximind/ds-p-23';
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
+import { Size,  TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
+import { Button, Text, Avatar, Col, Row, Radio,  ModalRefType,} from '@piximind/ds-p-23';
+import { useCallback, useEffect, useRef } from "react";
 import Nav from "./Nav";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { getUser } from "../redux/reducers/ProfileReducer";
+import PasswordModal from "./PasswordModal";
+import EditProfile from "./EditProfile";
 
 export default function ProfileDetails() {
 
     const modalRef = useRef<ModalRefType>(null);
-    const [password,setPassword] = useState('');
-    const [confirmPass, setConfirmPass] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
-    
+    const modalEditRef = useRef<ModalRefType>(null);
+  
     const dispatch = useAppDispatch();
     const token = useAppSelector(state=>state.auth.data?.accessToken)
     const id = useAppSelector(state=>state.auth.data?._id)
@@ -28,16 +27,16 @@ export default function ProfileDetails() {
         }
     },[dispatch, id, token]);
 
-    const handleOpenModal = () => {
-        if (modalRef.current) {
-          modalRef.current.onOpen();
+    const handleOpenModal = (ref : React.RefObject<ModalRefType>) => {
+        if (ref.current) {
+            ref.current.onOpen();
         }
       };
     
-    const cancel =()=>{
-        modalRef.current?.onClose();
-
+    const cancel =(ref : React.RefObject<ModalRefType>)=>{
+        ref.current?.onClose();
     }
+
 
     useEffect(()=>{
         fetchData()
@@ -47,7 +46,7 @@ export default function ProfileDetails() {
     return (
         <>
             <NavBar/>
-            <Nav/>
+            <Nav handleModify={()=>handleOpenModal(modalEditRef)}/>
             <div className="ds-ml-100 ds-mt-10">
                 <Row>
                     <Col>
@@ -82,7 +81,7 @@ export default function ProfileDetails() {
                         <Radio
                             label='Identité de genre'
                             name='gender'
-                            value={data.gander}
+                            value={data.gender}
                             className="ds-ml-5 ds-text-primary500 ds-text-size-18"
                             disabled={false}
                             data={[{ label: 'Homme', value: 'Homme' }, { label: 'Femme', value: 'Femme' }]}
@@ -130,69 +129,24 @@ export default function ProfileDetails() {
                     </Col>
                 </Row>
                 <Row className="ds-mt-10">
-                    <Button 
+                  <Button 
                     text='Changer mon mot de passe'
+                    type={Type.primary}
                     size={Size.small} 
-                    onClick={handleOpenModal} 
+                    className="ds-bg-grey"
+                    onClick={() => handleOpenModal(modalRef)}
                     />
                 </Row>
             </div>
-            <Modal ref={modalRef}  withCloseIcon={true} contentClassName="ds-m-200">
-                <Text
-                    text='Changer mon mot de passe'
-                    className='ds-flex ds-mb-2 ds-text-primary '
-                    type={TextType['type-5']} />
-                <hr/>
-                <Input 
-                    label='Nouveau mot de passe'
-                    type = {ETypesInput.text} 
-                    value={password} 
-                    name='password' 
-                    autoComplete='current-password'
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword( e.target.value)}
-                />
-                <Text
-                    text='Minimum 8 caractères'
-                    className="ds-text-error600"
-                    type={TextType.caption} 
-                />
-                <Input 
-                    label='Confirmer le mot de passe'
-                    type = {ETypesInput.text} 
-                    value={confirmPass} 
-                    name='confirmPass' 
-                    autoComplete='current-confirmPass'
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPass( e.target.value)}
-                />
-                <Text
-                    text='Minimum 8 caractères'
-                    className="ds-text-error600"
-                    type={TextType.caption} />
-                <Checkbox 
-                    label='Générer un mot de passe'
-                    labelClassName="ds-text-secondaryDarker ds-text-size-10"
-                    checked={isChecked}
-                    disabled={false}
-                    type={TypeCheck.checkbox}
-                    onClick={()=>setIsChecked(!isChecked)}
-                />
-                <Row className="ds-mt-10">
-                    <Col>
-                    <Button
-                    type={Type.secondary}
-                    text='Annuler'
-                    size={Size.small} 
-                    onClick={cancel}/>
-                    </Col>
-                    <Col>
-                    <Button
-                    type={Type.primary}
-                    text='Enregistrer'
-                    size={Size.small} 
-                    />
-                    </Col>
-                </Row>
-            </Modal>
+            <PasswordModal 
+                modalRef={modalRef}
+                cancel={()=>cancel(modalRef)}
+            />
+            <EditProfile
+                modalRef={modalEditRef}
+                cancel={()=>cancel(modalEditRef)}
+                data = {data}
+            />
         </>
     )
 }

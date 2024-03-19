@@ -11,13 +11,15 @@ import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IA
 
 export default function Login() {
     const navigate = useNavigate();
-    const [user, setUser] = useState<LoginUser>({} as LoginUser);
+    const [user, setUser] = useState<LoginUser>({email: '', password :'' } as LoginUser);
     const validation = new Validation();
     const dispatch = useAppDispatch();
 
+
+
     const handleConnect = (e: React.FormEvent): void => {
         e.preventDefault();
-        console.log(user)
+      
         if (!(validation.isMail(user.email) && validation.isNotEmpty(user.password))) {
             return;
         }
@@ -47,26 +49,23 @@ export default function Login() {
                     value={user.email} 
                     name='email' 
                     autoComplete='current-email'
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUser({...user, email : e.target.value})}/>
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUser({...user, email : e.target.value})}
+                />
                 <Input 
-                    label='Mot de pase'
+                    label='Mot de passe'
                     type = {ETypesInput.text} 
                     value={user.password} 
                     name='password' 
                     autoComplete='current-password'
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>)=> setUser({...user, password : e.target.value})}/>
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>)=> setUser({...user, password : e.target.value})}
+                    />
                     <Button 
                       type={Type.primaryLink}
                       className='ds-flex ds-justify-end'
                       text= 'Mot de passe oublié ?'
                     />
-                <Checkbox 
-                    label='Se souvenir de moi'
-                    checked={user.memorise}
-                    disabled={false}
-                    type={TypeCheck.checkbox}
-                    onClick={(e: React.ChangeEvent<HTMLInputElement>)=>setUser({...user, memorise : e.target.checked})}
-                />
+   
+ 
                 <Button
                     type={Type.primary}
                     className='ds-mb-5 ds-mt-5 ds-w-100'
@@ -90,3 +89,14 @@ export default function Login() {
         </div>
     );
 }
+
+/*
+               <Checkbox 
+                    label='Se souvenir de moi'
+                    className='ds-bg-white'
+                    checked={user.memorise}
+                    disabled={false}
+                    type={TypeCheck.checkbox}
+                    onClick={(e: React.ChangeEvent<HTMLInputElement>)=>setUser({...user, memorise : e.target.checked})}
+                />
+*/

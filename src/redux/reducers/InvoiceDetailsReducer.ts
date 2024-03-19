@@ -35,7 +35,7 @@ export const getInvoiceDetails = createAsyncThunk(
       try {
         await axios.put(`http://localhost:5000/users/${invoice?._id}`,
         {
-            LegalName: invoice?.LegalName,
+            legalName: invoice?.legalName,
             mat : invoice?.mat,
             adr :invoice?.adr,
             country : invoice?.country,

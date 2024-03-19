@@ -1,27 +1,46 @@
-import { Icon, Navbar, NavbarPosition } from "@piximind/ds-p-23";
+import { Navbar, NavbarPosition } from "@piximind/ds-p-23";
+
+
 
 export default function NavBar () {
 
   const links = [
     {
-      label:'Princo',
-      path:'/'
+      label:'',
+      path:'/',
+      sousLinks : [
+        {
+          label : 'Mon profil',
+          path:'/profile'
+        },
+        {
+          label : 'Mon crèdit',
+          path : '/credit'
+        },
+        {
+          label : 'Mes factures',
+          path : '/invoices'
+        },
+        {
+          label:'Déconnexion',
+          path : '/login'
+        }
+    ]
     }
   ]
 
 
     return(
         <>  
-        <Navbar 
-         position={NavbarPosition.left}
-         className="ds-blur1 p-4"  
-         links={links}
-         withButton={true}  
-         btnText='Acheter crédit' 
-         onClick={()=>console.log('ee')}
-         withIcon={true}
-         />
-         <Icon icon='https://storage.googleapis.com/uscimages/account.png'/>
+        <div className="ds-flex ds-justify-end ds-blur1">
+            <Navbar 
+                position={NavbarPosition.right}
+                className="ds-box-shadow1"  
+                links={links}
+                isLogout={false}
+                withButton ={false}
+            />
+        </div>
         </>
     )
 }

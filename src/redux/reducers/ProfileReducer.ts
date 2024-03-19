@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import User from "../../interfaces/User";
-import SignUser from "../../interfaces/SignUser";
+import { typeState } from "@piximind/custom-hook/lib/esn/interfaces";
 
 const initialState = {
     data:{} as User ,
@@ -11,13 +11,15 @@ const initialState = {
 
 export const createUser = createAsyncThunk(
     'auth/login',
-    async ( { user, token }: { user: SignUser, token: string | null | undefined } , thunkAPI ) => {
+    async ( { firstName , lastName, email, password, token }: 
+      { firstName :  typeState | undefined , 
+        lastName :  typeState | undefined,
+         email :  typeState | undefined,
+        password :  typeState | undefined
+        , token: string | null | undefined } , thunkAPI ) => {
     try{
-      await axios.post('http://localhost:5000/users', { 
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        password: user.password },{
+      await axios.post('http://localhost:5000/auth//signup', { firstName,lastName,email,password},
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -37,7 +39,7 @@ export const createUser = createAsyncThunk(
     '/getUser',
     async ( { id ,token }: {id: string | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:5000/users/${id}`,{
+      const response = await axios.get(`http://localhost:3000/users/${id}`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -54,30 +56,13 @@ export const createUser = createAsyncThunk(
     }
   );
 
-export const deleteUser = createAsyncThunk(
-  '/deleteUser',
-  async({id, token} : {id: string | null | undefined, token: string | null | undefined}, thunkAPI)=>{
-    try {
-      await axios.delete(`http://localhost:5000/users/${id}`,{
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-    }
-    catch(error) {
-      if (error instanceof AxiosError && error.response) {
-        return thunkAPI.rejectWithValue(error.response.data);
-      } 
-      throw error;
-    }
-  });
 
   export const updateUser = createAsyncThunk(
     '/updateUser',
     async({user, token} : {user : User | null, token: string | null | undefined },thunkAPI) => {
       try {
-        await axios.put(`http://localhost:5000/users/${user?._id}`,
-        {firstName: user?.firstName, email : user?.email, password :user?.password},{
+        await axios.put(`http://localhost:3000/users/${user?._id}`,
+        {firstName: user?.firstName, email : user?.email},{
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -117,15 +102,6 @@ export const deleteUser = createAsyncThunk(
         state.data = action.payload;
       })
       .addCase(getUser.rejected, (state, action) => {
-        state.error = action.error.message || 'error occurred';
-      })
-      .addCase(deleteUser.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(deleteUser.fulfilled, (state) => {
-        state.status = 'succeeded';
-      })
-      .addCase(deleteUser.rejected, (state, action) => {
         state.error = action.error.message || 'error occurred';
       })
       .addCase(updateUser.pending, (state) => {

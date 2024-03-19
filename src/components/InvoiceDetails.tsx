@@ -1,9 +1,10 @@
-import { TextType, Text, Col } from "@piximind/ds-p-23";
+import { TextType, Text, Col, ModalRefType } from "@piximind/ds-p-23";
 import Nav from "./Nav";
 import NavBar from "./NavBar";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { getInvoiceDetails } from "../redux/reducers/InvoiceDetailsReducer";
+import EditInvoice from "./EditInvoice";
 
 export default function InvoiceDetails ()  {
     
@@ -11,6 +12,18 @@ export default function InvoiceDetails ()  {
     const token = useAppSelector(state=>state.auth.data?.accessToken)
     const id = useAppSelector(state=>state.auth.data?._id)
     const data = useAppSelector(state => state.invoice.data)
+
+    const modalRef = useRef<ModalRefType>(null);
+    const handleOpenModal = () => {
+        if (modalRef .current) {
+            modalRef .current.onOpen();
+        }
+      };
+    
+    const cancel =()=>{
+        modalRef.current?.onClose();
+    }
+
 
     
     const fetchData =useCallback(()=> {
@@ -30,7 +43,7 @@ export default function InvoiceDetails ()  {
     return (
         <>
         <NavBar/>
-        <Nav/>
+        <Nav handleModify={handleOpenModal}/>
         <Col className="ds-ml-100 ds-mt-20">
         <Text
             text='Raison Sociale'
@@ -38,7 +51,7 @@ export default function InvoiceDetails ()  {
             type={TextType["subtitle-1"]}
             />
         <Text
-            text={data.LegalName}
+            text={data.legalName}
             className='ds-mb-5 ds-ml-5'
             type={TextType["subtitle-1"]}
         />
@@ -93,6 +106,10 @@ export default function InvoiceDetails ()  {
             type={TextType["subtitle-1"]}
         />
         </Col>
+        <EditInvoice
+                modalRef={modalRef}
+                cancel={cancel}
+        />
         </>
     )
 }

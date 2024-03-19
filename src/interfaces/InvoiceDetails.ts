@@ -1,6 +1,6 @@
 export default interface InvoiceDetails {
     _id: string,
-    LegalName : string,
+    legalName : string,
     mat: string,
     adr: string,
     country : string,

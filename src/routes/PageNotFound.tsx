@@ -1,9 +1,14 @@
+import {  Text } from '@piximind/ds-p-23';
+import { TextType } from '@piximind/ds-p-23/lib/esn/Interfaces';
 
 export default function PageNotFound() {
+
     return(
-            <div className="p-4 align-items-center text-lg-center">
-                 <h1>404</h1>
-                     <p>Page not found !</p>
-            </div>
+        <div className="ds-flex ds-justify-center ds-h-full ds-m-100">
+        <div className="ds-center">
+            <Text text='404' type={TextType['type-2']} />
+            <Text text='Page non trouvée !' type={TextType['type-3']} />
+        </div>
+        </div>
     )
 }

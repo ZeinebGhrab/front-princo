@@ -2,7 +2,11 @@ import { NavbarPosition, Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/
 import { Button, Navbar, Text } from '@piximind/ds-p-23';
 import { useNavigate } from "react-router-dom";
 
-export default function Nav() {
+interface NavProps {
+    handleModify: () => void;
+}
+
+export default function Nav({handleModify} : NavProps ) {
 
     const navigate  = useNavigate();
     const links =[
@@ -11,18 +15,17 @@ export default function Nav() {
             path : '/profile'
         },
         {
-            label :'Information de facturation',
+            label :'Informations de facturation',
             path : '/invoiceDetails'
         }
     ]
 
     return(
         <>
-           <div className="ds-flex ds-justify-between ds-items-center ds-m-10">
-                <div className="ds-flex ds-items-center">
+           <div className="ds-flex ds-justify-between ds-items-center ds-m-10 ">
+                <div className="ds-flex ds-items-center ">
                     <Button 
-                        icon='https://cdn-icons-png.flaticon.com/512/3114/3114883.png'
-                        text='<-'
+                        icon='https://th.bing.com/th/id/R.63d9a0f0ca26a6a3da699c91132aa03d?rik=ePEGNrFG0NR84A&pid=ImgRaw&r=0'
                         type={Type.tertiary}
                         size={Size.small}
                         onClick={()=>navigate('/')} />
@@ -34,16 +37,17 @@ export default function Nav() {
                 <Button
                     type={Type.secondary}
                     text='Modifier'
-                    className="ds-mr-20"
-                    size={Size.small} 
+                    className="ds-mr-20 ds-text-size-15"
+                    size={Size.medium} 
+                    onClick={()=>handleModify()}
                 />
             </div>
             <Navbar
-            className="ds-bg-white p-4"
+            className="ds-bg-white ds-p-50 ds-box-shadow2 ds-mb-30"
             links={links} 
             position={NavbarPosition.left}
             withButton={false} 
-            withIcon= {false}/>
+            />
         </>
     )
 }
