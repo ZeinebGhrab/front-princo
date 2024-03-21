@@ -10,20 +10,15 @@ const initialState = {
   };
 
 export const createUser = createAsyncThunk(
-    'auth/login',
-    async ( { firstName , lastName, email, password, token }: 
+    '/signup',
+    async ( { firstName , lastName, email, password }: 
       { firstName :  typeState | undefined , 
         lastName :  typeState | undefined,
          email :  typeState | undefined,
         password :  typeState | undefined
-        , token: string | null | undefined } , thunkAPI ) => {
+         } , thunkAPI ) => {
     try{
-      await axios.post('http://localhost:5000/auth//signup', { firstName,lastName,email,password},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post('http://localhost:3000/users/signup', { firstName,lastName,email,password});
     }
     catch(error){
       console.log(error);
@@ -44,6 +39,7 @@ export const createUser = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response.data)
       return response.data;
     }
     catch(error){
@@ -59,29 +55,25 @@ export const createUser = createAsyncThunk(
 
   export const updateUser = createAsyncThunk(
     '/updateUser',
-    async({user, token} : {user : User | null, token: string | null | undefined },thunkAPI) => {
+    async ({ id, updateUser, token }: { id: string | null | undefined, updateUser: Partial<User> | null | undefined, token: string | null | undefined }, thunkAPI) => {
       try {
-        await axios.put(`http://localhost:3000/users/${user?._id}`,
-        {firstName: user?.firstName, email : user?.email},{
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
-      catch(error) {
+        await axios.put(`http://localhost:3000/users/${id}`, updateUser, { headers: { Authorization: `Bearer ${token}` } });
+      } catch (error) {
         if (error instanceof AxiosError && error.response) {
           return thunkAPI.rejectWithValue(error.response.data);
-        } 
+        }
         throw error;
       }
-
     }
-  )
-
+  );
+  
   export const profileSlice = createSlice({
     name: 'profile',
     initialState,
     reducers: {
+      setData: (state,action)=>{
+        state.data= action.payload;
+       }
     },
     extraReducers: (builder) => {
       builder

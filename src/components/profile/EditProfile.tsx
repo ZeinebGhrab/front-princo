@@ -1,36 +1,34 @@
 import { Button, Col, Input, Modal, Radio, Row, Text } from "@piximind/ds-p-23";
 import { ETypesInput, Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
-import Props from "../interfaces/Props";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import Props from "../../interfaces/Props";
+import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { useState } from "react";
-import User from "../interfaces/User";
+import User from "../../interfaces/User";
 import { Validation } from "@piximind/validation";
-import { updateUser } from "../redux/reducers/ProfileReducer";
-import { useNavigate } from "react-router-dom";
+import { updateUser } from "../../api/reducers/ProfileReducer";
 
-export default function EditProfile ({modalRef, data, cancel} : Props) {
+export default function EditProfile ({modalRef, cancel} : Props) {
 
-    const [changeUser,setChangeUser] = useState<User>(data as User);
+    const [changeUser,setChangeUser] = useState<User>(useAppSelector(state => state.profile.data) || {} as User );
     const dispatch = useAppDispatch();
-    const token = useAppSelector(state => state.auth.data?.accessToken);
+    const dataAuth = useAppSelector(state => state.auth.data);
     const validation = new Validation();
-    const navigate = useNavigate();
 
-    const handleModify = () =>{
+    const handleModify = async() =>{
+        
         if(!validation.isMail(changeUser.email) || validation.isEmpty(changeUser.firstName) || validation.isEmpty(changeUser.lastName))
         {
             return;
         }
         try {
-            dispatch(updateUser({user: changeUser, token})).unwrap();
-            navigate('/profile')
+            
+            await dispatch(updateUser({id : dataAuth?.id , updateUser: changeUser, token : dataAuth?.token})).unwrap();
+            cancel()
         }
         catch(error) {
-            console.log('error')
+            console.log('error');
         }
      }
-
-
 
     return(
         <>
@@ -74,9 +72,9 @@ export default function EditProfile ({modalRef, data, cancel} : Props) {
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeUser({...changeUser, 'email' : e.target.value})}
                 />
                 </Col>
-                <Col className="ds-w-45">
+                <Col className="ds-w-45">      
                 <Input 
-                    label='tel'
+                    label='N° de téléphone'
                     value ={changeUser?.tel}
                     type = {ETypesInput.text} 
                     name='tel' 

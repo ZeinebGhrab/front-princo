@@ -14,12 +14,14 @@ export const authenticateUser = createAsyncThunk(
     try{
       const response = await axios.post('http://localhost:3000/auth/login', { email, password });
       thunkAPI.dispatch(setData(response.data));
+      console.log(response.data)
     }
-    catch(err){
-      console.log(err);
-      if (err instanceof AxiosError && err.response) {
-        return thunkAPI.rejectWithValue(err.response.data);
-      } 
+    catch(error){
+      console.log(error);
+      if (error instanceof AxiosError && error.response) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+      throw error;
     }
     }
   );
@@ -30,6 +32,7 @@ export const authenticateUser = createAsyncThunk(
     reducers: {
       logOut: (state) => {
         state.data = null;
+        state.auth = false;
 
       },
      setData: (state,action)=>{
@@ -46,7 +49,7 @@ export const authenticateUser = createAsyncThunk(
         state.status = 'succeeded';
       })
       .addCase(authenticateUser.rejected, (state, action) => {
-          state.error = action.error.message || 'error occurred';
+        state.error = action.error.message || 'error occurred';
       })
     }
   });

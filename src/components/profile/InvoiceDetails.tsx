@@ -1,17 +1,16 @@
 import { TextType, Text, Col, ModalRefType } from "@piximind/ds-p-23";
-import Nav from "./Nav";
-import NavBar from "./NavBar";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import Nav from "../nav/Nav";
+import NavBar from "../nav/NavBar";
+import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { useCallback, useEffect, useRef } from "react";
-import { getInvoiceDetails } from "../redux/reducers/InvoiceDetailsReducer";
 import EditInvoice from "./EditInvoice";
+import { getUser } from "../../api/reducers/ProfileReducer";
 
 export default function InvoiceDetails ()  {
     
     const dispatch = useAppDispatch();
-    const token = useAppSelector(state=>state.auth.data?.accessToken)
-    const id = useAppSelector(state=>state.auth.data?._id)
-    const data = useAppSelector(state => state.invoice.data)
+    const dataAuth = useAppSelector(state=>state.auth.data)
+    const data = useAppSelector(state => state.profile.data.invoiceDetails);
 
     const modalRef = useRef<ModalRefType>(null);
     const handleOpenModal = () => {
@@ -24,21 +23,19 @@ export default function InvoiceDetails ()  {
         modalRef.current?.onClose();
     }
 
-
-    
     const fetchData =useCallback(()=> {
         try{
-            dispatch(getInvoiceDetails({id: id , token: token})).unwrap();
+            dispatch(getUser({id: dataAuth?.id , token: dataAuth?.token})).unwrap();
         }
         catch(error) {
             console.log(error);
         }
-    },[dispatch, id, token]);
+    },[dataAuth?.id, dataAuth?.token, dispatch]);
 
  
     useEffect(()=>{
         fetchData()
-    },[fetchData])
+    },[fetchData, data])
     
     return (
         <>
@@ -51,7 +48,7 @@ export default function InvoiceDetails ()  {
             type={TextType["subtitle-1"]}
             />
         <Text
-            text={data.legalName}
+            text={data?.legalName}
             className='ds-mb-5 ds-ml-5'
             type={TextType["subtitle-1"]}
         />
@@ -61,7 +58,7 @@ export default function InvoiceDetails ()  {
             type={TextType["subtitle-1"]}
             />
         <Text
-            text={data.mat}
+            text={data?.fiscalId}
             className='ds-mb-5 ds-ml-5'
             type={TextType["subtitle-1"]}
         />
@@ -71,7 +68,7 @@ export default function InvoiceDetails ()  {
             type={TextType["subtitle-1"]}
         />
         <Text
-            text={data.adr}
+            text={data?.adress}
             className='ds-mb-5 ds-ml-5'
             type={TextType["subtitle-1"]}
         />
@@ -81,7 +78,7 @@ export default function InvoiceDetails ()  {
             type={TextType["subtitle-1"]}
             />
         <Text
-            text={data.country}
+            text={data?.country}
             className='ds-mb-5 ds-ml-5'
             type={TextType["subtitle-1"]}
         />
@@ -91,7 +88,7 @@ export default function InvoiceDetails ()  {
             type={TextType["subtitle-1"]}
             />
         <Text
-            text={data.city}
+            text={data?.city}
             className='ds-mb-5 ds-ml-5'
             type={TextType["subtitle-1"]}
         />
@@ -101,7 +98,7 @@ export default function InvoiceDetails ()  {
             type={TextType["subtitle-1"]}
         />
         <Text
-            text={data.postalCode}
+            text={data?.postalCode}
             className='ds-mb-5 ds-ml-5'
             type={TextType["subtitle-1"]}
         />

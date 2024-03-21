@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import '@piximind/ds-p-23/lib/main.css';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { createUser } from '../redux/reducers/ProfileReducer';
+import { useAppDispatch } from '../api/hooks';
+import { createUser } from '../api/reducers/ProfileReducer';
 import { Button, Checkbox, ETypesInput, Input, TextType } from '@piximind/ds-p-23';
 import {  Text } from '@piximind/ds-p-23';
 import { Size, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
@@ -11,16 +11,13 @@ import { useForm } from '@piximind/custom-hook';
 import { ValidationList } from '../interfaces/ValidationList';
 
   
-  
 
 export default function SignUp() {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const token = useAppSelector(state=>state.auth.data?.accessToken);
 
 
-   
     const {state,onChange,isFormValid} = useForm({ isRealTimeValidation: true, data: ValidationList });
             
    
@@ -31,13 +28,15 @@ export default function SignUp() {
         }
     
         try {
-            dispatch(createUser({ 
+
+            dispatch(createUser({
                 firstName: state.firstName.value,
-                lastName : state.lastName.value,
-                email : state.email.value,
-                password : state.password.value,
-                token })).unwrap();
-           navigate('/login',{ state: { validate: "Inscription confirmée !"}})
+                lastName: state.lastName.value,
+                email: state.email.value,
+                password: state.password.value,
+            })).unwrap();
+
+            navigate('/login',{ state: { validate: "Inscription confirmée !"}});
         }
         catch(error){
             console.log(error);
@@ -139,6 +138,15 @@ export default function SignUp() {
             type={TextType.caption} 
         />
         }
+        <Checkbox 
+                    label={"J'accepte les conditions d'utilisation"}
+                    className='ds-mt-7 ds-bg-white'
+                    labelClassName ='ds-mt-7'
+                    checked={state.confirm.value as boolean}
+                    disabled={false}
+                    type={TypeCheck.checkbox}
+                    onClick={(e : React.ChangeEvent<HTMLInputElement>)=>onChange({ key: "confirm", value: e.target.checked})}
+            />
       
             <Button 
                 type={Type.primary}
@@ -163,15 +171,3 @@ export default function SignUp() {
         </div>
     )
 }
-
-/*
-   <Checkbox 
-                    label={"J'accepte les conditions d'utilisation"}
-                    className='ds-mt-7 ds-bg-white'
-                    labelClassName ='ds-mt-7'
-                    checked={state.confirm.value as boolean}
-                    disabled={false}
-                    type={TypeCheck.checkbox}
-                    onClick={(e : React.ChangeEvent<HTMLInputElement>)=>onChange({ key: "confirm", value: e.target.checked})}
-            />
-*/

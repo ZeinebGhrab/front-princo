@@ -1,8 +1,8 @@
-export default interface InvoiceDetails {
+export default interface ProfileInvoiceDetails {
     _id: string,
     legalName : string,
-    mat: string,
-    adr: string,
+    fiscalId: string,
+    adress: string,
     country : string,
     city : string,
     postalCode : string

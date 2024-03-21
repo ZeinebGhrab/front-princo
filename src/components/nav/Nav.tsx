@@ -1,10 +1,12 @@
 import { NavbarPosition, Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { Button, Navbar, Text } from '@piximind/ds-p-23';
 import { useNavigate } from "react-router-dom";
+import { FaPencilAlt } from "react-icons/fa";
 
 interface NavProps {
     handleModify: () => void;
 }
+
 
 export default function Nav({handleModify} : NavProps ) {
 
@@ -36,7 +38,7 @@ export default function Nav({handleModify} : NavProps ) {
                 </div>
                 <Button
                     type={Type.secondary}
-                    text='Modifier'
+                    text={<><FaPencilAlt className="ds-mr-2" /> Modifier</> as unknown as string}
                     className="ds-mr-20 ds-text-size-15"
                     size={Size.medium} 
                     onClick={()=>handleModify()}

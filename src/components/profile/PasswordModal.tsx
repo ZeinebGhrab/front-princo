@@ -1,9 +1,11 @@
 import { Modal, Text, Input, Checkbox, Button, Row, Col, TextType, ETypesInput } from '@piximind/ds-p-23';
 import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
 import { Size, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
-import Props from '../interfaces/Props';
+import Props from '../../interfaces/Props';
 import { useState } from 'react';
 import { Validation } from '@piximind/validation';
+import { useAppDispatch, useAppSelector } from '../../api/hooks';
+import { updateUser } from '../../api/reducers/ProfileReducer';
 
 
 export default function PasswordModal({ modalRef, cancel }: Props ) {
@@ -11,16 +13,29 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
     const [change, setChange] = useState({
         password:'',
         confirmPass :'',
+        confirm: false,
     })
     
     const validation = new Validation()
+    const dispatch = useAppDispatch();
+    const data = useAppSelector(state=>state.auth.data);
 
     const handleChange = () =>{
         if (validation.isEmpty(change.password) 
-        ||validation.isEmpty(change.confirmPass) 
-        || change.confirmPass !== change.password)
-         {
+        || validation.isEmpty(change.confirmPass) 
+        || !validation.isTrue(change.confirm)
+        || change.confirmPass !== change.password
+        || change.password.length < 8)
+         { 
             return;
+         }
+
+         try {
+            dispatch(updateUser({id: data?.id , updateUser: {password : change.password} , token : data?.token})).unwrap();
+            cancel();
+         }
+         catch(error){
+            console.log(error);
          }
     }
 
@@ -36,7 +51,7 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
             <Col>
             <Input
                 label='Nouveau mot de passe'
-                type={ETypesInput.text}
+                type={ETypesInput.password}
                 value={change.password}
                 name='password'
                 autoComplete='current-password'
@@ -53,7 +68,7 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
             <Col>
             <Input
                 label='Confirmer le mot de passe'
-                type={ETypesInput.text}
+                type={ETypesInput.password}
                 value ={change.confirmPass}
                 name='confirmPass'
                 autoComplete='current-confirmPass'
@@ -71,9 +86,11 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
             <Col>
             <Checkbox
                 label='Générer un mot de passe'
+                checked ={change.confirm}
                 labelClassName="ds-text-secondaryDarker ds-text-size-10"
                 disabled={false}
                 type={TypeCheck.checkbox}
+                onClick={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, confirm: e.target.checked})}
             />
             </Col>
 
@@ -90,7 +107,7 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
                         type={Type.primary}
                         text='Enregistrer'
                         size={Size.small}
-                        onClick={()=>handleChange}
+                        onClick={()=>handleChange()}
                     />
                 </Col>
             </Row>

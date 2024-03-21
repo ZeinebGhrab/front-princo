@@ -1,10 +1,10 @@
-import NavBar from "./NavBar";
+import NavBar from "../nav/NavBar";
 import { Size,  TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { Button, Text, Avatar, Col, Row, Radio,  ModalRefType,} from '@piximind/ds-p-23';
-import { useCallback, useEffect, useRef } from "react";
-import Nav from "./Nav";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { getUser } from "../redux/reducers/ProfileReducer";
+import {  useCallback, useEffect, useRef } from "react";
+import Nav from "../nav/Nav";
+import { useAppDispatch, useAppSelector } from "../../api/hooks";
+import { getUser } from "../../api/reducers/ProfileReducer";
 import PasswordModal from "./PasswordModal";
 import EditProfile from "./EditProfile";
 
@@ -14,18 +14,17 @@ export default function ProfileDetails() {
     const modalEditRef = useRef<ModalRefType>(null);
   
     const dispatch = useAppDispatch();
-    const token = useAppSelector(state=>state.auth.data?.accessToken)
-    const id = useAppSelector(state=>state.auth.data?._id)
+    const dataAuth = useAppSelector(state=>state.auth.data)
     const data = useAppSelector(state => state.profile.data)
 
-    const fetchData =useCallback(()=> {
+    const fetchData =useCallback(async ()=> {
         try{
-            dispatch(getUser({id: id , token: token})).unwrap();
+            await dispatch(getUser({id: dataAuth?.id , token: dataAuth?.token})).unwrap();
         }
         catch(error) {
             console.log(error);
         }
-    },[dispatch, id, token]);
+    },[dataAuth?.id, dataAuth?.token, dispatch])
 
     const handleOpenModal = (ref : React.RefObject<ModalRefType>) => {
         if (ref.current) {
@@ -37,10 +36,9 @@ export default function ProfileDetails() {
         ref.current?.onClose();
     }
 
-
     useEffect(()=>{
         fetchData()
-    },[fetchData])
+    },[fetchData, dispatch, data])
 
 
     return (
@@ -55,7 +53,7 @@ export default function ProfileDetails() {
                     <Col className="ds-ml-20">
                         <Text
                             text='Nom et Prénom'
-                            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
+                            className='ds-mb-5 ds-text-primary500 ds-text-size-16'
                             type={TextType["subtitle-1"]}
                         />
                         <Text
@@ -65,7 +63,7 @@ export default function ProfileDetails() {
                         />
                         <Text
                             text='Adresse Mail'
-                            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
+                            className='ds-mb-5 ds-text-primary500 ds-text-size-16'
                             type={TextType["subtitle-1"]}
                         />
                         <Text
@@ -75,20 +73,20 @@ export default function ProfileDetails() {
                         />
                         <Text
                             text='Identité de genre'
-                            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
+                            className='ds-mb-5 ds-text-primary500 ds-text-size-16'
                             type={TextType["subtitle-1"]}
                         />
                         <Radio
                             label='Identité de genre'
                             name='gender'
                             value={data.gender}
-                            className="ds-ml-5 ds-text-primary500 ds-text-size-18"
+                            className="ds-ml-5 ds-text-primary500 ds-text-size-16"
                             disabled={false}
                             data={[{ label: 'Homme', value: 'Homme' }, { label: 'Femme', value: 'Femme' }]}
                         />
                         <Text
                             text='Date de naissance'
-                            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
+                            className='ds-mb-5 ds-text-primary500 ds-text-size-16'
                             type={TextType["subtitle-1"]}
                         />
                         <Text
@@ -98,7 +96,7 @@ export default function ProfileDetails() {
                         />
                         <Text
                             text='N° de téléphone '
-                            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
+                            className='ds-mb-5 ds-text-primary500 ds-text-size-16'
                             type={TextType["subtitle-1"]}
                         />
                         <Text
@@ -108,7 +106,7 @@ export default function ProfileDetails() {
                         />
                         <Text
                             text='Pays / Région'
-                            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
+                            className='ds-mb-5 ds-text-primary500 ds-text-size-16'
                             type={TextType["subtitle-1"]}
                         />
                         <Text
@@ -118,7 +116,7 @@ export default function ProfileDetails() {
                         />
                         <Text
                             text='Profil'
-                            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
+                            className='ds-mb-5 ds-text-primary500 ds-text-size-16'
                             type={TextType["subtitle-1"]}
                         />
                         <Text
@@ -131,9 +129,8 @@ export default function ProfileDetails() {
                 <Row className="ds-mt-10">
                   <Button 
                     text='Changer mon mot de passe'
-                    type={Type.primary}
+                    type={Type.secondary}
                     size={Size.small} 
-                    className="ds-bg-grey"
                     onClick={() => handleOpenModal(modalRef)}
                     />
                 </Row>
@@ -145,7 +142,6 @@ export default function ProfileDetails() {
             <EditProfile
                 modalRef={modalEditRef}
                 cancel={()=>cancel(modalEditRef)}
-                data = {data}
             />
         </>
     )

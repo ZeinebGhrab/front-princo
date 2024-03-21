@@ -1,4 +1,5 @@
 import { Navbar, NavbarPosition } from "@piximind/ds-p-23";
+import { RxAvatar } from "react-icons/rx";
 
 
 
@@ -6,7 +7,7 @@ export default function NavBar () {
 
   const links = [
     {
-      label:'',
+      label:<><RxAvatar /></>  as unknown as string,
       path:'/',
       sousLinks : [
         {
@@ -38,7 +39,8 @@ export default function NavBar () {
                 className="ds-box-shadow1"  
                 links={links}
                 isLogout={false}
-                withButton ={false}
+                withButton ={true}
+                btnText="Acheter"
             />
         </div>
         </>

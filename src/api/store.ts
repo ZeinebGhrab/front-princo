@@ -3,7 +3,6 @@ import storage from 'redux-persist/lib/storage';
 import { authentificationSlice } from './reducers/AuthReducer';
 import { configureStore } from '@reduxjs/toolkit';
 import { profileSlice } from './reducers/ProfileReducer';
-import { invoiceSlice } from './reducers/InvoiceDetailsReducer';
 
 const persistConfig = {
   key: 'root',
@@ -16,7 +15,6 @@ export const store = configureStore({
     reducer: {
       auth: persistedAuthReducer,
       profile: profileSlice.reducer,
-      invoice : invoiceSlice.reducer
     },
     middleware: (getDefaultMiddleware) => {
       if (process.env.NODE_ENV === 'development') {

@@ -61,5 +61,17 @@ export const ValidationList = [
       },
     ],
   },
+  {
+    key: 'confirm',
+    value: '',
+    isRealTimeValidation: false,
+    rules: [
+      {
+        priority: 1,
+        function: EListFunction.isTrue,
+        messageError: ''
+      },
+    ],
+  },
 ];
 

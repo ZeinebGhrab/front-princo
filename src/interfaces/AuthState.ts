@@ -1,4 +1,4 @@
 export default interface AuthState {
-    _id: string |  null,
-    accessToken: string | null,
+    id: string |  null,
+    token: string | null,
 }

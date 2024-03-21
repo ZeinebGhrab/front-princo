@@ -1,3 +1,5 @@
+import ProfileInvoiceDetails from "./InvoiceDetails";
+
 export default interface User {
     _id: string,
     firstName: string,
@@ -9,4 +11,5 @@ export default interface User {
     country?: string,
     profile?: string,
     password: string,
+    invoiceDetails? : ProfileInvoiceDetails
 }
