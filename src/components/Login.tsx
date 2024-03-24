@@ -26,6 +26,7 @@ export default function Login() {
         e.preventDefault();
       
         if (!validation.isMail(user.email) || validation.isEmpty(user.password)) {
+            setErrors({ message: "Veuillez saisir une adresse e-mail et un mot de passe valides." });
             return;
         }
         try {
@@ -46,23 +47,28 @@ export default function Login() {
         navigate('/sign');
     };
 
+
     return (
-        <div className='ds-flex ds-flex-col ds-center p-5'>
-            <form className='ds-blur4 p-4 border rounded ds-w-35 ds-m-40'>
+        <div className='ds-flex ds-center ds-p-10'>
+            <form className='ds-blur4 ds-p-20 ds-border-radius-8 ds-w-35 ds-m-50' onSubmit={(e: FormEvent)=>e.preventDefault()}>
                 <Text 
                     text='Connexion'
-                    className='ds-flex ds-mb-30 ds-justify-center ds-text-primary'
+                    className='ds-flex ds-mb-30 ds-justify-around ds-text-primary'
                     type={TextType['type-4']}/>
+             
                 <Input 
                     label='Adresse Email'
+                    containerClassName= 'ds-mb-13'
                     type = {ETypesInput.text} 
                     value={user.email} 
                     name='email' 
                     autoComplete='current-email'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUser({...user, email : e.target.value})}
                 />
+                
                 <Input 
                     label='Mot de passe'
+                    containerClassName= 'ds-mb-13'
                     type = {ETypesInput.password} 
                     value={user.password} 
                     name='password' 
@@ -79,32 +85,35 @@ export default function Login() {
                      }
                     <Button 
                       type={Type.primaryLink}
-                      className='ds-flex ds-justify-end'
+                      className='ds-flex ds-justify-end ds-mb-13'
                       text= 'Mot de passe oublié ?'
+                      disabled={false}
+                      to={'/'}
                     />
-                <Button
-                    type={Type.primary}
-                    className='ds-mb-5 ds-mt-5 ds-w-100'
-                    size={Size.medium}
-                    onClick={(e: FormEvent<Element>) => handleConnect(e)}
-                    text='Se connecter'
-                />
-                <Text 
-                    text='Vous n’avez pas de compte'
-                    className='ds-mb-5 ds-w-100 ds-text-secondaryDarker ds-flex ds-justify-center ds-align-center'
-                    type={TextType['body-2']}
-                     />
-                <Checkbox 
+
+                    <Checkbox 
                     label='Se souvenir de moi'
                     className='ds-bg-white'
                     checked={user.memorise}
                     disabled={false}
                     type={TypeCheck.checkbox}
                     onClick={(e: React.ChangeEvent<HTMLInputElement>)=>setUser({...user, memorise : e.target.checked})}
+                    />
+                <Button
+                    type={Type.primary}
+                    className='ds-mb-13 ds-mt-13 ds-w-100'
+                    size={Size.medium}
+                    onClick={(e: React.FormEvent) => handleConnect(e)}
+                    text='Se connecter'
                 />
+                <Text 
+                    text='Vous n’avez pas de compte'
+                    className='ds-mb-13 ds-w-100 ds-text-secondaryDarker ds-flex ds-justify-center ds-align-center'
+                    type={TextType['body-2']}
+                     />
                 <Button 
                     type={Type.secondary}
-                    className='ds-w-100 ds-mt-4' 
+                    className='ds-w-100' 
                     size={Size.medium}
                     onClick={(e: FormEvent<Element>) => handleSign(e)}
                     text='S’inscrire'

@@ -13,9 +13,9 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
     const [changeInvoice,setChangeInvoice] = useState<ProfileInvoiceDetails>(useAppSelector(state=>state.profile.data.invoiceDetails)|| {} as ProfileInvoiceDetails)
 
 
-    const handleModify = () =>{
+    const handleModify = async(): Promise<void> =>{
         try {
-            dispatch(updateUser({id: authData?.id ,updateUser : {invoiceDetails : changeInvoice} ,token : authData?.token})).unwrap();
+            await dispatch(updateUser({id: authData?.id ,updateUser : {invoiceDetails : changeInvoice} ,token : authData?.token})).unwrap();
             cancel();
         }
         catch(error){
@@ -33,14 +33,15 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     type={TextType['type-5']} />
                     <hr/>
                 
-                <div className="ds-justify-center ds-align-center ds-w-100  ds-m-3">
+                <div className="ds-m-3">
 
                     <Row className="ds-justify-center">
                     <Col className="ds-w-45">
                     <Input 
                     label='Raison Sociale'
                     value={changeInvoice?.legalName}
-                    type = {ETypesInput.text}  
+                    type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15' 
                     name='legalName' 
                     autoComplete='current-legalName'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeInvoice({...changeInvoice, 'legalName' : e.target.value})}
@@ -52,6 +53,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     label='Matricule fiscale'
                     value={changeInvoice?.fiscalId}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='mat' 
                     autoComplete='current-mat'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeInvoice({...changeInvoice, 'fiscalId' : e.target.value})}
@@ -62,6 +64,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     label='Adresse du siège social'
                     value={changeInvoice?.adress}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='adr' 
                     autoComplete='current-adress'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeInvoice({...changeInvoice, 'adress' : e.target.value})}
@@ -72,6 +75,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     label='Pays'
                     value={changeInvoice?.country}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='country' 
                     autoComplete='current-country' 
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeInvoice({...changeInvoice, 'country' : e.target.value})}
@@ -85,6 +89,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     label='Ville'
                     value={changeInvoice?.city}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='city' 
                     autoComplete='current-city'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeInvoice({...changeInvoice, 'city' : e.target.value})}
@@ -95,6 +100,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     label='Code postale'
                     value={changeInvoice?.postalCode}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='postalCode' 
                     autoComplete='current-postalCode'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeInvoice({...changeInvoice, 'postalCode' : e.target.value})}
@@ -102,20 +108,22 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     </Col>
                    </Row>
                
-                <Row className="ds-mt-10 ds-ml-31">
-                    <Col>
+                <Row className="ds-mt-10 ds-justify-center">
+                    <Col className="ds-w-45">
                     <Button
                     type={Type.secondary}
                     text='Annuler'
-                    size={Size.medium} 
+                    size={Size.medium}
+                    className="ds-w-100" 
                     onClick={cancel}
                    />
                     </Col>
-                    <Col>
+                    <Col className="ds-w-45">
                     <Button
                     type={Type.primary}
                     text='Enregistrer'
                     size={Size.medium} 
+                    className="ds-w-100"
                     onClick={()=>handleModify()}
                     />
                     </Col>

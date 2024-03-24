@@ -1,26 +1,26 @@
-import { Modal, Text, Input, Checkbox, Button, Row, Col, TextType, ETypesInput } from '@piximind/ds-p-23';
+import { Button, Checkbox, Input, Row, Text } from "@piximind/ds-p-23";
+import { ETypesInput, Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
-import { Size, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
-import Props from '../../interfaces/Props';
-import { useState } from 'react';
-import { Validation } from '@piximind/validation';
-import { useAppDispatch, useAppSelector } from '../../api/hooks';
-import { updateUser } from '../../api/reducers/ProfileReducer';
+import { Validation } from "@piximind/validation";
+import { useAppDispatch } from "../../api/hooks";
+import { useState } from "react";
+import { resetPassword } from "../../api/reducers/AuthReducer";
+import { useNavigate } from "react-router-dom";
 
-
-export default function PasswordModal({ modalRef, cancel }: Props ) {
+export default function ResetPassword ({email}: {email?: string | undefined}) {
 
     const [change, setChange] = useState({
         password:'',
         confirmPass :'',
         confirm: false,
-    })
-    
+    });
+
     const validation = new Validation()
     const dispatch = useAppDispatch();
-    const data = useAppSelector(state=>state.auth.data);
+    const navigate = useNavigate()
 
-    const handleChange = async(): Promise <void> =>{
+    const handleChange = async (e: React.FormEvent) =>{
+        e.preventDefault()
         if (validation.isEmpty(change.password) 
         || validation.isEmpty(change.confirmPass) 
         || !validation.isTrue(change.confirm)
@@ -31,24 +31,24 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
          }
 
          try {
-            await dispatch(updateUser({id: data?.id , updateUser: {password : change.password} , token : data?.token})).unwrap();
-            cancel();
+            await dispatch(resetPassword({email : email , password: change.password})).unwrap();
+            navigate('/');
          }
          catch(error){
             console.log(error);
          }
     }
 
+
     return (
-        <Modal ref={modalRef} withCloseIcon={true} contentClassName="ds-m-200"  containerClassName="ds-blur0 ds-center ds-p-100">
+        <div className='ds-flex-col ds-center ds-m-50'>
+            <form className='ds-blur4 ds-p-20 border rounded ds-w-35 ds-m-20'>
             <Text
-                text='Changer mon mot de passe'
-                className='ds-flex ds-mb-2 ds-text-primary '
+                text='Réinitialiser mon mot de passe'
+                className='ds-flex ds-mb-30 ds-mt-15 ds-text-primary ds-justify-center'
                 type={TextType['type-5']}
             />
-            <hr />
-
-            <Row className='ds-w-50 ds-m-10'>
+           
             <Input
                 label='Nouveau mot de passe'
                 type={ETypesInput.password}
@@ -57,15 +57,13 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
                 autoComplete='current-password'
                 onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, password: e.target.value})}
             />
-            </Row>
-            <Row className='ds-w-50 ds-m-10'>
+
             <Text
                 text='Minimum 8 caractères'
                 className="ds-text-error600"
                 type={TextType.caption}
             />
-            </Row>
-            <Row className='ds-w-50 ds-m-10'>
+            
             <Input
                 label='Confirmer le mot de passe'
                 type={ETypesInput.password}
@@ -75,42 +73,32 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
                 onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, confirmPass: e.target.value})}
                 
             />
-            </Row>
-            <Col>
             <Text
                 text='Minimum 8 caractères'
                 className="ds-text-error600"
                 type={TextType.caption} 
             />
-            </Col>
-            <Col>
+           
             <Checkbox
-                label='Générer un mot de passe'
+                label='Valider mon mot de passe'
                 checked ={change.confirm}
                 labelClassName="ds-text-secondaryDarker ds-text-size-10"
+                className="ds-bg-white"
                 disabled={false}
                 type={TypeCheck.checkbox}
                 onClick={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, confirm: e.target.checked})}
             />
-            </Col>
 
-            <Row className="ds-mt-10 ds-ml-5">
-                <Col>
-                    <Button
-                        type={Type.secondary}
-                        text='Annuler'
-                        size={Size.small}
-                        onClick={cancel} />
-                </Col>
-                <Col>
+            <Row className="ds-justify-center">
                     <Button
                         type={Type.primary}
                         text='Enregistrer'
-                        size={Size.small}
-                        onClick={()=>handleChange()}
+                        size={Size.large}
+                        className="ds-mt-25 ds-justify-center ds-w-35"
+                        onClick={(e : React.FormEvent)=>handleChange(e)}
                     />
-                </Col>
             </Row>
-        </Modal>
-    );
+            </form>
+        </div>
+    )
 }

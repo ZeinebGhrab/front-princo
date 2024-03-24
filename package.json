@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@piximind/api": "^2.0.5",
     "@piximind/custom-hook": "^1.1.12",
     "@piximind/ds-p-23": "^1.10.6",
     "@piximind/validation": "^1.2.0",

@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import User from "../../interfaces/User";
-import { typeState } from "@piximind/custom-hook/lib/esn/interfaces";
 
 const initialState = {
     data:{} as User ,
@@ -9,26 +8,7 @@ const initialState = {
     error : {},
   };
 
-export const createUser = createAsyncThunk(
-    '/signup',
-    async ( { firstName , lastName, email, password }: 
-      { firstName :  typeState | undefined , 
-        lastName :  typeState | undefined,
-         email :  typeState | undefined,
-        password :  typeState | undefined
-         } , thunkAPI ) => {
-    try{
-      await axios.post('http://localhost:3000/users/signup', { firstName,lastName,email,password});
-    }
-    catch(error){
-      console.log(error);
-      if (error instanceof AxiosError && error.response) {
-        return thunkAPI.rejectWithValue(error.response.data);
-      } 
-      throw error;
-    }
-    }
-  );
+
 
   export const getUser = createAsyncThunk(
     '/getUser',
@@ -77,15 +57,6 @@ export const createUser = createAsyncThunk(
     },
     extraReducers: (builder) => {
       builder
-      .addCase(createUser.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(createUser.fulfilled, (state) => {
-        state.status = 'succeeded';
-      })
-      .addCase(createUser.rejected, (state, action) => {
-        state.error = action.error.message || 'error occurred';
-      })
       .addCase(getUser.pending, (state) => {
         state.status = 'loading';
       })

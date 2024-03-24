@@ -1,4 +1,4 @@
-import { Button, Col, Input, Modal, Radio, Row, Text } from "@piximind/ds-p-23";
+import { Button, Col, Datepicker, Input, Modal, Radio, Row, Text } from "@piximind/ds-p-23";
 import { ETypesInput, Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import Props from "../../interfaces/Props";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
@@ -6,6 +6,7 @@ import { useState } from "react";
 import User from "../../interfaces/User";
 import { Validation } from "@piximind/validation";
 import { updateUser } from "../../api/reducers/ProfileReducer";
+import { IChangeDatePicker } from "@piximind/ds-p-23/lib/esn/Interfaces/Molecule/IMoleculeDatepicker/IMoleculeDatepicker";
 
 export default function EditProfile ({modalRef, cancel} : Props) {
 
@@ -32,19 +33,21 @@ export default function EditProfile ({modalRef, cancel} : Props) {
 
     return(
         <>
-        <Modal ref={modalRef} withCloseIcon={true} contentClassName="ds-flex ds-m-200" containerClassName="ds-blur0 ds-center ds-p-20">
+        <Modal ref={modalRef} withCloseIcon={true} contentClassName=" ds-m-200" containerClassName="ds-center">
+                
                 <Text
                     text='Changer mes informations de profil'
-                    className='ds-flex ds-mb-2 ds-text-primary ds-ml-10 '
+                    className='ds-text-primary'
                     type={TextType['type-5']} />
                 <hr/>
-                <div className=" ds-w-100  ds-m-3">
+                <div className="ds-m-3">
                     <Row className="ds-justify-center">
                     <Col className="ds-w-45">
                     <Input 
                     label='Nom'
                     value ={changeUser?.lastName}
                     type = {ETypesInput.text}  
+                    containerClassName= 'ds-mb-15'
                     name='lastName' 
                     autoComplete='current-lastName'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeUser({...changeUser, 'lastName' : e.target.value})}
@@ -55,18 +58,20 @@ export default function EditProfile ({modalRef, cancel} : Props) {
                     label='Prénom'
                     value = {changeUser?.firstName}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='firstName' 
                     autoComplete='current-firstName'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeUser({...changeUser, 'firstName' : e.target.value})}
                 />
             </Col>
                 </Row>
-                <Row className="ds-justify-center">
+                <Row className="ds-justify-center ds-mb-7">
                 <Col className="ds-w-45">
                     <Input 
                     label='Adresse mail'
                     value ={changeUser?.email}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='email' 
                     autoComplete='current-email'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeUser({...changeUser, 'email' : e.target.value})}
@@ -77,6 +82,7 @@ export default function EditProfile ({modalRef, cancel} : Props) {
                     label='N° de téléphone'
                     value ={changeUser?.tel}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='tel' 
                     autoComplete='current-tel'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeUser({...changeUser, 'tel' : e.target.value})}
@@ -84,20 +90,15 @@ export default function EditProfile ({modalRef, cancel} : Props) {
                 </Col>
                 </Row>
             
-          <Row className="ds-justify-center ds-mb-16 ds-mt-4">
+          <Row className="ds-justify-center">
                 <Col className="ds-w-45">
-                    <label className="ds-text-weight400">Date de naissance</label>
-                 
-            <input 
-                    className="default-input ds-text-dark ds-px-12 ds-h-85 ds-bg-white ds-text-weight400 ds-w-100 ds-borad-8"
-                    value ={changeUser?.birthDate}
-                    type = 'date'
-                    name='birthDate' 
-                    autoComplete='current-birthDate'
-                    onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeUser({...changeUser, 'birthDate' : e.target.value})}
+                    <label className="ds-text-weight400">Date de naissance</label>    
+                <Datepicker
+                 placeholder="Date de naissance"
+                 containerClassName= 'ds-mb-15'
+                 value={changeUser?.birthDate  instanceof Date ? changeUser.birthDate : null}
+                 onChange={(e : Date | IChangeDatePicker)=>setChangeUser({...changeUser, 'birthDate' : e})}
                 />
-
-  
                 </Col>
             <Col className="ds-w-45">
             <label className="ds-text-weight400 ds-mb-8">Identité de genre</label>
@@ -113,12 +114,13 @@ export default function EditProfile ({modalRef, cancel} : Props) {
             </Col>
           </Row>
 
-                    <Row className="ds-justify-center">
+                <Row className="ds-justify-center">
                     <Col className="ds-w-45">
                     <Input 
                     label='Pays / Région'
                     value ={changeUser?.country}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='country' 
                     autoComplete='current-country'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeUser({...changeUser, 'country' : e.target.value})}
@@ -129,26 +131,29 @@ export default function EditProfile ({modalRef, cancel} : Props) {
                     label='Profil'
                     value ={changeUser?.profile}
                     type = {ETypesInput.text} 
+                    containerClassName= 'ds-mb-15'
                     name='profile' 
                     autoComplete='current-profile'
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeUser({...changeUser, 'profile' : e.target.value})}
                 />
                 </Col>      
                     </Row>
-                <Row className="ds-ml-31 ds-mt-14 ">
-                    <Col>
+                <Row className="ds-justify-center ds-mt-10">
+                    <Col className="ds-w-45">
                     <Button
                     type={Type.secondary}
                     text='Annuler'
                     size={Size.medium} 
+                    className='ds-w-100'
                     onClick={cancel}
                    />
                    </Col>
-                    <Col>
+                    <Col className="ds-w-45">
                     <Button
                     type={Type.primary}
                     text='Enregistrer'
                     size={Size.medium} 
+                    className='ds-w-100'
                     onClick={()=>handleModify()}
                     />
                     </Col>

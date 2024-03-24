@@ -1,9 +1,11 @@
-import NavBar from "../nav/NavBar";
+import Navbar from "../nav/Navbar";
+
 
 export default function ConnectorsList(){
     return(
         <>
-        <NavBar/>
+        <Navbar/>
+        
         </>
     )
 }

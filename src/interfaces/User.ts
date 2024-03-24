@@ -1,3 +1,4 @@
+import { IChangeDatePicker } from "@piximind/ds-p-23/lib/esn/Interfaces/Molecule/IMoleculeDatepicker/IMoleculeDatepicker";
 import ProfileInvoiceDetails from "./InvoiceDetails";
 
 export default interface User {
@@ -7,7 +8,7 @@ export default interface User {
     email: string,
     gender?: string,
     tel?: string,
-    birthDate?: string,
+    birthDate?: Date | IChangeDatePicker,
     country?: string,
     profile?: string,
     password: string,

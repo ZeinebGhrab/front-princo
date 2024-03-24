@@ -1,107 +1,113 @@
-import { TextType, Text, Col, ModalRefType } from "@piximind/ds-p-23";
-import Nav from "../nav/Nav";
-import NavBar from "../nav/NavBar";
-import { useAppDispatch, useAppSelector } from "../../api/hooks";
-import { useCallback, useEffect, useRef } from "react";
+import { TextType, Text, Col, Container, ModalRefType } from "@piximind/ds-p-23";
 import EditInvoice from "./EditInvoice";
-import { getUser } from "../../api/reducers/ProfileReducer";
+import ProfileInvoiceDetails from "../../interfaces/InvoiceDetails";
 
-export default function InvoiceDetails ()  {
-    
-    const dispatch = useAppDispatch();
-    const dataAuth = useAppSelector(state=>state.auth.data)
-    const data = useAppSelector(state => state.profile.data.invoiceDetails);
 
-    const modalRef = useRef<ModalRefType>(null);
-    const handleOpenModal = () => {
-        if (modalRef .current) {
-            modalRef .current.onOpen();
-        }
-      };
-    
-    const cancel =()=>{
-        modalRef.current?.onClose();
-    }
+interface Props {
+    modalRef: React.RefObject<ModalRefType>;
+    data? : ProfileInvoiceDetails;
+    cancel: () => void;
+}
 
-    const fetchData =useCallback(()=> {
-        try{
-            dispatch(getUser({id: dataAuth?.id , token: dataAuth?.token})).unwrap();
-        }
-        catch(error) {
-            console.log(error);
-        }
-    },[dataAuth?.id, dataAuth?.token, dispatch]);
 
- 
-    useEffect(()=>{
-        fetchData()
-    },[fetchData, data])
+export default function InvoiceDetails ({data, cancel, modalRef}: Props)  {
     
     return (
         <>
-        <NavBar/>
-        <Nav handleModify={handleOpenModal}/>
-        <Col className="ds-ml-100 ds-mt-20">
-        <Text
-            text='Raison Sociale'
-            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
-            type={TextType["subtitle-1"]}
+        <Col className="ds-ml-125 ds-mt-50">
+            <Container
+            className="ds-mb-11"
+            children = 
+            {
+                <>
+                <Text
+                   text='Raison Sociale'
+                   className='ds-mb-5 ds-text-size-15'
+                 />
+                <Text
+                   text={data?.legalName}
+                   className='ds-mb-5 ds-ml-5 ds-text-primary700 ds-text-size-14'
+                 />
+                </>
+            }
             />
-        <Text
-            text={data?.legalName}
-            className='ds-mb-5 ds-ml-5'
-            type={TextType["subtitle-1"]}
-        />
-        <Text
+            <Container
+            className="ds-mb-10"
+            children = 
+            {
+            <>
+            <Text
             text='Matricule fiscale'
-            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
+            className='ds-mb-5 ds-text-size-15'
             type={TextType["subtitle-1"]}
             />
-        <Text
+            <Text
             text={data?.fiscalId}
-            className='ds-mb-5 ds-ml-5'
-            type={TextType["subtitle-1"]}
-        />
-        <Text
+            className='ds-ml-5 ds-text-primary700 ds-text-size-14'
+            />
+            </>
+            }
+            />
+           <Container
+           className="ds-mb-11"
+           children = {
+            <>
+            <Text
             text='Adresse du siège social'
-            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
-            type={TextType["subtitle-1"]}
+            className='ds-mb-5 ds-text-size-15'
         />
         <Text
             text={data?.adress}
-            className='ds-mb-5 ds-ml-5'
-            type={TextType["subtitle-1"]}
+            className='ds-ml-5 ds-text-primary700 ds-text-size-14'
         />
-        <Text
+            </>
+           }
+           />
+           <Container
+           className="ds-mb-11"
+           children = {
+            <>
+             <Text
             text='Pays'
-            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
-            type={TextType["subtitle-1"]}
+            className='ds-mb-5 ds-text-size-15'
             />
         <Text
             text={data?.country}
-            className='ds-mb-5 ds-ml-5'
-            type={TextType["subtitle-1"]}
+            className='ds-ml-5 ds-text-primary700 ds-text-size-14'
         />
-        <Text
+            </>
+           }
+           />
+           <Container
+           className="ds-mb-11"
+           children = {
+            <>
+            <Text
             text='Ville'
-            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
-            type={TextType["subtitle-1"]}
+            className='ds-mb-5 ds-text-size-15'
             />
         <Text
             text={data?.city}
-            className='ds-mb-5 ds-ml-5'
-            type={TextType["subtitle-1"]}
+            className='ds-ml-5 ds-text-primary700 ds-text-size-14'
         />
-        <Text
+            </>
+           }
+           />
+           <Container
+           className="ds-mb-11"
+           children = {
+            <>
+            <Text
             text='Code postale'
-            className='ds-mb-5 ds-text-primary500 ds-text-size-18'
-            type={TextType["subtitle-1"]}
+            className='ds-mb-5 ds-text-size-15'
         />
         <Text
             text={data?.postalCode}
-            className='ds-mb-5 ds-ml-5'
-            type={TextType["subtitle-1"]}
+            className='ds-ml-5 ds-text-primary700 ds-text-size-14 '
         />
+            </>
+           }
+           />
         </Col>
         <EditInvoice
                 modalRef={modalRef}
