@@ -1,11 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Validation } from '@piximind/validation';
 import { FormEvent, useState } from 'react';
 import LoginUser from '../interfaces/LoginUser';
 import { useAppDispatch } from '../api/hooks';
 import { authenticateUser } from '../api/reducers/AuthReducer';
-import { Button, Input, ETypesInput, Text, Checkbox } from '@piximind/ds-p-23';
-import {  Size, TextType, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
+import { Button, Input, ETypesInput, Text, Checkbox, Container } from '@piximind/ds-p-23';
+import {  ESizeInput, Size, TextType, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
 
 
@@ -15,7 +15,7 @@ export default function Login() {
         {
             email: localStorage.getItem('email'),
             password :localStorage.getItem('password'),
-            memorise : false
+            memorise : localStorage.getItem('memorise') === 'true' ? true : false
         } as LoginUser);
 
     const [errors,setErrors]=useState<{ [key: string]: string }>({});
@@ -34,6 +34,7 @@ export default function Login() {
              if (user.memorise) {
                 localStorage.setItem('email', user.email);
                 localStorage.setItem('password', user.password);
+                localStorage.setItem('memorise', 'true');
             }
                 navigate('/'); 
         } catch (error) {
@@ -54,44 +55,62 @@ export default function Login() {
                 <Text 
                     text='Connexion'
                     className='ds-flex ds-mb-30 ds-justify-around ds-text-primary'
-                    type={TextType['type-4']}/>
-             
-                <Input 
+                    type={TextType['type-4']}
+                />
+
+                <Container
+                children = {
+                    <>
+                    <Input 
                     label='Adresse Email'
                     containerClassName= 'ds-mb-13'
-                    type = {ETypesInput.text} 
+                    type = {ETypesInput.text}
+                    inputSize={ESizeInput.large}
                     value={user.email} 
                     name='email' 
                     autoComplete='current-email'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUser({...user, email : e.target.value})}
                 />
-                
-                <Input 
+                    </>
+                }
+                 />
+
+                 <Container
+                 children = {
+                    <>
+                    <Input 
                     label='Mot de passe'
                     containerClassName= 'ds-mb-13'
                     type = {ETypesInput.password} 
+                    inputSize={ESizeInput.large}
                     value={user.password} 
                     name='password' 
                     autoComplete='current-password'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>)=> setUser({...user, password : e.target.value})}
                     />
+                    </>
+                 }
+                 />
                      {
                       errors['message']&&                
-                      <Text
+                      <Container 
+                      children = {
+                        <Text
                          text={errors['message']}
                          className="ds-text-error600 ds-ml-3 ds-mt-2"
                          type={TextType['subtitle-2']} 
                     />
+                      }/>
                      }
-                    <Button 
-                      type={Type.primaryLink}
-                      className='ds-flex ds-justify-end ds-mb-13'
-                      text= 'Mot de passe oublié ?'
-                      disabled={false}
-                      to={'/'}
-                    />
+                     <Container 
+                     children = {
 
-                    <Checkbox 
+                    <Link to='/forgetPassword' className='ds-flex ds-justify-end ds-mb-13 ds-text-primary'>Mot de passe oublié ?</Link>
+                     }
+                     />
+                     <Container 
+                     children = {
+                        <Checkbox 
                     label='Se souvenir de moi'
                     className='ds-bg-white'
                     checked={user.memorise}
@@ -99,10 +118,16 @@ export default function Login() {
                     type={TypeCheck.checkbox}
                     onClick={(e: React.ChangeEvent<HTMLInputElement>)=>setUser({...user, memorise : e.target.checked})}
                     />
-                <Button
+                     }
+                     />
+
+                     <Container 
+                     children = {
+                        <>
+                        <Button
                     type={Type.primary}
                     className='ds-mb-13 ds-mt-13 ds-w-100'
-                    size={Size.medium}
+                    size={Size.large}
                     onClick={(e: React.FormEvent) => handleConnect(e)}
                     text='Se connecter'
                 />
@@ -114,10 +139,16 @@ export default function Login() {
                 <Button 
                     type={Type.secondary}
                     className='ds-w-100' 
-                    size={Size.medium}
+                    size={Size.large}
                     onClick={(e: FormEvent<Element>) => handleSign(e)}
                     text='S’inscrire'
                 />
+                        </>
+                     }
+                     />
+                    
+                    
+                
             </form>
         </div>
     );

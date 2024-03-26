@@ -1,4 +1,4 @@
-/*import { Avatar, Button } from '@piximind/ds-p-23';
+import { Avatar, Button } from '@piximind/ds-p-23';
 import { Size } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import { Size as SizeAvatar } from '@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomAvatar/IAtomAvatar';
 import Container from 'react-bootstrap/Container';
@@ -23,7 +23,7 @@ export default function Navpar() {
 
 
   return (
-    <Navbar className="ds-blur1 ds-p-10 ds-w-100 ds-hv-10" expand="lg">
+    <Navbar className="ds-p-10 ds-w-100 ds-hv-10" expand="lg">
       <Container fluid>
         <Navbar.Brand as={Link} to="/">Princo</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -42,7 +42,7 @@ export default function Navpar() {
                         />} 
                 className='ds-p-9 ds-hv-10'
                 id="navbarScrollingDropdown">
-                <NavDropdown.Item as={Link} to="/profile" > <CgProfile /> Mon Profil</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/profileDetails" > <CgProfile /> Mon Profil</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/credit">
                   <BsFillCreditCard2BackFill /> Mon crédit
                 </NavDropdown.Item>
@@ -61,4 +61,3 @@ export default function Navpar() {
     </Navbar>
   );
 }
-*/

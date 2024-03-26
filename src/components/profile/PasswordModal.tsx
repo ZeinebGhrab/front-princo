@@ -1,54 +1,60 @@
-import { Modal, Text, Input, Checkbox, Button, Row, Col, TextType, ETypesInput } from '@piximind/ds-p-23';
-import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
-import { Size, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
-import Props from '../../interfaces/Props';
-import { useState } from 'react';
-import { Validation } from '@piximind/validation';
+import React, { useState } from 'react';
+import {  Modal } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../api/hooks';
 import { updateUser } from '../../api/reducers/ProfileReducer';
+import { Validation } from '@piximind/validation';
+import { ETypesInput, Size, TextType, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
+import { Button, Checkbox, Container, Input, Text } from '@piximind/ds-p-23';
+import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
 
+interface Props {
+    show: boolean;
+    handleClose: () => void;
+}
 
-export default function PasswordModal({ modalRef, cancel }: Props ) {
-
+export default function PasswordModal({ show, handleClose }: Props) {
     const [change, setChange] = useState({
         password:'',
         confirmPass :'',
         confirm: false,
-    })
-    
-    const validation = new Validation()
+    });
+
+    const validation = new Validation();
     const dispatch = useAppDispatch();
     const data = useAppSelector(state=>state.auth.data);
 
-    const handleChange = async(): Promise <void> =>{
-        if (validation.isEmpty(change.password) 
-        || validation.isEmpty(change.confirmPass) 
-        || !validation.isTrue(change.confirm)
-        || change.confirmPass !== change.password
-        || change.password.length < 8)
-         { 
+    const handleChange = async() => {
+        if (
+            validation.isEmpty(change.password) ||
+            validation.isEmpty(change.confirmPass) ||
+            !validation.isTrue(change.confirm) ||
+            change.password !== change.confirmPass ||
+            change.password.length < 8
+        ) {
             return;
-         }
+        }
 
-         try {
+        try {
             await dispatch(updateUser({id: data?.id , updateUser: {password : change.password} , token : data?.token})).unwrap();
-            cancel();
-         }
-         catch(error){
+            handleClose();
+        } catch(error) {
             console.log(error);
-         }
-    }
+        }
+    };
 
     return (
-        <Modal ref={modalRef} withCloseIcon={true} contentClassName="ds-m-200"  containerClassName="ds-blur0 ds-center ds-p-100">
-            <Text
+        <Modal show={show} onHide={handleClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title ><Text
                 text='Changer mon mot de passe'
-                className='ds-flex ds-mb-2 ds-text-primary '
+                className='ds-flex ds-mb-2 ds-text-primary ds-ml-14'
                 type={TextType['type-5']}
-            />
-            <hr />
-
-            <Row className='ds-w-50 ds-m-10'>
+            /></Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <Container
+            children={
+                <>
             <Input
                 label='Nouveau mot de passe'
                 type={ETypesInput.password}
@@ -57,15 +63,17 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
                 autoComplete='current-password'
                 onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, password: e.target.value})}
             />
-            </Row>
-            <Row className='ds-w-50 ds-m-10'>
             <Text
                 text='Minimum 8 caractères'
                 className="ds-text-error600"
                 type={TextType.caption}
             />
-            </Row>
-            <Row className='ds-w-50 ds-m-10'>
+                </>
+            }
+            />
+            <Container
+            children= {
+                <>
             <Input
                 label='Confirmer le mot de passe'
                 type={ETypesInput.password}
@@ -75,16 +83,20 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
                 onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, confirmPass: e.target.value})}
                 
             />
-            </Row>
-            <Col>
             <Text
                 text='Minimum 8 caractères'
                 className="ds-text-error600"
                 type={TextType.caption} 
             />
-            </Col>
-            <Col>
-            <Checkbox
+                </>
+
+            }
+            />
+
+            <Container
+            children ={
+                <>
+                <Checkbox
                 label='Générer un mot de passe'
                 checked ={change.confirm}
                 labelClassName="ds-text-secondaryDarker ds-text-size-10"
@@ -92,25 +104,28 @@ export default function PasswordModal({ modalRef, cancel }: Props ) {
                 type={TypeCheck.checkbox}
                 onClick={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, confirm: e.target.checked})}
             />
-            </Col>
-
-            <Row className="ds-mt-10 ds-ml-5">
-                <Col>
-                    <Button
+                </>  
+            }
+            />
+            </Modal.Body>
+            <Modal.Footer>
+                 <Button
                         type={Type.secondary}
                         text='Annuler'
-                        size={Size.small}
-                        onClick={cancel} />
-                </Col>
-                <Col>
+                        size={Size.medium}
+                        className='ds-w-48'
+                        onClick={handleClose} 
+                        />
                     <Button
                         type={Type.primary}
                         text='Enregistrer'
-                        size={Size.small}
+                        size={Size.medium}
+                        className='ds-w-48 '
                         onClick={()=>handleChange()}
                     />
-                </Col>
-            </Row>
+                
+            </Modal.Footer>
         </Modal>
     );
 }
+

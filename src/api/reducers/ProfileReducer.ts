@@ -23,7 +23,6 @@ const initialState = {
       return response.data;
     }
     catch(error){
-      console.log(error);
       if (error instanceof AxiosError && error.response) {
         return thunkAPI.rejectWithValue(error.response.data);
       } 

@@ -2,33 +2,53 @@ import { Size,  Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { Button, Text, Avatar, Col, Row, Radio,  ModalRefType, Container} from '@piximind/ds-p-23';
 import PasswordModal from "./PasswordModal";
 import EditProfile from "./EditProfile";
-import { useRef } from "react";
-import User from "../../interfaces/User";
+import { useCallback, useEffect, useRef, useState } from "react";
+import moment from "moment";
+import ProfileNav from "./ProfileNav";
+import { getUser } from "../../api/reducers/ProfileReducer";
+import { useAppDispatch, useAppSelector } from "../../api/hooks";
 
 
-interface Props {
-    modalRef: React.RefObject<ModalRefType>;
-    data? : User;
-    cancel: () => void;
-}
+export default function ProfileDetails() {
 
-export default function ProfileDetails({data, cancel, modalRef}: Props) {
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const dispatch = useAppDispatch();
+    const dataAuth = useAppSelector(state=>state.auth.data)
+    const data = useAppSelector(state => state.profile.data);
 
-    const modalPassRef = useRef<ModalRefType>(null);
-  
-    const handleOpenPassModal = () => {
-        if (modalPassRef.current) {
-            modalPassRef.current.onOpen();
+    const modalRef = useRef<ModalRefType>(null);
+
+
+    const fetchData =useCallback(()=> {
+        try{
+            dispatch(getUser({id: dataAuth?.id , token: dataAuth?.token})).unwrap();
+        }
+        catch(error) {
+            console.log(error);
+        }
+    },[dataAuth?.id, dataAuth?.token, dispatch]);
+
+
+    const handleOpenModal = () => {
+        if (modalRef .current) {
+            modalRef .current.onOpen();
         }
       };
     
-    const cancelPass =()=>{
-        modalPassRef.current?.onClose();
+    const cancel =()=>{
+        modalRef.current?.onClose();
     }
+
+    
+    useEffect(()=>{
+        fetchData()
+    },[fetchData, data, dispatch])
+ 
 
    
     return (
         <>
+        <ProfileNav handleOpenModal={handleOpenModal}/>
             <div className="ds-ml-100 ds-mt-50">
                 <Row>
                     <Col>
@@ -93,7 +113,7 @@ export default function ProfileDetails({data, cancel, modalRef}: Props) {
                             className='ds-mb-5 ds-mt-14 ds-text-size-15'
                         />
                          <Text
-                            text={data?.birthDate as unknown as string}
+                            text={moment(data?.birthDate as Date).format("DD/MM/YYYY")}
                             className='ds-ml-5 ds-text-primary700 ds-text-size-14'
                         />
                         </>
@@ -153,14 +173,14 @@ export default function ProfileDetails({data, cancel, modalRef}: Props) {
                     className="ds-mt-12 ds-mb-12"
                     type={Type.secondary}
                     size={Size.small} 
-                    onClick={() => handleOpenPassModal()}
+                    onClick={() => setShowPasswordModal(true)}
                     />
                   </Col>
                 </Row>
             </div>
             <PasswordModal 
-                modalRef={modalPassRef}
-                cancel={()=>cancelPass()}
+                show={showPasswordModal} 
+                handleClose={() => setShowPasswordModal(false)} 
             />
             <EditProfile
                 modalRef={modalRef}

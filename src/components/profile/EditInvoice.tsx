@@ -26,17 +26,16 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
     
     return(
         <>
-        <Modal ref={modalRef} withCloseIcon={true} contentClassName="ds-flex ds-m-200" containerClassName="ds-blur0 ds-center ds-p-100">
+        <Modal ref={modalRef} withCloseIcon={true} contentClassName="ds-m-200" containerClassName="ds-center">
                 <Text
                     text='Changer mes informations de facturation'
-                    className='ds-flex  ds-text-primary ds-ml-10'
+                    className='ds-flex ds-text-primary ds-ml-20'
                     type={TextType['type-5']} />
-                    <hr/>
+                    <hr className="ds-ml-20 ds-mr-24"/>
                 
-                <div className="ds-m-3">
-
-                    <Row className="ds-justify-center">
-                    <Col className="ds-w-45">
+                <div className="ds-ml-20">
+                    <Row className="ds-w-100">
+                    <Col className="ds-w-50">
                     <Input 
                     label='Raison Sociale'
                     value={changeInvoice?.legalName}
@@ -48,7 +47,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     
                 />
                 </Col>
-                 <Col className="ds-w-45">
+                 <Col className="ds-w-50">
                     <Input 
                     label='Matricule fiscale'
                     value={changeInvoice?.fiscalId}
@@ -59,7 +58,9 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeInvoice({...changeInvoice, 'fiscalId' : e.target.value})}
                 />
                     </Col>
-                    <Col className="ds-w-45">
+                 </Row>
+                 <Row className="ds-w-100">
+                    <Col className="ds-w-50">
                     <Input 
                     label='Adresse du siège social'
                     value={changeInvoice?.adress}
@@ -70,7 +71,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeInvoice({...changeInvoice, 'adress' : e.target.value})}
                 />
                     </Col>
-                    <Col className="ds-w-45">
+                    <Col className="ds-w-50">
                     <Input 
                     label='Pays'
                     value={changeInvoice?.country}
@@ -82,9 +83,8 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                 />
                     </Col>
                     </Row>
-              
-                   <Row className="ds-justify-center">
-                    <Col className="ds-w-45">
+                   <Row className="ds-w-100">
+                    <Col className="ds-w-50">
                     <Input 
                     label='Ville'
                     value={changeInvoice?.city}
@@ -95,7 +95,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChangeInvoice({...changeInvoice, 'city' : e.target.value})}
                 />
                     </Col>
-                    <Col className="ds-w-45 ds-justify-center">
+                    <Col className="ds-w-50">
                     <Input 
                     label='Code postale'
                     value={changeInvoice?.postalCode}
@@ -108,8 +108,8 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     </Col>
                    </Row>
                
-                <Row className="ds-mt-10 ds-justify-center">
-                    <Col className="ds-w-45">
+                <Row className="ds-mt-10 ds-w-100 ds-mb-10">
+                    <Col className="ds-w-50">
                     <Button
                     type={Type.secondary}
                     text='Annuler'
@@ -118,7 +118,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                     onClick={cancel}
                    />
                     </Col>
-                    <Col className="ds-w-45">
+                    <Col className="ds-w-50">
                     <Button
                     type={Type.primary}
                     text='Enregistrer'

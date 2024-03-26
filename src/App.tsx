@@ -8,7 +8,10 @@ import Verify from './routes/Verify'
 import ForgetPassword from './components/password/ForgetPassword'
 import ResetPassword from './components/password/ResetPassword'
 import RequireValidation from './routes/RequiredValidation'
-import Profile from './components/profile/Profile'
+import ProfileDetails from './components/profile/ProfileDetails'
+import InvoiceDetails from './components/profile/InvoiceDetails'
+import AddConnector from './components/connectors/AddConnector'
+import ConnectorDetails from './components/connectors/ConnectorDetails'
 
 
 function App() {
@@ -24,7 +27,10 @@ function App() {
           </Route>
           <Route element={<RequireAuthentication/>}>
             <Route path='/' element={<ConnectorsList/>}/>
-            <Route path='/profile' element={<Profile/>}/>
+            <Route path='/addConnector' element={<AddConnector/>}/>
+            <Route path='/connectorDetails' element={<ConnectorDetails/>}/>
+            <Route path='/profileDetails' element={<ProfileDetails/>}/>
+            <Route path='/invoiceDetails' element={<InvoiceDetails/>}/>
             <Route path='*' element={<PageNotFound/>}/>
           </Route>
         </Routes>

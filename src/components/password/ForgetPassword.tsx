@@ -1,4 +1,4 @@
-import { Button, TextType, Text, Input, Row } from "@piximind/ds-p-23";
+import { Button, TextType, Text, Input, Row, Container } from "@piximind/ds-p-23";
 import { ETypesInput, Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import React, { FormEvent, useState } from "react";
 import { useAppDispatch } from "../../api/hooks";
@@ -17,7 +17,7 @@ export default function ForgetPassword() {
         try {
             e.preventDefault();
             if(!validation.isMail(email)) {
-                setErrors({message : 'Veuillez saisir un adresse email valide'})
+                setErrors({message : 'Veuillez saisir une adresse email valide'})
                 return;
             }
             dispatch(forgetPassword({email})).unwrap();
@@ -49,15 +49,18 @@ export default function ForgetPassword() {
             )
             :
             (
-                <form className='ds-bg-neutral300 ds-p-30 border rounded ds-w-35 ds-m-130' onSubmit={(e: FormEvent) =>handleSend(e)}>
+                <form className='ds-bg-neutral300 ds-p-30 border rounded ds-w-40 ds-m-130' onSubmit={(e: FormEvent) =>handleSend(e)}>
                 <Text 
                     text='Mot de passe oublié'
-                    className='ds-flex ds-mb-30 ds-justify-center ds-text-primary'
+                    className='ds-flex ds-mb-40 ds-justify-center ds-text-primary'
                     type={TextType['type-4']}/>
-                <Input 
+                    <Container
+                    children = {
+                        <>
+                        <Input 
                     label='Adresse Email'
                     className='ds-m-100'
-                    containerClassName="ds-mb-10"
+                   
                     type = {ETypesInput.text} 
                     value={email} 
                     name='email' 
@@ -67,9 +70,16 @@ export default function ForgetPassword() {
                 <Text
                 text='Un lien de réinitialisation sera envoyé à cette adresse email'
                 className="ds-mb-10"
-                type={TextType["subtitle-2"]}
+                type={TextType.caption}
                   />
-                     {
+                        </>
+                    }
+                     />
+                
+                <Container
+                children = {
+                    <>
+                    {
                       errors['message']&&                
                       <Text
                          text={errors['message']}
@@ -79,10 +89,13 @@ export default function ForgetPassword() {
                      }
                 <Button
                     type={Type.primary}
-                    className='ds-mb-5 ds-mt-5 ds-w-100'
+                    className='ds-mb-5 ds-mt-20 ds-w-100'
                     size={Size.medium}
                     text='Réinitialiser mon mot de passe'
                 />
+                    </>
+                }
+                />      
             </form>
             )
             }

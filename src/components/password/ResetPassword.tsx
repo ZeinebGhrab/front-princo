@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input, Row, Text } from "@piximind/ds-p-23";
+import { Button, Checkbox, Container, Input, Text } from "@piximind/ds-p-23";
 import { ETypesInput, Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
 import { Validation } from "@piximind/validation";
@@ -42,14 +42,17 @@ export default function ResetPassword ({email}: {email?: string | undefined}) {
 
     return (
         <div className='ds-flex-col ds-center ds-m-50'>
-            <form className='ds-blur4 ds-p-20 border rounded ds-w-35 ds-m-20'>
+            <form className='ds-blur4 ds-p-20 border rounded ds-w-40 ds-m-20'>
             <Text
                 text='Réinitialiser mon mot de passe'
-                className='ds-flex ds-mb-30 ds-mt-15 ds-text-primary ds-justify-center'
+                className='ds-flex ds-mb-40 ds-mt-15 ds-text-primary ds-justify-center'
                 type={TextType['type-5']}
             />
-           
-            <Input
+
+            <Container
+            children = {
+                <>
+                 <Input
                 label='Nouveau mot de passe'
                 type={ETypesInput.password}
                 value={change.password}
@@ -63,8 +66,14 @@ export default function ResetPassword ({email}: {email?: string | undefined}) {
                 className="ds-text-error600"
                 type={TextType.caption}
             />
-            
-            <Input
+                </>
+            }
+            />
+
+            <Container
+            children = {
+                <>
+                <Input
                 label='Confirmer le mot de passe'
                 type={ETypesInput.password}
                 value ={change.confirmPass}
@@ -78,8 +87,14 @@ export default function ResetPassword ({email}: {email?: string | undefined}) {
                 className="ds-text-error600"
                 type={TextType.caption} 
             />
-           
-            <Checkbox
+                </>
+            }
+            />
+
+            <Container 
+            children = {
+                <>
+                            <Checkbox
                 label='Valider mon mot de passe'
                 checked ={change.confirm}
                 labelClassName="ds-text-secondaryDarker ds-text-size-10"
@@ -88,16 +103,16 @@ export default function ResetPassword ({email}: {email?: string | undefined}) {
                 type={TypeCheck.checkbox}
                 onClick={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, confirm: e.target.checked})}
             />
-
-            <Row className="ds-justify-center">
-                    <Button
+                <Button
                         type={Type.primary}
                         text='Enregistrer'
-                        size={Size.large}
-                        className="ds-mt-25 ds-justify-center ds-w-35"
+                        size={Size.medium}
+                        className="ds-mt-25 ds-justify-center ds-w-100"
                         onClick={(e : React.FormEvent)=>handleChange(e)}
                     />
-            </Row>
+                </>
+            }
+            />
             </form>
         </div>
     )

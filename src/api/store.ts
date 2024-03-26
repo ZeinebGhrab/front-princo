@@ -3,6 +3,7 @@ import storage from 'redux-persist/lib/storage';
 import { authentificationSlice } from './reducers/AuthReducer';
 import { configureStore } from '@reduxjs/toolkit';
 import { profileSlice } from './reducers/ProfileReducer';
+import { connectorsSlice } from './reducers/ConnectorsReducer';
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +16,7 @@ export const store = configureStore({
     reducer: {
       auth: persistedAuthReducer,
       profile: profileSlice.reducer,
+      printers : connectorsSlice.reducer
     },
     middleware: (getDefaultMiddleware) => {
       if (process.env.NODE_ENV === 'development') {
