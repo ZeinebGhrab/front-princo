@@ -28,7 +28,7 @@ function App() {
           <Route element={<RequireAuthentication/>}>
             <Route path='/' element={<ConnectorsList/>}/>
             <Route path='/addConnector' element={<AddConnector/>}/>
-            <Route path='/connectorDetails' element={<ConnectorDetails/>}/>
+            <Route path='/connectorDetails/:id' element={<ConnectorDetails/>}/>
             <Route path='/profileDetails' element={<ProfileDetails/>}/>
             <Route path='/invoiceDetails' element={<InvoiceDetails/>}/>
             <Route path='*' element={<PageNotFound/>}/>

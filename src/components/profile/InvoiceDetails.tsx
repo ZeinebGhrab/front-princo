@@ -1,7 +1,7 @@
-import { TextType, Text, Col, Container, ModalRefType } from "@piximind/ds-p-23";
+import { TextType, Text, Col, Container } from "@piximind/ds-p-23";
 import EditInvoice from "./EditInvoice";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getUser } from "../../api/reducers/ProfileReducer";
 import ProfileNav from "./ProfileNav";
 
@@ -15,7 +15,8 @@ export default function InvoiceDetails ()  {
     const dataAuth = useAppSelector(state=>state.auth.data)
     const data = useAppSelector(state => state.profile.data.invoiceDetails);
 
-    const modalRef = useRef<ModalRefType>(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+
 
 
     const fetchData =useCallback(()=> {
@@ -28,27 +29,17 @@ export default function InvoiceDetails ()  {
     },[dataAuth?.id, dataAuth?.token, dispatch]);
 
 
-    const handleOpenModal = () => {
-        if (modalRef .current) {
-            modalRef .current.onOpen();
-        }
-      };
-    
-    const cancel =()=>{
-        modalRef.current?.onClose();
-    }
-
     
     useEffect(()=>{
         fetchData()
-    },[fetchData, data, dispatch])
+    },[fetchData, showEditModal])
 
 
 
 
     return (
         <>
-        <ProfileNav handleOpenModal={handleOpenModal}/>
+        <ProfileNav handleOpenModal={()=>setShowEditModal(true)}/>
         <Col className="ds-ml-125 ds-mt-50">
             <Container
             className="ds-mb-11"
@@ -145,8 +136,8 @@ export default function InvoiceDetails ()  {
            />
         </Col>
         <EditInvoice
-                modalRef={modalRef}
-                cancel={cancel}
+                show={showEditModal}
+                handleClose={()=>setShowEditModal(false)}
         />
         </>
     )

@@ -16,7 +16,7 @@ export const store = configureStore({
     reducer: {
       auth: persistedAuthReducer,
       profile: profileSlice.reducer,
-      printers : connectorsSlice.reducer
+      connectors : connectorsSlice.reducer
     },
     middleware: (getDefaultMiddleware) => {
       if (process.env.NODE_ENV === 'development') {

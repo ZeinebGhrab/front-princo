@@ -1,6 +1,7 @@
-import { ModalRefType } from "@piximind/ds-p-23";
+import Connector from "./Connector";
 
 export default interface Props {
-    modalRef: React.RefObject<ModalRefType>;
-    cancel: () => void;
+    data? : Connector
+    show : boolean;
+    handleClose: () => void;
 }

@@ -1,8 +1,8 @@
 import { Size,  Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
-import { Button, Text, Avatar, Col, Row, Radio,  ModalRefType, Container} from '@piximind/ds-p-23';
+import { Button, Text, Avatar, Col, Row, Radio,  Container} from '@piximind/ds-p-23';
 import PasswordModal from "./PasswordModal";
 import EditProfile from "./EditProfile";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import moment from "moment";
 import ProfileNav from "./ProfileNav";
 import { getUser } from "../../api/reducers/ProfileReducer";
@@ -16,7 +16,7 @@ export default function ProfileDetails() {
     const dataAuth = useAppSelector(state=>state.auth.data)
     const data = useAppSelector(state => state.profile.data);
 
-    const modalRef = useRef<ModalRefType>(null);
+    const [showEditModal, setShowEditModal] = useState(false);
 
 
     const fetchData =useCallback(()=> {
@@ -28,27 +28,16 @@ export default function ProfileDetails() {
         }
     },[dataAuth?.id, dataAuth?.token, dispatch]);
 
-
-    const handleOpenModal = () => {
-        if (modalRef .current) {
-            modalRef .current.onOpen();
-        }
-      };
-    
-    const cancel =()=>{
-        modalRef.current?.onClose();
-    }
-
     
     useEffect(()=>{
         fetchData()
-    },[fetchData, data, dispatch])
+    },[fetchData, showEditModal])
  
 
    
     return (
         <>
-        <ProfileNav handleOpenModal={handleOpenModal}/>
+        <ProfileNav handleOpenModal={()=>setShowEditModal(true)}/>
             <div className="ds-ml-100 ds-mt-50">
                 <Row>
                     <Col>
@@ -183,8 +172,8 @@ export default function ProfileDetails() {
                 handleClose={() => setShowPasswordModal(false)} 
             />
             <EditProfile
-                modalRef={modalRef}
-                cancel={()=>cancel()}
+                show={showEditModal}
+                handleClose={()=>setShowEditModal(false)}
             />
         </>
     )

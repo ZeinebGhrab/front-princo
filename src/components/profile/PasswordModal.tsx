@@ -6,11 +6,8 @@ import { Validation } from '@piximind/validation';
 import { ETypesInput, Size, TextType, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import { Button, Checkbox, Container, Input, Text } from '@piximind/ds-p-23';
 import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
+import Props from '../../interfaces/Props';
 
-interface Props {
-    show: boolean;
-    handleClose: () => void;
-}
 
 export default function PasswordModal({ show, handleClose }: Props) {
     const [change, setChange] = useState({
@@ -48,7 +45,6 @@ export default function PasswordModal({ show, handleClose }: Props) {
                 <Modal.Title ><Text
                 text='Changer mon mot de passe'
                 className='ds-flex ds-mb-2 ds-text-primary ds-ml-14'
-                type={TextType['type-5']}
             /></Modal.Title>
             </Modal.Header>
             <Modal.Body>

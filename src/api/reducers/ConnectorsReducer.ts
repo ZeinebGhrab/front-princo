@@ -3,16 +3,21 @@ import axios, { AxiosError } from "axios";
 import Connector from "../../interfaces/Connector";
 
 const initialState = {
-    data:[] as Connector[],
+    data:[] as Connector[] | Connector,
     status: "idle", 
     error : {},
   };
 
   export const createConnector= createAsyncThunk(
     '/createConnector',
-    async ( { createConnector ,token }: {id : string | null | undefined, createConnector: Connector | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
+    async ( { createConnector ,token }: {createConnector: Connector | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
     try{
-      const response = await axios.post(`http://localhost:3000/printers`, {createConnector},{
+      const response = await axios.post(`http://localhost:3000/connector`, 
+      {
+        connectorName: createConnector?.connectorName,
+        webSite : createConnector?.webSite,
+      }
+      ,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -30,13 +35,14 @@ const initialState = {
 
   export const getConnectors= createAsyncThunk(
     '/getConnectors',
-    async ( { token }: {id: string | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
+    async ( { id ,token }: {id: string | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:3000/printers}`,{
+      const response = await axios.get(`http://localhost:3000/connector/connectors/${id}`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(response.data)
       return response.data;
     }
     catch(error){
@@ -52,7 +58,7 @@ const initialState = {
     '/getConnector',
     async ( {id ,token }: {id: string | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:3000/printers/${id}}`,{
+      const response = await axios.get(`http://localhost:3000/connector/${id}`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -73,7 +79,7 @@ const initialState = {
     '/updateConnector',
     async ({ id, updateConnector, token }: { id: string | null | undefined, updateConnector: Connector| null | undefined, token: string | null | undefined }, thunkAPI) => {
       try {
-        await axios.put(`http://localhost:3000/printers/${id}`, updateConnector, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.put(`http://localhost:3000/connector/${id}`, updateConnector, { headers: { Authorization: `Bearer ${token}` } });
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           return thunkAPI.rejectWithValue(error.response.data);

@@ -3,12 +3,12 @@ import Navbar from "../nav/Navbar";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { SiApple, SiLinux, SiNestjs, SiPhp, SiPython, SiWindows10 } from "react-icons/si";
 import { Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../api/hooks";
-import { getConnector } from "../../api/reducers/ConnectorsReducer";
-import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { Card } from "react-bootstrap";
 import { MdContentCopy } from "react-icons/md";
+import { useAppDispatch, useAppSelector } from "../../api/hooks";
+import { getConnector } from "../../api/reducers/ConnectorsReducer";
 
 
 export default function ConnectorDetails() {
@@ -23,30 +23,43 @@ export default function ConnectorDetails() {
     
     
     const navigate = useNavigate();
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const id = searchParams.get("id");
+    const { id } = useParams();
     const dispatch = useAppDispatch();
-    const token = useAppSelector(state=>state.auth.data?.token);
+    const token = useAppSelector(state => state.auth.data?.token)
+    const data = useAppSelector(state=>state.connectors.data);
+    const apiRef = useRef(null);
+    const codeRef = useRef(null);
+   
 
+  const handleCopyApi = () => {
+    if (apiRef.current) {
+      const inputValue = (apiRef?.current as HTMLInputElement)?.value;
+      navigator.clipboard.writeText(inputValue)
+    }
+  };
+
+    const handleCopy = () => {
+      const cardContent =  (codeRef?.current as unknown as HTMLElement)?.innerText;
+      navigator.clipboard.writeText(cardContent);
+    };
+  
+   
     const [changeCode, setChangeCode] = useState<{ [key: string]: string }>({ "php": code.php });
     const [active, setActive] = useState<boolean>(true)
 
-    const fetchData = async () =>{
-        try{
-            await dispatch(getConnector({id: id, token: token})).unwrap()
-        }
-        catch(error) {
-            console.log(error);
-        }
+    const fetchData = async ()=> {
+      try {
+        await dispatch(getConnector({id,token})).unwrap()
+      }
+      catch(error){
+        console.log(error);
+      }
     }
 
     useEffect(()=>{
-        fetchData();
+      fetchData();
     },[])
-
-
-
+  
     return (
         <>
         <Navbar/> 
@@ -55,14 +68,14 @@ export default function ConnectorDetails() {
     <Button
       text={<IoIosArrowRoundBack /> as unknown as string}
       type={Type.tertiary}
-      className="ds-text-size-50 ds-mt-4"
+      className="ds-text-size-50 ds-mt-4 ds-text-primary"
       size={Size.small}
       onClick={() => navigate('/')}
     />
     <Text
-      text="Imprimante"
+      text= {Array.isArray(data) ? data[0]?.connectorName : data?.connectorName}
       type={TextType["type-5"]}
-      className="ds-ml-3"
+      className="ds-ml-3 ds-text-primary"
     />
     </div>
      <Checkbox
@@ -77,19 +90,21 @@ export default function ConnectorDetails() {
   <div className="ds-w-50 ds-mt-5"> 
     <Container className="ds-mt-3">
     <b>Site web</b> 
-    <Text text="..." />
+    <Text text={Array.isArray(data) ? data[0]?.webSite : data?.webSite} />
     </Container>
    
     <Container className="ds-flex ds-align-center ds-mt-3"> 
       <Input
-        label="API key"
-        className="ds-text-primary"
+        label={<b>API key</b> as unknown as string}
+        value={Array.isArray(data) ? data[0]?.apiKey : data?.apiKey}
+        ref={apiRef}
       />
       <Button 
       text="Copier" 
       size = {Size.medium}
       type = {TypeButton.secondary}
       className="ds-ml-15 ds-mt-24"
+      onClick={handleCopyApi}
       />
     </Container>
 
@@ -230,10 +245,11 @@ export default function ConnectorDetails() {
        className="ds-flex ds-justify-end  ds-bg-dark ds-text-white ds-mt-8"
         size={Size.xSmall}
         type={TypeButton.tertiary}
+        onClick={handleCopy}
         />
       </div>
                 <Card.Body>
-                  <div className = "ds-mb-7 ds-text-white ds-text-size-12">
+                  <div className = "ds-mb-7 ds-text-white ds-text-size-12" ref={codeRef}>
                   {changeCode[Object.keys(changeCode)[0]]}
                   </div>
                 </Card.Body>
@@ -242,8 +258,6 @@ export default function ConnectorDetails() {
   </div>
 </div>
          </>
-
-     
     )
 
 }

@@ -1,12 +1,13 @@
-import { Button, Col, Input, Modal, Row, Text } from "@piximind/ds-p-23";
-import { ETypesInput, Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
+import { Button, Col, Input, Row, Text } from "@piximind/ds-p-23";
+import { ETypesInput, Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import Props from "../../interfaces/Props";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { useState } from "react";
 import { updateUser } from "../../api/reducers/ProfileReducer";
 import ProfileInvoiceDetails from "../../interfaces/InvoiceDetails";
+import { Modal } from "react-bootstrap";
 
-export default function EditInvoice ({modalRef, cancel} : Props) {
+export default function EditInvoice ({show, handleClose} : Props) {
     
     const dispatch = useAppDispatch();
     const authData= useAppSelector(state => state.auth.data);
@@ -16,7 +17,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
     const handleModify = async(): Promise<void> =>{
         try {
             await dispatch(updateUser({id: authData?.id ,updateUser : {invoiceDetails : changeInvoice} ,token : authData?.token})).unwrap();
-            cancel();
+            handleClose();
         }
         catch(error){
             console.log(error);
@@ -26,15 +27,17 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
     
     return(
         <>
-        <Modal ref={modalRef} withCloseIcon={true} contentClassName="ds-m-200" containerClassName="ds-center">
-                <Text
-                    text='Changer mes informations de facturation'
-                    className='ds-flex ds-text-primary ds-ml-20'
-                    type={TextType['type-5']} />
-                    <hr className="ds-ml-20 ds-mr-24"/>
-                
-                <div className="ds-ml-20">
-                    <Row className="ds-w-100">
+         <Modal show={show} onHide={handleClose} size="lg" centered>
+            <Modal.Header closeButton>
+                <Modal.Title >
+                    <Text
+                         text='Changer mes informations de facturation'
+                         className='ds-mb-2 ds-text-primary'
+                     />
+            </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <Row>
                     <Col className="ds-w-50">
                     <Input 
                     label='Raison Sociale'
@@ -59,7 +62,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                 />
                     </Col>
                  </Row>
-                 <Row className="ds-w-100">
+                 <Row>
                     <Col className="ds-w-50">
                     <Input 
                     label='Adresse du siège social'
@@ -83,7 +86,7 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                 />
                     </Col>
                     </Row>
-                   <Row className="ds-w-100">
+                   <Row>
                     <Col className="ds-w-50">
                     <Input 
                     label='Ville'
@@ -107,29 +110,24 @@ export default function EditInvoice ({modalRef, cancel} : Props) {
                 />
                     </Col>
                    </Row>
-               
-                <Row className="ds-mt-10 ds-w-100 ds-mb-10">
-                    <Col className="ds-w-50">
+            </Modal.Body>
+            <Modal.Footer>
                     <Button
                     type={Type.secondary}
                     text='Annuler'
-                    size={Size.medium}
-                    className="ds-w-100" 
-                    onClick={cancel}
+                    size={Size.medium} 
+                    className='ds-w-48'
+                    onClick={handleClose}
                    />
-                    </Col>
-                    <Col className="ds-w-50">
                     <Button
                     type={Type.primary}
                     text='Enregistrer'
-                    size={Size.medium} 
-                    className="ds-w-100"
+                    size={Size.medium}
+                    className='ds-w-48' 
                     onClick={()=>handleModify()}
                     />
-                    </Col>
-                </Row>
-                </div>
-            </Modal>
+            </Modal.Footer>
+        </Modal>
         </>
     )
 }

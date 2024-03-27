@@ -78,7 +78,7 @@ export default function Navbar() {
   return (
     <>
       <div className="ds-flex ds-px-12 ds-hp-32 ds-align-center ds-mt-20  ds-justify-between ds-w-100">
-        <Text text="Princo" className="ds-ml-20" type={TextType['type-5']} />
+        <b><Text text="Princo" className="ds-ml-20 ds-text-primary" type={TextType['type-5']} /></b>
         <div className="ds-flex ds-align-center">
           <Button text="Acheter Crédit" type={TypeButton.primary} className="ds-mr-20" size={Size.small} />
           <div className="ds-flex-grow1 ds-flex ds-justify-start">
@@ -87,7 +87,7 @@ export default function Navbar() {
                 {link.sousLinks && (
                   <div>
                     <Link
-                      className="ds-mr-66 ds-link ds-text-line-16 ds-text-weight500 ds-text-size-16 ds-m-5"
+                      className="ds-mr-66 ds-link ds-text-line-16 ds-text-weight500 ds-text-size-16"
                       to={link.path || '#'}
                     >
                       {link.label}

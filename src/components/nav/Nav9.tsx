@@ -14,7 +14,7 @@ import { logOut } from '../../api/reducers/AuthReducer';
 import { LiaFileInvoiceDollarSolid } from 'react-icons/lia';
 
 
-export default function Navpar() {
+export default function Nav9() {
 
   const dispatch = useAppDispatch();
   const handleLogout = ()=>{

@@ -1,5 +1,5 @@
-import { Button, Col, Datepicker, EDisplayType, Input, Modal, NumberInput, Radio, Row, Text } from "@piximind/ds-p-23";
-import { ESizeInput, ETypesInput, Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
+import { Button, Col, Datepicker, EDisplayType, Input,  NumberInput, Radio, Row, Text } from "@piximind/ds-p-23";
+import { ESizeInput, ETypesInput, Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import Props from "../../interfaces/Props";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { useState } from "react";
@@ -7,8 +7,9 @@ import User from "../../interfaces/User";
 import { Validation } from "@piximind/validation";
 import { updateUser } from "../../api/reducers/ProfileReducer";
 import { IChangeDatePicker } from "@piximind/ds-p-23/lib/esn/Interfaces/Molecule/IMoleculeDatepicker/IMoleculeDatepicker";
+import { Modal } from "react-bootstrap";
 
-export default function EditProfile ({modalRef, cancel} : Props) {
+export default function EditProfile ({show, handleClose} : Props) {
 
     const [changeUser,setChangeUser] = useState<User>(useAppSelector(state => state.profile.data) || {} as User );
     const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ export default function EditProfile ({modalRef, cancel} : Props) {
         try {
             
             await dispatch(updateUser({id : dataAuth?.id , updateUser: changeUser, token : dataAuth?.token})).unwrap();
-            cancel()
+            handleClose()
         }
         catch(error) {
             console.log('error');
@@ -34,15 +35,17 @@ export default function EditProfile ({modalRef, cancel} : Props) {
 
     return(
         <>
-        <Modal ref={modalRef} withCloseIcon={true} contentClassName="ds-m-200" containerClassName="ds-center">
-                
-                <Text
-                    text='Changer mes informations de profil'
-                    className='ds-text-primary ds-ml-20'
-                    type={TextType['type-5']} />
-                <hr className="ds-ml-20 ds-mr-24"/>
-                <div className="ds-ml-20">
-                <Row className="ds-w-100">
+         <Modal show={show} onHide={handleClose} size="lg" centered>
+            <Modal.Header closeButton>
+                <Modal.Title >
+                    <Text
+                         text='Changer mes informations de profil'
+                         className='ds-mb-2 ds-text-primary'
+                     />
+            </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <Row>
                     <Col className="ds-w-50">
                     <Input 
                     label='Nom'
@@ -66,7 +69,7 @@ export default function EditProfile ({modalRef, cancel} : Props) {
                 />
             </Col>
                 </Row>
-                <Row className="ds-w-100 ds-mb-7">
+                <Row>
                 <Col className="ds-w-50">
                     <Input 
                     label='Adresse mail'
@@ -86,11 +89,11 @@ export default function EditProfile ({modalRef, cancel} : Props) {
                     containerClassName = 'ds-w-100 ds-h-100'
                     allowNegative={false}
                     displayType={ EDisplayType.input}
-                    onChange={(e)=>setChangeUser({...changeUser, 'tel' : e.value})}
+                    onChange={(e: { value: string })=>setChangeUser({...changeUser, 'tel' : e.value})}
                  />   
                 </Col>
                 </Row>
-          <Row className="ds-w-100">
+          <Row>
                 <Col className="ds-w-50">
                     <label className="ds-text-weight400">Date de naissance</label>    
                 <Datepicker
@@ -116,7 +119,7 @@ export default function EditProfile ({modalRef, cancel} : Props) {
             </Col>
           </Row>
 
-                <Row className="ds-w-100">
+                <Row>
                     <Col className="ds-w-50">
                     <Input 
                     label='Pays / Région'
@@ -140,28 +143,24 @@ export default function EditProfile ({modalRef, cancel} : Props) {
                 />
                 </Col>      
                     </Row>
-                <Row className="ds-w-100 ds-mt-10 ds-mb-10">
-                    <Col className="ds-w-50">
+            </Modal.Body>
+            <Modal.Footer>
                     <Button
                     type={Type.secondary}
                     text='Annuler'
                     size={Size.medium} 
-                    className='ds-w-100'
-                    onClick={cancel}
+                    className='ds-w-48'
+                    onClick={handleClose}
                    />
-                   </Col>
-                    <Col className="ds-w-50">
                     <Button
                     type={Type.primary}
                     text='Enregistrer'
-                    size={Size.medium} 
-                    className='ds-w-100'
+                    size={Size.medium}
+                    className='ds-w-48' 
                     onClick={()=>handleModify()}
                     />
-                    </Col>
-                </Row>
-                </div>
-            </Modal>
+            </Modal.Footer>
+        </Modal>
         </>
     )
 }
