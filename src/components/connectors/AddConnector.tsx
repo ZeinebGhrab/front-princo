@@ -50,26 +50,27 @@ export default function AddConnector () {
         <Navbar/>
         <Container
         children = {
-            <div className="ds-flex ds-align-center ds-mt-30">
+            <div className="ds-flex ds-align-center ds-mt-40">
                 <Button
                 text = {<IoIosArrowRoundBack /> as unknown as string}
                 type = {Type.tertiary}
-                className="ds-text-size-50 ds-ml-50 ds-text-neutral500"
+                className="ds-text-size-55 ds-ml-50"
+                style = {{color : '#003D42'}}
                 size = {Size.small}
                 onClick={()=>navigate('/')}
                 />
                 <Text
                 text = "Nouveau connecteur"
-                type={TextType["type-5"]}
-                className="ds-mt-9 ds-text-neutral500"
+                className="ds-text-size-30"
+                style = {{color : '#003D42'}}
                 />
             </div>
         }
         />
         <div className="ds-flex ds-justify-center ds-m-50">
-        <form className="ds-w-25 ds-flex-col" onSubmit={(e: FormEvent)=>handleGenerate(e)}>
+        <form className="ds-w-28 ds-flex-col ds-mt-10" onSubmit={(e: FormEvent)=>handleGenerate(e)}>
             <div className="ds-flex ds-justify-center">
-            <SlPrinter className="ds-text-size-50 ds-mb-25 ds-flex ds-justify-center ds-text-primary700" />
+            <SlPrinter className="ds-text-size-60 ds-mb-25 ds-flex ds-justify-center ds-text-primary700" />
             </div>
                 <Input
                 label = "Nom du connecteur"
@@ -80,7 +81,7 @@ export default function AddConnector () {
                 />
                 <Input
                 label = "Site web de l'application"
-                containerClassName="ds-mb-20"
+                containerClassName="ds-mb-24"
                 name='webSite'
                 value = {connector.webSite}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setConnector({...connector, 'webSite': e.target.value})}

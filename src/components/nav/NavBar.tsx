@@ -1,120 +1,61 @@
 import { Button, TypeButton, Text, Avatar } from '@piximind/ds-p-23';
-import { Size, SizeAvatar, TextType } from '@piximind/ds-p-23/lib/esn/Interfaces';
-import { ReactElement } from 'react';
+import { Size, SizeAvatar } from '@piximind/ds-p-23/lib/esn/Interfaces';
+import { useState } from 'react';
 import { BsFillCreditCard2BackFill } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { LiaFileInvoiceDollarSolid } from 'react-icons/lia';
 import { TbLogout } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
+import userLogo from '../../assets/user.png';
+import { Dropdown,  NavDropdown } from 'react-bootstrap';
+import { useAppDispatch } from '../../api/hooks';
+import { logOut } from '../../api/reducers/AuthReducer';
 
-interface LinkItem {
-  label: ReactElement;
-  path?: string;
-  sousLinks?: LinkItem[];
-}
 
 export default function Navbar() {
-  const renderSousLinks = (sousLinks: LinkItem[] | undefined) => {
-    const list: JSX.Element[] = [];
-    sousLinks?.forEach(item => {
-      if (item.path) {
-        list.push(
-          <Link
-            className="ds-align-center ds-flex ds-link ds-text-line-16 ds-text-weight500 ds-text-size-16 ds-m-5"
-            to={item.path}
-          >
-            {item.label}
-          </Link>
-        );
-      }
-    });
-    return list;
-  };
 
-  const links: LinkItem[] = [
-    {
-      label: (
-        <>
-          <Avatar src="https://storage.googleapis.com/uscimages/account.png" isImage={true} size={SizeAvatar.large} />
-        </>
-      ),
-      sousLinks: [
-        {
-          label: (
-            <>
-              <CgProfile className="ds-mr-3" /> Mon Profil
-            </>
-          ),
-          path: '/profileDetails',
-        },
-        {
-          label: (
-            <>
-              <BsFillCreditCard2BackFill className="ds-mr-3" /> Mon crédit
-            </>
-          ),
-          path: '/credit',
-        },
-        {
-          label: (
-            <>
-              <LiaFileInvoiceDollarSolid className="ds-mr-3" /> Mes factures
-            </>
-          ),
-          path: '/invoice',
-        },
-        {
-          label: (
-            <>
-              <TbLogout className="ds-mr-3" /> Déconnexion
-            </>
-          ),
-          path: '/login',
-        },
-      ],
-    },
-  ];
+
+   const dispatch = useAppDispatch();
+   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
     <>
-      <div className="ds-flex ds-px-12 ds-hp-32 ds-align-center ds-mt-20  ds-justify-between ds-w-100">
-        <b><Text text="Princo" className="ds-ml-20 ds-text-primary" type={TextType['type-5']} /></b>
+      <div className="ds-flex ds-px-12 ds-hp-65 ds-align-center ds-mt-10  ds-justify-between ds-w-100 ds-box-shadow3">
+        <b><Text text="Princo" className="ds-ml-20 ds-text-primary ds-text-size-33" /></b>
         <div className="ds-flex ds-align-center">
-          <Button text="Acheter Crédit" type={TypeButton.primary} className="ds-mr-20" size={Size.small} />
+          <Button text="Acheter Crédit"
+           type={TypeButton.primary} 
+           className="ds-mr-20" 
+           size={Size.medium} 
+           />
           <div className="ds-flex-grow1 ds-flex ds-justify-start">
-            {links.map((link, index) => (
-              <div key={index} className="ds-dropdown-link ds-relative ds-px-10 ds-text-line-16 ds-text-weight500 ds-text-size-16 ds-text-neutral600">
-                {link.sousLinks && (
-                  <div>
-                    <Link
-                      className="ds-mr-66 ds-link ds-text-line-16 ds-text-weight500 ds-text-size-16"
-                      to={link.path || '#'}
-                    >
-                      {link.label}
-                    </Link>
-                    <div className="ds-dropdown-content ds-absolute ds-bg-white ds-align-start">
-                      {link.sousLinks.map((sousLink, subIndex) => (
-                        <div key={subIndex}>
-                          {subIndex === link?.sousLinks.length - 1 && <hr/>}
-                          {sousLink.path && (
-                            <Link
-                              className="ds-align-center ds-flex ds-link ds-text-line-16 ds-text-weight500 ds-text-size-16 ds-m-13"
-                              to={sousLink.path}
-                            >
-                              {sousLink.label}
-                            </Link>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+            <NavDropdown 
+              title={
+              <Avatar  src= {userLogo}
+              isImage={true}
+              size={SizeAvatar.large}
+              />}
+              show={showDropdown}
+              onMouseEnter={() => setShowDropdown(true)}
+              onMouseLeave={() => setShowDropdown(false)} 
+              id="basic-nav-dropdown"
+              >
+            <Dropdown.Item eventKey="1" as={Link} to='/profileDetails'>
+                <CgProfile className="ds-mr-3" /> Mon Profil
+                </Dropdown.Item>
+              <Dropdown.Item eventKey="2"  as={Link}  to='/credit'> 
+                <BsFillCreditCard2BackFill className="ds-mr-3" /> Mon crédit</Dropdown.Item>
+              <Dropdown.Item eventKey="3" as={Link}  to='/invoices'>
+                <LiaFileInvoiceDollarSolid className="ds-mr-3" /> Mes factures
+                </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="4" as={Link}  to='login' onClick={()=>dispatch(logOut())}>
+                <TbLogout className="ds-mr-3" /> Déconnexion
+                 </Dropdown.Item>
+            </NavDropdown>  
           </div>
         </div>
       </div>
-      <hr />
     </>
   );
 }

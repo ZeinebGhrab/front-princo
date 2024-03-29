@@ -89,6 +89,20 @@ const initialState = {
     }
   );
 
+  export const deleteConnector = createAsyncThunk(
+    '/deleteConnector',
+    async ({ id, token }: { id: string | null | undefined, token: string | null | undefined }, thunkAPI) => {
+      try {
+        await axios.delete(`http://localhost:3000/connector/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      } catch (error) {
+        if (error instanceof AxiosError && error.response) {
+          return thunkAPI.rejectWithValue(error.response.data);
+        }
+        throw error;
+      }
+    }
+  );
+
 
   
   export const connectorsSlice = createSlice({
@@ -140,7 +154,17 @@ const initialState = {
       .addCase(updateConnector.rejected, (state, action) => {
         state.error = action.error.message || 'error occurred';
       })
-    }
-});
+    .addCase(deleteConnector.pending, (state) => {
+      state.status = 'loading';
+    })
+    .addCase(deleteConnector.fulfilled, (state) => {
+      state.status = 'succeeded';
+    })
+    .addCase(deleteConnector.rejected, (state, action) => {
+      state.error = action.error.message || 'error occurred';
+    })
+  }
+  }
+  );
 
 export default connectorsSlice.reducer;

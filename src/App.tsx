@@ -12,6 +12,8 @@ import ProfileDetails from './components/profile/ProfileDetails'
 import InvoiceDetails from './components/profile/InvoiceDetails'
 import AddConnector from './components/connectors/AddConnector'
 import ConnectorDetails from './components/connectors/ConnectorDetails'
+import Guide from './components/connectors/Guide'
+import EditConnector from './components/connectors/EditConnector'
 
 
 function App() {
@@ -29,6 +31,8 @@ function App() {
             <Route path='/' element={<ConnectorsList/>}/>
             <Route path='/addConnector' element={<AddConnector/>}/>
             <Route path='/connectorDetails/:id' element={<ConnectorDetails/>}/>
+            <Route path='/editConnector/:id' element={<EditConnector/>}/>
+            <Route path='/guide' element={<Guide exportGuide={false} />}/>
             <Route path='/profileDetails' element={<ProfileDetails/>}/>
             <Route path='/invoiceDetails' element={<InvoiceDetails/>}/>
             <Route path='*' element={<PageNotFound/>}/>

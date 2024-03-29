@@ -1,4 +1,4 @@
-import { TextType, Text, Col, Container } from "@piximind/ds-p-23";
+import { Text, Col, Container } from "@piximind/ds-p-23";
 import EditInvoice from "./EditInvoice";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { useCallback, useEffect, useState } from "react";
@@ -42,94 +42,93 @@ export default function InvoiceDetails ()  {
         <ProfileNav handleOpenModal={()=>setShowEditModal(true)}/>
         <Col className="ds-ml-125 ds-mt-50">
             <Container
-            className="ds-mb-11"
+            className="ds-mb-18"
             children = 
             {
                 <>
                 <Text
                    text='Raison Sociale'
-                   className='ds-mb-5 ds-text-size-15'
+                   className='ds-mb-5 ds-text-size-16'
                  />
                 <Text
                    text={data?.legalName}
-                   className='ds-mb-5 ds-ml-5 ds-text-primary700 ds-text-size-14'
+                   className='ds-mb-5 ds-ml-5 ds-text-primary700 ds-text-size-15'
                  />
                 </>
             }
             />
             <Container
-            className="ds-mb-10"
+            className="ds-mb-18"
             children = 
             {
             <>
             <Text
             text='Matricule fiscale'
-            className='ds-mb-5 ds-text-size-15'
-            type={TextType["subtitle-1"]}
+            className='ds-mb-5 ds-text-size-16'
             />
             <Text
             text={data?.fiscalId}
-            className='ds-ml-5 ds-text-primary700 ds-text-size-14'
+            className='ds-ml-5 ds-text-primary700 ds-text-size-15'
             />
             </>
             }
             />
            <Container
-           className="ds-mb-11"
+           className="ds-mb-18"
            children = {
             <>
             <Text
             text='Adresse du siège social'
-            className='ds-mb-5 ds-text-size-15'
+            className='ds-mb-5 ds-text-size-16'
         />
         <Text
             text={data?.adress}
-            className='ds-ml-5 ds-text-primary700 ds-text-size-14'
+            className='ds-ml-5 ds-text-primary700 ds-text-size-15'
         />
             </>
            }
            />
            <Container
-           className="ds-mb-11"
+           className="ds-mb-18"
            children = {
             <>
              <Text
             text='Pays'
-            className='ds-mb-5 ds-text-size-15'
+            className='ds-mb-5 ds-text-size-16'
             />
         <Text
             text={data?.country}
-            className='ds-ml-5 ds-text-primary700 ds-text-size-14'
+            className='ds-ml-5 ds-text-primary700 ds-text-size-15'
         />
             </>
            }
            />
            <Container
-           className="ds-mb-11"
+           className="ds-mb-18"
            children = {
             <>
             <Text
             text='Ville'
-            className='ds-mb-5 ds-text-size-15'
+            className='ds-mb-5 ds-text-size-16'
             />
         <Text
             text={data?.city}
-            className='ds-ml-5 ds-text-primary700 ds-text-size-14'
+            className='ds-ml-5 ds-text-primary700 ds-text-size-15'
         />
             </>
            }
            />
            <Container
-           className="ds-mb-11"
+           className="ds-mb-18"
            children = {
             <>
             <Text
             text='Code postale'
-            className='ds-mb-5 ds-text-size-15'
+            className='ds-mb-5 ds-text-size-16'
         />
         <Text
             text={data?.postalCode}
-            className='ds-ml-5 ds-text-primary700 ds-text-size-14 '
+            className='ds-ml-5 ds-text-primary700 ds-text-size-15'
         />
             </>
            }

@@ -1,27 +1,43 @@
-import React, { useState } from 'react';
-import {  Modal } from 'react-bootstrap';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../api/hooks';
 import { Validation } from '@piximind/validation';
-import { ETypesInput, Size, TextType, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
-import { Button, Input, Text } from '@piximind/ds-p-23';
-import { updateConnector } from '../../api/reducers/ConnectorsReducer';
-import Props from '../../interfaces/Props';
+import { Size, TextType, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
+import { Button, Container, Input, Text, TypeButton } from '@piximind/ds-p-23';
+import { getConnector, updateConnector } from '../../api/reducers/ConnectorsReducer';
+import { IoIosArrowRoundBack } from 'react-icons/io';
+import { useNavigate, useParams } from 'react-router-dom';
+import Navbar from '../nav/Navbar';
+import { SlPrinter } from 'react-icons/sl';
+import Connector from '../../interfaces/Connector';
 
 
-export default function EditConnector({ data ,show, handleClose }: Props) {
-    const [change, setChange] = useState(data || {
+export default function EditConnector() {
+
+    const navigate = useNavigate();
+    const data = useAppSelector(state=>state.connectors.data);
+    const [change, setChange] = useState<Connector>(Array.isArray(data) ? data[0]: data || {
         connectorName :"",
         webSite:"",
     });
-
-    console.log(data)
 
     const validation = new Validation();
     const dispatch = useAppDispatch();
     const token = useAppSelector(state=>state.auth.data?.token);
     const [errors,setErrors]=useState<{ [key: string]: string }>({});
+    const  {id} = useParams();
 
-    const handleChange = async() => {
+    const fetchData = async ()=>{
+        try {
+            await dispatch(getConnector({id, token})).unwrap();
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+
+    const handleChange = async(e : FormEvent) => {
+        e.preventDefault()
         setErrors({});
         if (
             validation.isEmpty(change.connectorName) || validation.isEmpty(change.webSite) ) {
@@ -34,46 +50,59 @@ export default function EditConnector({ data ,show, handleClose }: Props) {
         }
 
         try {
-            await dispatch(updateConnector({id : data?._id, updateConnector: change,token})).unwrap();
-            handleClose();
+            await dispatch(updateConnector({id : Array.isArray(data) ? data[0]?._id : data?._id ,updateConnector: change,token})).unwrap();
+            navigate(`/connectorDetails/${id}`)
         } catch(error) {
             console.log(error);
         }
     };
 
+    useEffect(()=>{
+        fetchData();
+    },[]);
+
     return (
-        <Modal show={show} onHide={handleClose} centered>
-            <Modal.Header closeButton>
-                <Modal.Title ><Text
-                text='Changer les informations du connecteur'
-                className='ds-flex ds-mb-2 ds-text-primary '
-            /></Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-
-            <Input
-                label='Nouveau nom de connecteur'
-                type={ETypesInput.text}
-                value={change.connectorName}
+        <>
+        <Navbar/>
+        <Container
+        children = {
+            <div className="ds-flex ds-align-center ds-mt-40">
+                <Button
+                text = {<IoIosArrowRoundBack /> as unknown as string}
+                type = {Type.tertiary}
+                className="ds-text-size-55 ds-ml-50"
+                style = {{color : '#003D42'}}
+                size = {Size.small}
+                onClick={()=>navigate(`/connectorDetails/${id}`)}
+                />
+                <Text
+                text = "Modifier connecteur"
+                className="ds-text-size-30"
+                style = {{color : '#003D42'}}
+                />
+            </div>
+        }
+        />
+        <div className="ds-flex ds-justify-center ds-m-50">
+        <form className="ds-w-28 ds-flex-col ds-mt-10" onSubmit={(e: FormEvent)=>handleChange(e)}>
+            <div className="ds-flex ds-justify-center">
+            <SlPrinter className="ds-text-size-60 ds-mb-25 ds-flex ds-justify-center ds-text-primary700" />
+            </div>
+                <Input
+                label = "Nom du connecteur"
+                containerClassName="ds-mb-20"
                 name='connectorName'
-                autoComplete='current-connectorName'
-                containerClassName='ds-mb-15 ds-mt-10'
-                onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, connectorName: e.target.value})}
-            />
-           
-           
-            <Input
-                label='Nouveau site web'
-                type={ETypesInput.text}
-                value ={change.webSite}
+                value = {change.connectorName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setChange({...change, 'connectorName': e.target.value})}
+                />
+                <Input
+                label = "Site web de l'application"
+                containerClassName="ds-mb-24"
                 name='webSite'
-                autoComplete='current-webSite'
-                containerClassName='ds-mb-10'
-                onChange={(e : React.ChangeEvent<HTMLInputElement>)=>setChange({...change, webSite: e.target.value})}
-                
-            />
-
-                {
+                value = {change.webSite}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setChange({...change, 'webSite': e.target.value})}
+                />
+                 {
                       errors['message']&&                
                      
                         <Text
@@ -83,26 +112,14 @@ export default function EditConnector({ data ,show, handleClose }: Props) {
                     />
                     
                  }
-                
-            </Modal.Body>
-            <Modal.Footer>
-                 <Button
-                        type={Type.secondary}
-                        text='Annuler'
-                        size={Size.medium}
-                        className='ds-w-48'
-                        onClick={handleClose} 
-                        />
-                    <Button
-                        type={Type.primary}
-                        text='Enregistrer'
-                        size={Size.medium}
-                        className='ds-w-48 '
-                        onClick={()=>handleChange()}
-                    />
-                
-            </Modal.Footer>
-        </Modal>
+                <Button 
+               text="Modifier" 
+               type={TypeButton.primary}
+               className="ds-text-size-16"
+               />
+        </form>
+        </div>
+        </>
     );
 }
 

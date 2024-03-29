@@ -50,8 +50,8 @@ export default function Login() {
 
 
     return (
-        <div className='ds-flex ds-center ds-p-10'>
-            <form className='ds-blur4 ds-p-20 ds-border-radius-8 ds-w-35 ds-m-50' onSubmit={(e: FormEvent)=>e.preventDefault()}>
+        <div className='ds-flex ds-center ds-mt-30'>
+            <form className='ds-blur4 ds-p-20 ds-border-radius-8 ds-w-35 ds-m-50 ds-box-shadow2' onSubmit={(e: FormEvent)=>e.preventDefault()}>
                 <Text 
                     text='Connexion'
                     className='ds-flex ds-mb-30 ds-justify-around ds-text-primary'
@@ -105,7 +105,7 @@ export default function Login() {
                      <Container 
                      children = {
 
-                    <Link to='/forgetPassword' className='ds-flex ds-justify-end ds-mb-13 ds-text-primary'>Mot de passe oublié ?</Link>
+                    <Link to='/forgetPassword' className='ds-text-size-17 ds-flex ds-justify-end ds-mb-13 ds-text-primary'>Mot de passe oublié ?</Link>
                      }
                      />
                      <Container 
@@ -113,6 +113,7 @@ export default function Login() {
                         <Checkbox 
                     label='Se souvenir de moi'
                     className='ds-bg-white'
+                    labelClassName='ds-text-size-17'
                     checked={user.memorise}
                     disabled={false}
                     type={TypeCheck.checkbox}
@@ -146,9 +147,6 @@ export default function Login() {
                         </>
                      }
                      />
-                    
-                    
-                
             </form>
         </div>
     );

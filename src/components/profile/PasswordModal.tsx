@@ -104,7 +104,7 @@ export default function PasswordModal({ show, handleClose }: Props) {
             }
             />
             </Modal.Body>
-            <Modal.Footer>
+            <Modal.Footer className='ds-flex ds-justify-center ds-ml-10 ds-mr-10'>
                  <Button
                         type={Type.secondary}
                         text='Annuler'

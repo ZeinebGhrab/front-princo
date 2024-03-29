@@ -1,26 +1,22 @@
-import { Button, Checkbox, Container, Input, Text, TypeButton, TypeCheckbox } from "@piximind/ds-p-23";
+import { Button, Checkbox, Container, Input, SizeButton, Text, TypeButton, TypeCheckbox } from "@piximind/ds-p-23";
 import Navbar from "../nav/Navbar";
 import { IoIosArrowRoundBack } from "react-icons/io";
-import { SiApple, SiLinux, SiNestjs, SiPhp, SiPython, SiWindows10 } from "react-icons/si";
-import { Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
+import { Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { Card } from "react-bootstrap";
-import { MdContentCopy } from "react-icons/md";
+import {  OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { getConnector } from "../../api/reducers/ConnectorsReducer";
+import Guide from "./Guide";
+import { FaPencilAlt } from "react-icons/fa";
+import { TiDeleteOutline } from "react-icons/ti";
+import DeleteConnector from "./DeleteConnector";
+
 
 
 export default function ConnectorDetails() {
 
-    
-    const code = {
-        "php": "php",
-        "python": "python",
-        "nest": "nest"
-      };
       
-    
     
     const navigate = useNavigate();
     const { id } = useParams();
@@ -28,7 +24,7 @@ export default function ConnectorDetails() {
     const token = useAppSelector(state => state.auth.data?.token)
     const data = useAppSelector(state=>state.connectors.data);
     const apiRef = useRef(null);
-    const codeRef = useRef(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
    
 
   const handleCopyApi = () => {
@@ -38,13 +34,6 @@ export default function ConnectorDetails() {
     }
   };
 
-    const handleCopy = () => {
-      const cardContent =  (codeRef?.current as unknown as HTMLElement)?.innerText;
-      navigator.clipboard.writeText(cardContent);
-    };
-  
-   
-    const [changeCode, setChangeCode] = useState<{ [key: string]: string }>({ "php": code.php });
     const [active, setActive] = useState<boolean>(true)
 
     const fetchData = async ()=> {
@@ -63,42 +52,78 @@ export default function ConnectorDetails() {
     return (
         <>
         <Navbar/> 
-  <Container className="ds-flex ds-align-center ds-justify-between  ds-ml-58 ds-mt-30">
-    <div className="ds-flex ds-justify-center">
+  <Container className="ds-flex ds-align-center ds-justify-between ds-ml-58 ds-mt-35">
+    <div className="ds-flex ds-align-center">
+    <div className="ds-flex ds-align-center ds-mr-60">
     <Button
       text={<IoIosArrowRoundBack /> as unknown as string}
       type={Type.tertiary}
-      className="ds-text-size-50 ds-mt-4 ds-text-primary"
+      className="ds-text-size-55"
+      style = {{color : '#003D42'}}
       size={Size.small}
       onClick={() => navigate('/')}
     />
     <Text
       text= {Array.isArray(data) ? data[0]?.connectorName : data?.connectorName}
-      type={TextType["type-5"]}
-      className="ds-ml-3 ds-text-primary"
+      className="ds-text-size-30"
+      style = {{color : '#003D42'}}
     />
+    </div>
+    <div className="ds-flex ds-align-center ds-mb-14">
+      <Button
+      text ={<><FaPencilAlt className="ds-mr-2 ds-text-size-17"/> Modifier</> as unknown as string}
+      type={TypeButton.secondary}
+      size={SizeButton.small}
+      style ={{
+        backgroundColor: '#fff',
+        borderColor: '#003D42',
+        color: '#003D42',
+        fontSize: '15px'
+      }}
+      className="ds-mr-10"
+      onClick={()=>navigate(`/editConnector/${id}`)}
+      />
+      <Button
+      text ={<><TiDeleteOutline  className="ds-mr-2 ds-text-size-17" /> Supprimer</> as unknown as string}
+      type={TypeButton.secondary}
+      size={SizeButton.small}
+      style ={{
+        backgroundColor: '#fff',
+        borderColor: '#003D42',
+        color: '#003D42',
+        fontSize: '15px'
+      }}
+      onClick={()=>setShowDeleteModal(true)}
+      />
+    </div>
     </div>
      <Checkbox
       checked = {active}
       onClick={()=>setActive(!active)}
       type={TypeCheckbox.switch}  
       label="Activé" 
-      containerClassName="ds-mb-14 ds-mr-100"
+      containerClassName="ds-mb-14 ds-mr-130"
       />
   </Container>
   <div className="ds-ml-80"> 
-  <div className="ds-w-50 ds-mt-5"> 
-    <Container className="ds-mt-3">
-    <b>Site web</b> 
-    <Text text={Array.isArray(data) ? data[0]?.webSite : data?.webSite} />
+  <div className="ds-w-50 ds-mt-35"> 
+    <Container className="ds-mt-3 ds-text-size-16">
+    <b className="ds-text-primary">Site web</b> 
+    <Text 
+    text={Array.isArray(data) ? data[0]?.webSite : data?.webSite}
+    className="ds-text-neutral800"
+     />
     </Container>
    
     <Container className="ds-flex ds-align-center ds-mt-3"> 
       <Input
-        label={<b>API key</b> as unknown as string}
+        label={<b className="ds-text-primary">API key</b> as unknown as string}
         value={Array.isArray(data) ? data[0]?.apiKey : data?.apiKey}
+        className="ds-text-neutral800"
         ref={apiRef}
       />
+      <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Copier</Tooltip>} placement='bottom'>
+      <span className="d-inline-block">
       <Button 
       text="Copier" 
       size = {Size.medium}
@@ -106,157 +131,13 @@ export default function ConnectorDetails() {
       className="ds-ml-15 ds-mt-24"
       onClick={handleCopyApi}
       />
+        </span>
+      </OverlayTrigger>
     </Container>
-
-    <Container className="ds-mt-20">
-      <b>
-        <Text
-          text="Guide de mise en marche : "
-          className="ds-text-size-20 ds-text-neutral800 "
-        />
-      </b>
-    </Container>
-
-    <Container className="ds-mt-18"> 
-        <>
-        <b className="ds-text-primary">Etape 1 : </b> Télécharger l'application desktop de votre imprimante
-        <div className="ds-flex ds-align-center ds-mt-10">
-      <div>
-      <Button
-      text={<SiWindows10 /> as unknown as string}
-      type={TypeButton.primary}
-      style={{
-        backgroundColor : '#eaeeeb',
-        color :'#000',
-        borderColor: '#eaeeeb'
-      }}
-      size = {Size.large}
-      className="ds-text-size-30 ds-mr-25"
-      />
-      <Text text='Windows' type={TextType.caption} className="ds-ml-13"/>
-      </div>
-      <div>
-      <Button
-      text={<SiApple /> as unknown as string}
-      type={TypeButton.primary}
-      style={{
-        backgroundColor : '#eaeeeb',
-        color :'#000',
-        borderColor: '#eaeeeb'
-      }}
-      size = {Size.large}
-      className="ds-text-size-30 ds-mr-25"
-      />
-      <Text text='MacOs' type={TextType.caption} className="ds-ml-17"/>
-      </div>
-      <div>
-      <Button
-      text={<SiLinux /> as unknown as string}
-      type={TypeButton.primary}
-      style={{
-        backgroundColor : '#eaeeeb',
-        color :'#000',
-        borderColor: '#eaeeeb'
-      }}
-      size = {Size.large}
-      className="ds-text-size-30"
-      />
-      <Text text='Linux' type={TextType.caption} className="ds-ml-21"/>
-      </div>
-        </div>
-        </>
-    </Container>
-
-    <Container> 
-      <>
-        <b className="ds-text-primary">Etape 2 : </b> Connectez l'imprimante à votre ordinateur
-        <Text
-          text="Assurez-vous que l'imprimante est connectée à votre ordinateur. L'application peut utiliser plusieurs imprimantes à la fois."
-          type={TextType["body-2"]}
-          className="ds-mt-2" 
-        />
-      </>
-    </Container>
-
-    <Container className="ds-mt-18"> 
-      <>
-        <b className="ds-text-primary">Etape 3 : </b> Associer le site à votre ordinateur
-        <Text
-          text="Copier le token du connecteur dans votre espace manager et mettez le dans l'application. Choisissez l'imprimante dans laquelle vous allez imprimer votre ticket de caisse ou vos factures."
-          type={TextType["body-2"]}
-          className="ds-mt-2" 
-        />
-      </>
-    </Container>
-
-    <Container className="ds-mt-18 ds-mb-25"> 
-        <b className="ds-text-neutral900">Vous êtes dans le cas d'un développement spécifique ? Vous pouvez utiliser directement le code suivant :</b>
-      <div className="ds-flex ds-align-center ds-mt-10">
-      <div>
-      <Button
-      text={<SiPhp /> as unknown as string}
-      type={TypeButton.primary}
-      style={{
-        backgroundColor : '#eaeeeb',
-        color :'#000',
-        borderColor: '#eaeeeb'
-      }}
-      className="ds-text-size-30 ds-mr-25"
-      size = {Size.large}
-      onClick={()=>setChangeCode({ "php": code.php })}
-      />
-      <Text text='PHP' type={TextType.caption} className="ds-ml-27"/>
-      </div>
-      <div>
-      <Button
-      text={<SiPython /> as unknown as string}
-      type={TypeButton.primary}
-      style={{
-        backgroundColor : '#eaeeeb',
-        color :'#000',
-        borderColor: '#eaeeeb'
-      }}
-      className="ds-text-size-25 ds-mr-30"
-      size = {Size.large}
-      onClick={()=>setChangeCode({ "python": code.python })}
-      />
-      <Text text='Python' type={TextType.caption} className="ds-ml-16"/>
-      </div>
-      <div>
-      <Button
-      text={<SiNestjs /> as unknown as string}
-      type={TypeButton.primary}
-      style={{
-        backgroundColor : '#eaeeeb',
-        color :'#000',
-        borderColor: '#eaeeeb'
-      }}
-      className="ds-text-size-30"
-      size = {Size.large}
-      onClick={()=>setChangeCode({ "nest": code.nest })}
-      />
-      <Text text='JS' type={TextType.caption} className="ds-ml-30"/>
-      </div>
-      </div>
-      <Card style={{ width: '40rem', height:'15rem', background: 'black' }}>
-      <div  className="ds-flex ds-justify-end ds-m-3">
-      <Button 
-      text={<><MdContentCopy /> Copier</> as unknown as string}
-       className="ds-flex ds-justify-end  ds-bg-dark ds-text-white ds-mt-8"
-        size={Size.xSmall}
-        type={TypeButton.tertiary}
-        onClick={handleCopy}
-        />
-      </div>
-                <Card.Body>
-                  <div className = "ds-mb-7 ds-text-white ds-text-size-12" ref={codeRef}>
-                  {changeCode[Object.keys(changeCode)[0]]}
-                  </div>
-                </Card.Body>
-              </Card>
-    </Container>
+    <Guide exportGuide={true}/>
   </div>
 </div>
+<DeleteConnector show={showDeleteModal} handleClose={()=>setShowDeleteModal(false)} data={id}/>
          </>
     )
 

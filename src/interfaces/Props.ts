@@ -1,7 +1,5 @@
-import Connector from "./Connector";
-
 export default interface Props {
-    data? : Connector
+    data? : string;
     show : boolean;
     handleClose: () => void;
 }

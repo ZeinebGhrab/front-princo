@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import '@piximind/ds-p-23/lib/main.css';
 import { useAppDispatch } from '../api/hooks';
-import { Button, Checkbox, Container, ETypesInput, Input, Row, TextType } from '@piximind/ds-p-23';
+import { Button, Checkbox, Container, ETypesInput, Input, TextType } from '@piximind/ds-p-23';
 import {  Text } from '@piximind/ds-p-23';
 import { Size, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import { FormEvent, useState} from 'react';
@@ -9,6 +8,7 @@ import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IA
 import { useForm } from '@piximind/custom-hook';
 import { ValidationList } from '../interfaces/ValidationList';
 import { signup } from '../api/reducers/AuthReducer';
+import { MdOutlineMarkEmailRead } from "react-icons/md";
 
   
 
@@ -16,7 +16,8 @@ export default function SignUp() {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const [send, setSend]=useState<boolean>(false)
+    const [send, setSend]=useState<boolean>(false);
+    const [errors,setErrors]=useState<{ [key: string]: string }>({});
 
 
     const {state,onChange,isFormValid} = useForm({ isRealTimeValidation: true, data: ValidationList });
@@ -24,6 +25,8 @@ export default function SignUp() {
    
     const handleSign = async (e: React.FormEvent) : Promise<void> => {
         e.preventDefault();
+        setErrors({})
+
         if (!isFormValid || state.password.value !== state.confirmPassword.value) {
             return;
         }
@@ -41,6 +44,7 @@ export default function SignUp() {
         }
         catch(error){
             console.log(error);
+            setErrors(error as { [key: string]: string } );
         }
       }
 
@@ -53,16 +57,24 @@ export default function SignUp() {
         <>
         {
             send ? (
-                <Row className="ds-center ds-mt-120">
+                <div className="ds-m-100">
+                    <div className='ds-flex ds-justify-center ds-text-size-80 ds-mb-20'>
+                    <MdOutlineMarkEmailRead className='ds-text-success700' />
+                    </div>
+                    
             <Text
-               text="Un lien a été envoyé à votre adresse e-mail. 
+               text="Un lien a été envoyé à votre adresse e-mail."
+               className="ds-text-success800 ds-text-size-24 ds-flex ds-justify-center"
+            /> 
+            <Text
+               text="
                Veuillez le consulter pour activer votre compte."
-               className="ds-text-neutral700 ds-text-size-24"
-            />      
-            </Row>
+               className="ds-text-neutral700 ds-text-size-24 ds-flex ds-justify-center"
+            />          
+            </div>
             ):(
-        <div className='ds-flex-col ds-center ds-p-3'>
-        <form className='ds-blur4 ds-p-20 ds-border-radius-8 ds-w-35'>
+        <div className='ds-flex-col ds-center ds-m-10'>
+        <form className='ds-blur4 ds-p-20 ds-border-radius-8 ds-w-35 ds-box-shadow2'>
         <Text 
             text='Inscription'
             className='ds-flex ds-mb-25 ds-justify-center ds-text-primary'
@@ -206,13 +218,26 @@ export default function SignUp() {
             </>
         }
         />
+
+                {
+                      errors['message']&&                
+                      <Container 
+                      children = {
+                        <Text
+                         text={errors['message']}
+                         className="ds-text-error600 ds-ml-3"
+                         type={TextType['subtitle-1']} 
+                    />
+                      }/>
+                     }
+        
         <Container
         children = {
             <>
             <Button 
                 type={Type.primary}
                 className='ds-w-100 ds-mb-13' 
-                size={Size.medium}
+                size={Size.large}
                 onClick={(e: FormEvent<Element>) => handleSign(e)}
                 text='S’inscrire'
             />
@@ -224,7 +249,7 @@ export default function SignUp() {
             <Button 
                 type={Type.secondary}
                 className='ds-w-100' 
-                size={Size.medium}
+                size={Size.large}
                 onClick={(e: FormEvent<Element>) => handleConnect(e)}
                 text='Se connecter'
             />

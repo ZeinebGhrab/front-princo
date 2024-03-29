@@ -1,9 +1,10 @@
-import { Button, TextType, Text, Input, Row, Container } from "@piximind/ds-p-23";
+import { Button, TextType, Text, Input, Container } from "@piximind/ds-p-23";
 import { ETypesInput, Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import React, { FormEvent, useState } from "react";
 import { useAppDispatch } from "../../api/hooks";
 import { forgetPassword } from "../../api/reducers/AuthReducer";
 import { Validation } from "@piximind/validation";
+import { MdOutlineMarkEmailRead } from "react-icons/md";
 
 export default function ForgetPassword() {
 
@@ -32,24 +33,24 @@ export default function ForgetPassword() {
     return(
         <div className='ds-flex-col ds-center ds-p-10'>
             { send ? (
-            <div className="ds-m-170">
-            <Row className="ds-justify-center">
+             <div className="ds-m-100">
+                    <div className='ds-flex ds-justify-center ds-text-size-80 ds-mb-20'>
+                    <MdOutlineMarkEmailRead className='ds-text-success700' />
+                    </div>
+                    
             <Text
                text="Un lien de réinitialisation a été envoyé à votre adresse e-mail."
-               className="ds-text-neutral700 ds-text-size-24"
-            />     
-            </Row>
-            <Row className="ds-justify-center">
-            <Text 
-            text=" Veuillez le consulter pour réinitialiser votre mot de passe."
-            className="ds-text-neutral700 ds-text-size-24"
+               className="ds-text-success800 ds-text-size-24 ds-flex ds-justify-center"
             /> 
-            </Row>
+            <Text
+               text=" Veuillez le consulter pour réinitialiser votre mot de passe."
+               className="ds-text-neutral700 ds-text-size-24 ds-flex ds-justify-center"
+            />          
             </div>
             )
             :
             (
-                <form className='ds-bg-neutral300 ds-p-30 border rounded ds-w-40 ds-m-130' onSubmit={(e: FormEvent) =>handleSend(e)}>
+                <form className='ds-bg-neutral300 ds-p-30 border rounded ds-w-37 ds-m-130' onSubmit={(e: FormEvent) =>handleSend(e)}>
                 <Text 
                     text='Mot de passe oublié'
                     className='ds-flex ds-mb-40 ds-justify-center ds-text-primary'
