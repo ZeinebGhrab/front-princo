@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../api/hooks';
+import { useAppDispatch } from '../../api/hooks';
 import { Button, Checkbox, Container, ETypesInput, Input, TextType } from '@piximind/ds-p-23';
 import {  Text } from '@piximind/ds-p-23';
 import { Size, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import { FormEvent, useState} from 'react';
 import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
 import { useForm } from '@piximind/custom-hook';
-import { ValidationList } from '../interfaces/ValidationList';
-import { signup } from '../api/reducers/AuthReducer';
+import { ValidationList } from '../../interfaces/ValidationList';
+import { signup } from '../../api/reducers/AuthReducer';
 import { MdOutlineMarkEmailRead } from "react-icons/md";
 
   

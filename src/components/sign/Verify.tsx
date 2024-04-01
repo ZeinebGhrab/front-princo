@@ -1,8 +1,8 @@
 import { Button, Row, Text,  } from "@piximind/ds-p-23";
 import { Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../api/hooks";
-import { validate } from "../api/reducers/AuthReducer";
+import { useAppDispatch } from "../../api/hooks";
+import { validate } from "../../api/reducers/AuthReducer";
 import { FaUserCheck } from "react-icons/fa";
 
 export default function Verify({ token }: { token?: string | undefined }) {
@@ -48,9 +48,7 @@ export default function Verify({ token }: { token?: string | undefined }) {
                 backgroundColor : '#15803d'
                 }}
               />
-
-            </Row>
-            
+            </Row>  
         </div>
     )
 }

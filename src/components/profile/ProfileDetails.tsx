@@ -1,43 +1,22 @@
 import { Size,  Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { Button, Text, Avatar, Col, Row, Radio,  Container} from '@piximind/ds-p-23';
 import PasswordModal from "./PasswordModal";
-import EditProfile from "./EditProfile";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import moment from "moment";
 import ProfileNav from "./ProfileNav";
-import { getUser } from "../../api/reducers/ProfileReducer";
-import { useAppDispatch, useAppSelector } from "../../api/hooks";
+import { useAppSelector } from "../../api/hooks";
 import userLogo from '../../assets/user.png';
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileDetails() {
 
     const [showPasswordModal, setShowPasswordModal] = useState(false);
-    const dispatch = useAppDispatch();
-    const dataAuth = useAppSelector(state=>state.auth.data)
+    const navigate = useNavigate();
     const data = useAppSelector(state => state.profile.data);
-
-    const [showEditModal, setShowEditModal] = useState(false);
-
-
-    const fetchData =useCallback(()=> {
-        try{
-            dispatch(getUser({id: dataAuth?.id , token: dataAuth?.token})).unwrap();
-        }
-        catch(error) {
-            console.log(error);
-        }
-    },[dataAuth?.id, dataAuth?.token, dispatch]);
-
-    
-    useEffect(()=>{
-        fetchData()
-    },[fetchData, showEditModal])
- 
-
    
     return (
         <>
-        <ProfileNav handleOpenModal={()=>setShowEditModal(true)}/>
+        <ProfileNav handleModify={()=>navigate('/EditProfileDetails')}/>
             <div className="ds-ml-100 ds-mt-50">
                 <Row>
                     <Col>
@@ -176,10 +155,6 @@ export default function ProfileDetails() {
             <PasswordModal 
                 show={showPasswordModal} 
                 handleClose={() => setShowPasswordModal(false)} 
-            />
-            <EditProfile
-                show={showEditModal}
-                handleClose={()=>setShowEditModal(false)}
             />
         </>
     )

@@ -34,15 +34,18 @@ export default function AddConnector () {
             return;
         }
         try {
-            const response = await dispatch(createConnector({token : authData?.token, createConnector: connector})).unwrap();
-            console.log("...",response.connector)
-            navigate(`/connectorDetails/${response.connector._id}`);
+            const response = await dispatch(createConnector(
+                {
+                 token : authData?.token, 
+                 createConnector: {...connector, userId:authData?.id },
+                }
+                )).unwrap();
+            navigate(`/connectorDetails/${response}`);
         }
         catch(error) {
             console.log(error);
-            setErrors(error as { [key: string]: string } );
+            setErrors(error as { [key: string]: string });
         }
-
     }
 
     return (

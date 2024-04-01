@@ -15,7 +15,6 @@ export const authenticateUser = createAsyncThunk(
     try{
       const response = await axios.post('http://localhost:3000/auth/login', { email, password });
       thunkAPI.dispatch(setData(response.data));
-      console.log(response.data)
     }
     catch(error){
       console.log(error);
@@ -33,8 +32,8 @@ export const authenticateUser = createAsyncThunk(
       { firstName :  typeState | undefined , 
         lastName :  typeState | undefined,
         email :  typeState | undefined,
-        password :  typeState | undefined
-         } , thunkAPI ) => {
+        password :  typeState | undefined} 
+        , thunkAPI ) => {
     try{
       const response = await axios.post('http://localhost:3000/users/signup', { firstName,lastName,email,password});
       thunkAPI.dispatch(setData(response.data));

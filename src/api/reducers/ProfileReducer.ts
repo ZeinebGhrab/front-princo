@@ -8,8 +8,6 @@ const initialState = {
     error : {},
   };
 
-
-
   export const getUser = createAsyncThunk(
     '/getUser',
     async ( { id ,token }: {id: string | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
@@ -19,7 +17,6 @@ const initialState = {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data)
       return response.data;
     }
     catch(error){
@@ -50,9 +47,6 @@ const initialState = {
     name: 'profile',
     initialState,
     reducers: {
-      setData: (state,action)=>{
-        state.data= action.payload;
-       }
     },
     extraReducers: (builder) => {
       builder

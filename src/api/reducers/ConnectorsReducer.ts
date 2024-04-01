@@ -16,6 +16,7 @@ const initialState = {
       {
         connectorName: createConnector?.connectorName,
         webSite : createConnector?.webSite,
+        userId: createConnector?.userId,
       }
       ,{
         headers: {
@@ -42,7 +43,6 @@ const initialState = {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data)
       return response.data;
     }
     catch(error){
@@ -109,9 +109,6 @@ const initialState = {
     name: 'connectors',
     initialState,
     reducers: {
-      setData: (state,action)=>{
-        state.data= action.payload;
-       }
     },
     extraReducers: (builder) => {
       builder
@@ -164,7 +161,6 @@ const initialState = {
       state.error = action.error.message || 'error occurred';
     })
   }
-  }
-  );
+  });
 
 export default connectorsSlice.reducer;

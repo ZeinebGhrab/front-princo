@@ -22,19 +22,18 @@ export default function EditConnector() {
 
     const validation = new Validation();
     const dispatch = useAppDispatch();
-    const token = useAppSelector(state=>state.auth.data?.token);
+    const authData= useAppSelector(state=>state.auth.data);
     const [errors,setErrors]=useState<{ [key: string]: string }>({});
     const  {id} = useParams();
 
     const fetchData = async ()=>{
         try {
-            await dispatch(getConnector({id, token})).unwrap();
+            await dispatch(getConnector({id, token: authData?.token})).unwrap();
         }
         catch(error){
             console.log(error);
         }
     }
-
 
     const handleChange = async(e : FormEvent) => {
         e.preventDefault()
@@ -50,10 +49,15 @@ export default function EditConnector() {
         }
 
         try {
-            await dispatch(updateConnector({id : Array.isArray(data) ? data[0]?._id : data?._id ,updateConnector: change,token})).unwrap();
+            await dispatch(updateConnector({
+                id : Array.isArray(data) ? data[0]?._id : data?._id ,
+                updateConnector: {...change, userId: authData?.id},
+                token: authData?.token
+            })).unwrap();
             navigate(`/connectorDetails/${id}`)
         } catch(error) {
             console.log(error);
+            setErrors(error as { [key: string]: string });
         }
     };
 

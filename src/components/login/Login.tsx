@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Validation } from '@piximind/validation';
 import { FormEvent, useState } from 'react';
-import LoginUser from '../interfaces/LoginUser';
-import { useAppDispatch } from '../api/hooks';
-import { authenticateUser } from '../api/reducers/AuthReducer';
+import LoginUser from '../../interfaces/LoginUser';
+import { useAppDispatch } from '../../api/hooks';
+import { authenticateUser } from '../../api/reducers/AuthReducer';
 import { Button, Input, ETypesInput, Text, Checkbox, Container } from '@piximind/ds-p-23';
 import {  ESizeInput, Size, TextType, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";

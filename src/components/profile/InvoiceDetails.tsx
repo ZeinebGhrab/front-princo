@@ -1,45 +1,16 @@
 import { Text, Col, Container } from "@piximind/ds-p-23";
-import EditInvoice from "./EditInvoice";
-import { useAppDispatch, useAppSelector } from "../../api/hooks";
-import { useCallback, useEffect, useState } from "react";
-import { getUser } from "../../api/reducers/ProfileReducer";
+import { useAppSelector } from "../../api/hooks";
 import ProfileNav from "./ProfileNav";
-
-
-
+import { useNavigate } from "react-router-dom";
 
 export default function InvoiceDetails ()  {
     
-      
-    const dispatch = useAppDispatch();
-    const dataAuth = useAppSelector(state=>state.auth.data)
     const data = useAppSelector(state => state.profile.data.invoiceDetails);
-
-    const [showEditModal, setShowEditModal] = useState(false);
-
-
-
-    const fetchData =useCallback(()=> {
-        try{
-            dispatch(getUser({id: dataAuth?.id , token: dataAuth?.token})).unwrap();
-        }
-        catch(error) {
-            console.log(error);
-        }
-    },[dataAuth?.id, dataAuth?.token, dispatch]);
-
-
-    
-    useEffect(()=>{
-        fetchData()
-    },[fetchData, showEditModal])
-
-
-
+    const navigate = useNavigate();
 
     return (
         <>
-        <ProfileNav handleOpenModal={()=>setShowEditModal(true)}/>
+        <ProfileNav handleModify={()=>navigate('/editInvoiceDetails')}/>
         <Col className="ds-ml-125 ds-mt-50">
             <Container
             className="ds-mb-18"
@@ -134,10 +105,6 @@ export default function InvoiceDetails ()  {
            }
            />
         </Col>
-        <EditInvoice
-                show={showEditModal}
-                handleClose={()=>setShowEditModal(false)}
-        />
         </>
     )
 }

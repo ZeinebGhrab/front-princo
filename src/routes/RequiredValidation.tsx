@@ -1,6 +1,6 @@
 import { Navigate, useLocation} from "react-router-dom";
-import Verify from "./Verify";
-import ResetPassword from "../components/password/ResetPassword";
+import Verify from "../components/sign/Verify";
+import ResetPassword from "../components/login/ResetPassword";
 import { useEffect } from "react";
 
 export default function RequireValidation() {
@@ -11,7 +11,6 @@ export default function RequireValidation() {
     const email = searchParams.get("email");
 
     useEffect(()=>{
-     console.log(token, email)
    },[email, token])
 
     return (

@@ -1,11 +1,11 @@
-import { Card, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Card, OverlayTrigger, Pagination, Tooltip } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { getConnectors } from "../../api/reducers/ConnectorsReducer";
 import Connector from "../../interfaces/Connector";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Button, Col, Container, Row, SizeButton, TypeButton, Text } from "@piximind/ds-p-23";
 import { Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../nav/Navbar";
 import { LuCircleOff } from "react-icons/lu";
@@ -35,6 +35,13 @@ export default function ConnectorsList() {
     navigate(`/connectorDetails/${id}`);
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 9;
+  const totalPages = useMemo(() : number => Math.floor((connectorsData?.length || 0) / limit) + 1, [connectorsData, limit]);
+
+  const handlePageChange = async (pageNumber: number): Promise<void> => {
+    setCurrentPage(pageNumber);
+  };
 
   useEffect(() => {
     showConnectors();
@@ -47,7 +54,7 @@ export default function ConnectorsList() {
       <div className='ds-flex ds-center ds-mt-13'>
         <div className="ds-m-50">
         {Array.isArray(connectorsData) &&
-  connectorsData
+        connectorsData
     .reduce((data: Connector[][], connector: Connector, index: number) => {
       const chunkIndex = Math.floor(index / 3);
       if (!data[chunkIndex]) {
@@ -155,6 +162,13 @@ export default function ConnectorsList() {
               </Col>
             </Row>
           )}
+          <Pagination className="mb-2 mt-1 d-flex justify-content-center">
+              <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
+              <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
+              <Pagination.Item>{currentPage}</Pagination.Item>
+              <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages || currentPage >= totalPages} />
+              <Pagination.Last onClick={() => handlePageChange(totalPages)} />
+          </Pagination>
         </div>
         {
           Array.isArray(connectorsData) && connectorsData.length ===0 && (

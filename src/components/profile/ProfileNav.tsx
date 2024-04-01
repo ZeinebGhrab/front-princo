@@ -5,18 +5,34 @@ import { IoIosArrowRoundBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../nav/Navbar';
 import { FaPencilAlt } from 'react-icons/fa';
+import { useAppDispatch, useAppSelector } from '../../api/hooks';
+import { useCallback, useEffect } from 'react';
+import { getUser } from '../../api/reducers/ProfileReducer';
 
 
 interface Props {
-    handleOpenModal : () => void,
+    handleModify: () => void,
 }
 
-
-
-
-export default function ProfileNav({handleOpenModal} :Props) {
+export default function ProfileNav({handleModify} :Props) {
 
     const navigate  = useNavigate();
+    const dispatch = useAppDispatch();
+    const dataAuth = useAppSelector(state=>state.auth.data)
+
+    const fetchData =useCallback(()=> {
+      try{
+          dispatch(getUser({id: dataAuth?.id , token: dataAuth?.token})).unwrap();
+      }
+      catch(error) {
+          console.log(error);
+      }
+  },[dataAuth?.id, dataAuth?.token, dispatch]);
+
+  
+  useEffect(()=>{
+      fetchData()
+  },[fetchData])
     
   return (
     <>
@@ -40,7 +56,7 @@ export default function ProfileNav({handleOpenModal} :Props) {
                     text={<><FaPencilAlt className="ds-mr-2" /> Modifier</> as unknown as string}
                     className="ds-mr-160 ds-text-size-15"
                     size={Size.medium}
-                    onClick={handleOpenModal}
+                    onClick={handleModify}
                     style={{
                       backgroundColor: '#fff',
                       borderColor: '#003D42',
