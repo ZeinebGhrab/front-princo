@@ -16,6 +16,8 @@ import Guide from './components/connectors/Guide'
 import EditConnector from './components/connectors/EditConnector'
 import EditInvoice from './components/profile/EditInvoice'
 import EditProfile from './components/profile/EditProfile'
+import CreditsList from './components/credits/CreditsList'
+import InvoicesList from './components/invoices/InvoicesList'
 
 
 function App() {
@@ -39,6 +41,8 @@ function App() {
             <Route path='/EditProfileDetails' element={<EditProfile/>}/>
             <Route path='/invoiceDetails' element={<InvoiceDetails/>}/>
             <Route path='/EditInvoiceDetails' element={<EditInvoice/>}/>
+            <Route path='/credit' element={<CreditsList/>}/>
+            <Route path='/invoices' element={<InvoicesList/>}/>
             <Route path='*' element={<PageNotFound/>}/>
           </Route>
         </Routes>

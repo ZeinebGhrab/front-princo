@@ -15,17 +15,28 @@ export default function ConnectorsList() {
   const dispatch = useAppDispatch();
   const authData = useAppSelector(state => state.auth.data);
   const connectorsData = useAppSelector(state => state.connectors.data);
-  const lastRowHasLessThanThreeConnectors = Array.isArray(connectorsData) && connectorsData.length !== 0 && connectorsData.length % 3 === 0;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = currentPage === 1 ? 8 : 9;
+
+  const totalPages = useMemo(() : number =>{ 
+  return Math.floor((Array.isArray(connectorsData) && connectorsData?.length || 0) / limit) + 1
+},[connectorsData, limit]);
+
+const handlePageChange = async (pageNumber: number): Promise<void> => {
+  setCurrentPage(pageNumber);
+};
 
   const showConnectors = useCallback(
     async (): Promise<void> => {
       try {
-        dispatch(getConnectors({ id: authData?.id, token: authData?.token })).unwrap();
+        const skip = limit * (currentPage - 1);
+        dispatch(getConnectors({ id: authData?.id, token: authData?.token, skip, limit })).unwrap();
       } catch (error) {
         console.log(error);
       }
     }
-  ,[authData?.id, authData?.token, dispatch])
+  ,[authData?.id, authData?.token, currentPage, dispatch, limit]);
 
   const addConnector = async (): Promise<void> => {
     navigate('/addConnector');
@@ -35,90 +46,78 @@ export default function ConnectorsList() {
     navigate(`/connectorDetails/${id}`);
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const limit = 9;
-  const totalPages = useMemo(() : number => Math.floor((connectorsData?.length || 0) / limit) + 1, [connectorsData, limit]);
-
-  const handlePageChange = async (pageNumber: number): Promise<void> => {
-    setCurrentPage(pageNumber);
-  };
-
   useEffect(() => {
     showConnectors();
   }, [showConnectors]);
 
-
   return (
     <>
       <Navbar />
-      <div className='ds-flex ds-center ds-mt-13'>
+      <div className='ds-flex ds-mt-13'>
         <div className="ds-m-50">
         {Array.isArray(connectorsData) &&
-        connectorsData
+    connectorsData
     .reduce((data: Connector[][], connector: Connector, index: number) => {
-      const chunkIndex = Math.floor(index / 3);
-      if (!data[chunkIndex]) {
-        data[chunkIndex] = [];
+
+      const dataIndex = Math.floor(index / 3);
+
+      if (!data[dataIndex]) {
+        data[dataIndex] = [];
       }
-      data[chunkIndex].push(connector);
+
+      data[dataIndex].push(connector);
+      console.log(data)
       return data;
     }, [])
     .map((connData: Connector[], connDataIndex: number) => (
       <Row key={connDataIndex} className="ds-mb-20">
-        {connData.map((connector: Connector, index: number) => (
+        {(connDataIndex === 0 && currentPage === 1 ? connData.slice(0) : connData).map((connector: Connector, index: number) => (
           <Col key={index}>
             <OverlayTrigger overlay={
-            <Tooltip id="tooltip-disabled">
-              Accéder aux détails du connecteur
+              <Tooltip id="tooltip-disabled">
+                Accéder aux détails du connecteur
               </Tooltip>}>
-      <span className="d-inline-block">
-      <Card 
-            onClick={()=>handleClick(connector._id)} 
-            style={{
-              width: '22rem',
-               height: '8rem',
-                borderWidth: '2px', 
-                borderStyle: 'solid', 
-                cursor: 'pointer',
-                borderColor : '#16a34a'
-                }} >
-              <Card.Title 
-              style={{ 
-                display: 'flex',
-                color : '#15803d',
-                alignItems: 'center',
-                margin: '10px',
-                }}>
-                {connector.connectorName}
-              </Card.Title>
-              <Card.Body>
-                <Button text="Connecté"
-                  size={SizeButton.small}
-                  type={TypeButton.secondary}
+              <span className="d-inline-block">
+                <Card
+                  onClick={() => handleClick(connector._id)}
                   style={{
-                    backgroundColor: '#fff',
-                    borderColor: '#16a34a',
-                    color: '#16a34a',
-                    fontSize : '16px'
-                  }}
-                />
-              </Card.Body>
-            </Card>
-
-      </span>
-      </OverlayTrigger>
+                    width: '22rem',
+                    height: '8rem',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                    cursor: 'pointer',
+                    borderColor: '#567388'
+                  }} >
+                  <Card.Title
+                    style={{
+                      display: 'flex',
+                      color: '#15803d',
+                      alignItems: 'center',
+                      margin: '10px',
+                    }}>
+                    {connector.connectorName}
+                  </Card.Title>
+                  <Card.Body>
+                    <Button text="Connecté"
+                      size={SizeButton.small}
+                      type={TypeButton.secondary}
+                    />
+                  </Card.Body>
+                </Card>
+              </span>
+            </OverlayTrigger>
           </Col>
         ))}
-        {connData.length < 3  && (
-          <Col key={connData.length}>
-            <Card 
-             style={{ width: '22rem', 
-             height: '8rem',
-              borderWidth: '2px',
-              borderStyle: 'solid',
-              borderColor : '#16a34a'
-
-               }}>
+        {connDataIndex === Math.ceil(connectorsData.length / 3) - 1 && currentPage === 1 && (
+          <Col>
+            <Card
+              style={{
+                width: '22rem',
+                height: '8rem',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: '#003D42'
+              }}>
               <Card.Body>
                 <div className="ds-flex ds-justify-center ds-mb-4">
                   <Button
@@ -131,47 +130,27 @@ export default function ConnectorsList() {
                     onClick={() => addConnector()}
                   />
                 </div>
-                <Card.Title style={{ textAlign: 'center', color : '#15803d' }}>Ajouter un connecteur</Card.Title>
+                <Card.Title style={{ textAlign: 'center', color: '#15803d' }}>Ajouter un connecteur</Card.Title>
               </Card.Body>
             </Card>
           </Col>
         )}
       </Row>
     ))}
-
-          {lastRowHasLessThanThreeConnectors && (
-            <Row key="connector" className="ds-mb-20">
-              <Col>
-                <Card style={{ width: '22rem', height: '8rem', borderWidth: '1px', borderStyle: 'solid', borderColor: '#16a34a'}}>
-                  <Card.Body>
-                    <div className="ds-flex ds-justify-center ds-mb-4">
-                      <Button
-                        text={<IoIosAddCircleOutline /> as unknown as string}
-                        className="ds-text-size-30 ds-text-neutral900"
-                        style={{
-                          backgroundColor: '#fff',
-                          borderColor: '#2d5f63'
-                        }}
-                        type={Type.primary}
-                        onClick={() => addConnector()}
-                      />
-                    </div>
-                    <Card.Title style={{ textAlign: 'center', color : '#15803d' }}>Ajouter un connecteur</Card.Title>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          )}
-          <Pagination className="mb-2 mt-1 d-flex justify-content-center">
+    {
+       Array.isArray(connectorsData) && connectorsData.length !==0 && (
+        <Pagination  className="ds-mb-25 ds-flex ds-justify-center ds-text-neutral800 fixed-bottom">
               <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
               <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
               <Pagination.Item>{currentPage}</Pagination.Item>
-              <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages || currentPage >= totalPages} />
+              <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages } />
               <Pagination.Last onClick={() => handlePageChange(totalPages)} />
           </Pagination>
+       )
+    }
         </div>
         {
-          Array.isArray(connectorsData) && connectorsData.length ===0 && (
+          Array.isArray(connectorsData) && connectorsData.length ===0 && currentPage === 1 && (
             <div className="ds-m-100">
               <div>
                 <Container

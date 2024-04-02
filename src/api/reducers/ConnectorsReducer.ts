@@ -36,9 +36,9 @@ const initialState = {
 
   export const getConnectors= createAsyncThunk(
     '/getConnectors',
-    async ( { id ,token }: {id: string | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
+    async ( { id, skip, limit ,token }: {id: string | null | undefined, skip: number, limit: number ,token: string | null | undefined } , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:3000/connector/connectors/${id}`,{
+      const response = await axios.get(`http://localhost:3000/connector/connectors/${id}?skip=${skip}&limit=${limit}`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
