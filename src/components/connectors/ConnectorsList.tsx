@@ -4,7 +4,7 @@ import { getConnectors } from "../../api/reducers/ConnectorsReducer";
 import Connector from "../../interfaces/Connector";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Button, Col, Container, Row, SizeButton, TypeButton, Text } from "@piximind/ds-p-23";
-import { Size, TextType } from "@piximind/ds-p-23/lib/esn/Interfaces";
+import { Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../nav/Navbar";
@@ -17,7 +17,7 @@ export default function ConnectorsList() {
   const connectorsData = useAppSelector(state => state.connectors.data);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 9;
+  const limit = 8;
 
   const totalPages = useMemo(() : number =>{ 
   return Math.floor((Array.isArray(connectorsData) && connectorsData?.length || 0) / limit) + 1
@@ -67,73 +67,118 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
     <>
       <Navbar />
       <div>
-        {
-          Array.isArray(connectorsData) && connectorsData.length !==0 && (
-        <div className="ds-justify-end ds-flex ds-mt-30 ds-mr-70">
-        <Button
-        text = {<><IoIosAddCircleOutline className="ds-text-size-20 ds-mr-3"/> Ajouter un connecteur</> as unknown as string}
-        type={TypeButton.secondary}
-        size={SizeButton.medium}
-        onClick={()=>addConnector()}
-        />
-        </div>
-        )
-        }
-        <div className="ds-justify-center ds-flex">
+        <div className="ds-justify-center ds-flex ds-mt-50">
         <div className="ds-mt-35 ds-m-50">
         {Array.isArray(connectors) && connectors.map((rowConnectors: Connector[], rowIndex: number) => (
-            <Row key={rowIndex} className="ds-mb-20">
-              {rowConnectors.map((connector: Connector, colIndex: number) => (
-                <Col key={colIndex} >
-                  <OverlayTrigger
-                    overlay={
-                      <Tooltip id="tooltip-disabled">
-                        Accéder aux détails du connecteur
-                      </Tooltip>
-                    }
-                  >
-                    <span className="d-inline-block">
-                      <Card
-                        onClick={() => handleClick(connector._id)}
-                        className='ds-box-shadow1'
-                        style={{
-                          width: "20rem",
-                          height: "7rem",
-                          borderWidth: "1px",
-                          borderStyle: "solid",
-                          cursor: "pointer",
-                          borderColor: "#A4BABC",
-                        }}
-                      >
-                        <Card.Title
-                          style={{
-                            display: "flex",
-                            color: "#3B6A6E",
-                            alignItems: "center",
-                            margin: "10px",
-                          }}
-                        >
-                          {connector.connectorName}
-                        </Card.Title>
-                        <Card.Body>
-                          <Button
-                            text="Connecté"
-                            size={SizeButton.small}
-                            type={TypeButton.secondary}
-                            style={{
-                              color : '#477377',
-                              borderColor: '#477377'
-                            }}
-                          />
-                        </Card.Body>
-                      </Card>
-                    </span>
-                  </OverlayTrigger>
-                </Col>
-              ))}
-            </Row>
-          ))}
-
+    <Row key={rowIndex} className="ds-mb-20">
+      {rowConnectors.map((connector: Connector, colIndex: number) => (
+        <Col key={colIndex}>
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="tooltip-disabled">
+                Accéder aux détails du connecteur
+              </Tooltip>
+            }
+          >
+            <span className="d-inline-block">
+              <Card
+                onClick={() => handleClick(connector._id)}
+                className='ds-box-shadow3'
+                style={{
+                  width: "20rem",
+                  height: "7rem",
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  cursor: "pointer",
+                  borderColor: "#eaeeeb",
+                }}
+              >
+                <Card.Title
+                  style={{
+                    display: "flex",
+                    color: "#536375",
+                    alignItems: "center",
+                    margin: "10px",
+                  }}
+                >
+                  {connector.connectorName}
+                </Card.Title>
+                <Card.Body>
+                  <Button
+                    text="Connecté"
+                    size={SizeButton.small}
+                    type={TypeButton.secondary}
+                    style={{
+                      color : '#536375',
+                      borderColor: '#536375'
+                    }}
+                  />
+                </Card.Body>
+              </Card>
+            </span>
+          </OverlayTrigger>
+        </Col>
+      ))}
+      {rowConnectors.length < 3 && (
+        <Col key={rowConnectors.length}>
+          <Card 
+            className='ds-box-shadow3'
+            style={{ width: '20rem', 
+            height: '7rem',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderColor : '#eaeeeb'
+          }}>
+            <Card.Body>
+              <div className="ds-flex ds-justify-center ds-mb-4">
+                <Button
+                  text={<IoIosAddCircleOutline /> as unknown as string}
+                  className="ds-text-size-30"
+                  style={{
+                    backgroundColor: '#fff',
+                    color:'#536375',
+                  }}
+                  type={Type.primary}
+                  onClick={() => addConnector()}
+                />
+              </div>
+              <Card.Title style={{ textAlign: 'center', color : '#536375' }}>Ajouter un connecteur</Card.Title>
+            </Card.Body>
+          </Card>
+        </Col>
+      )}
+    </Row>
+  ))}
+  {Array.isArray(connectors) && connectors.length > 0 && connectors[connectors.length - 1].length === 3 && (
+    <Row key="additionalRow" className="ds-mb-20">
+      <Col key={connectors[connectors.length - 1].length}>
+        <Card 
+          className='ds-box-shadow3'
+          style={{ width: '20rem', 
+          height: '7rem',
+          borderWidth: '1px',
+          borderStyle: 'solid',
+          borderColor : '#eaeeeb'
+        }}>
+          <Card.Body>
+            <div className="ds-flex ds-justify-center ds-mb-4">
+              <Button
+                text={<IoIosAddCircleOutline /> as unknown as string}
+                className="ds-text-size-30 ds-text-success600"
+                style={{
+                  backgroundColor: '#fff',
+                  color:'#536375',
+                }}
+                type={Type.primary}
+                onClick={() => addConnector()}
+              />
+            </div>
+            <Card.Title style={{ textAlign: 'center', color : '#536375' }}>Ajouter un connecteur</Card.Title>
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
+  )}
         </div>
        
     {

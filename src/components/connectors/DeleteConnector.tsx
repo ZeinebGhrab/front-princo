@@ -1,9 +1,11 @@
 import { Modal } from "react-bootstrap";
 import Props from "../../interfaces/Props";
-import { Button, SizeButton, TypeButton } from "@piximind/ds-p-23";
+import { Button, SizeButton, TypeButton, Text } from "@piximind/ds-p-23";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { deleteConnector } from "../../api/reducers/ConnectorsReducer";
 import { useNavigate } from "react-router-dom";
+import { GiCheckMark } from "react-icons/gi";
+import { IoMdClose } from "react-icons/io";
 
 export default function DeleteConnector({show,data,handleClose}: Props) {
 
@@ -28,26 +30,33 @@ export default function DeleteConnector({show,data,handleClose}: Props) {
     return (
         <>
         <Modal
-        size='sm'
         show={show}
         onHide={handleClose}
         centered>
        <Modal.Header closeButton>
        </Modal.Header>
-        <Modal.Body className="ds-flex ds-justify-center ds-text-size-17">Veuillez supprimer ce connecteur ? </Modal.Body>
-        <Modal.Footer>
+        <Modal.Body>
+            <b className="ds-flex ds-center ds-text-size-21 ds-mb-20">
+                Confirmez-vous la suppression ?
+            </b>
+            <Text
+            text='Si vous confirmez, le connecteur sera définitivement effacé'
+            className="ds-flex ds-center ds-text-size-17"
+            />
+        </Modal.Body>
+        <Modal.Footer className="ds-flex ds-center">
             <Button
-            text="Annuler"
+            text={<><IoMdClose className="ds-mr-3 ds-text-size-20"/> Annuler</> as unknown as string}
             onClick={handleClose}
-            className="ds-w-46"
+            className="ds-w-45 ds-mr-7"
             type={TypeButton.secondary}
-            size={SizeButton.small}
+            size={SizeButton.medium}
             />
             <Button
-            text="Confirmer"
+            text={<><GiCheckMark className="ds-mr-3 ds-text-size-20"/>Confirmer</> as unknown as string}
             onClick={()=>handleDelete()}
-            className="ds-w-46"
-            size={SizeButton.small}
+            className="ds-w-45"
+            size={SizeButton.medium}
             />
         </Modal.Footer>
       </Modal>

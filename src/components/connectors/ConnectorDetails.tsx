@@ -4,13 +4,14 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import {  OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { getConnector } from "../../api/reducers/ConnectorsReducer";
 import Guide from "./Guide";
 import { FaPencilAlt } from "react-icons/fa";
 import { TiDelete } from "react-icons/ti";
 import DeleteConnector from "./DeleteConnector";
+import { MdCopyAll } from "react-icons/md";
+import { LuCopyCheck } from "react-icons/lu";
 
 
 
@@ -24,13 +25,18 @@ export default function ConnectorDetails() {
     const token = useAppSelector(state => state.auth.data?.token)
     const data = useAppSelector(state=>state.connectors.data);
     const apiRef = useRef(null);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+    const [copy, setCopy] = useState<boolean>(false)
    
 
   const handleCopyApi = () => {
     if (apiRef.current) {
       const inputValue = (apiRef?.current as HTMLInputElement)?.value;
-      navigator.clipboard.writeText(inputValue)
+      navigator.clipboard.writeText(inputValue);
+      setCopy(true);
+      setTimeout(() => {
+        setCopy(false);
+      }, 3000); 
     }
   };
 
@@ -107,17 +113,13 @@ export default function ConnectorDetails() {
         className="ds-text-neutral800"
         ref={apiRef}
       />
-      <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Copier</Tooltip>} placement='bottom'>
-      <span className="d-inline-block">
       <Button 
-      text="Copier" 
+      text={<>{copy ? <LuCopyCheck className="ds-text-size-19 ds-mr-3" /> :<MdCopyAll className="ds-text-size-19 ds-mr-3" />} Copier</> as unknown as string}
       size = {Size.medium}
       type = {TypeButton.secondary}
       className="ds-ml-15 ds-mt-24"
       onClick={handleCopyApi}
       />
-        </span>
-      </OverlayTrigger>  
     </Container>
     <Guide exportGuide={true}/>
   </div>
