@@ -22,7 +22,7 @@ export default function EditConnector() {
 
     const validation = new Validation();
     const dispatch = useAppDispatch();
-    const authData= useAppSelector(state=>state.auth.data);
+    const authData= useAppSelector(state=>state.authentication.data);
     const [errors,setErrors]=useState<{ [key: string]: string }>({});
     const  {id} = useParams();
 

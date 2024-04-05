@@ -4,6 +4,10 @@ import { authentificationSlice } from './reducers/AuthReducer';
 import { configureStore } from '@reduxjs/toolkit';
 import { profileSlice } from './reducers/ProfileReducer';
 import { connectorsSlice } from './reducers/ConnectorsReducer';
+import { offerSlice } from './reducers/OfferReducer';
+import { InvoiceSlice } from './reducers/InvoiceReducer';
+import { paymentSlice } from './reducers/PaymentReducer';
+
 
 const persistConfig = {
   key: 'root',
@@ -14,9 +18,12 @@ const persistedAuthReducer = persistReducer(persistConfig, authentificationSlice
 
 export const store = configureStore({
     reducer: {
-      auth: persistedAuthReducer,
+      authentication: persistedAuthReducer,
       profile: profileSlice.reducer,
-      connectors : connectorsSlice.reducer
+      connectors : connectorsSlice.reducer,
+      offers: offerSlice.reducer,
+      payment: paymentSlice.reducer,
+      invoices : InvoiceSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
       if (process.env.NODE_ENV === 'development') {

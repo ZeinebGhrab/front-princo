@@ -13,7 +13,7 @@ import { LuCircleOff } from "react-icons/lu";
 export default function ConnectorsList() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const authData = useAppSelector(state => state.auth.data);
+  const authData = useAppSelector(state => state.authentication.data);
   const connectorsData = useAppSelector(state => state.connectors.data);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -96,7 +96,7 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
                 <Card.Title
                   style={{
                     display: "flex",
-                    color: "#536375",
+                    color: "#6FB200",
                     alignItems: "center",
                     margin: "10px",
                   }}
@@ -108,10 +108,6 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
                     text="Connecté"
                     size={SizeButton.small}
                     type={TypeButton.secondary}
-                    style={{
-                      color : '#536375',
-                      borderColor: '#536375'
-                    }}
                   />
                 </Card.Body>
               </Card>
@@ -136,13 +132,13 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
                   className="ds-text-size-30"
                   style={{
                     backgroundColor: '#fff',
-                    color:'#536375',
+                    color:'#79c300',
                   }}
                   type={Type.primary}
                   onClick={() => addConnector()}
                 />
               </div>
-              <Card.Title style={{ textAlign: 'center', color : '#536375' }}>Ajouter un connecteur</Card.Title>
+              <Card.Title style={{ textAlign: 'center', color : '#6FB200' }}>Ajouter un connecteur</Card.Title>
             </Card.Body>
           </Card>
         </Col>
@@ -196,7 +192,7 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
         {
           Array.isArray(connectorsData) && connectorsData.length ===0 && currentPage === 1 && (
             <div className="ds-flex ds-center">
-              <div className="ds-m-60">
+              <div>
                 <Container
                 className='ds-mb-25'
                 children = {

@@ -6,7 +6,7 @@ import { Size, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import { FormEvent, useState} from 'react';
 import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
 import { useForm } from '@piximind/custom-hook';
-import { ValidationList } from '../../interfaces/ValidationList';
+import { ValidationList } from '../../interfaces/user/ValidationList';
 import { signup } from '../../api/reducers/AuthReducer';
 import { MdOutlineMarkEmailRead } from "react-icons/md";
 

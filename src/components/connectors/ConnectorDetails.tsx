@@ -16,13 +16,11 @@ import { LuCopyCheck } from "react-icons/lu";
 
 
 export default function ConnectorDetails() {
-
-      
     
     const navigate = useNavigate();
     const { id } = useParams();
     const dispatch = useAppDispatch();
-    const token = useAppSelector(state => state.auth.data?.token)
+    const token = useAppSelector(state => state.authentication.data?.token)
     const data = useAppSelector(state=>state.connectors.data);
     const apiRef = useRef(null);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -129,34 +127,3 @@ export default function ConnectorDetails() {
     )
 
 }
-
-
-/*
- <div className="ds-flex ds-align-center ds-mb-14">
-      <Button
-      text ={<><FaPencilAlt className="ds-mr-2 ds-text-size-17"/> Modifier</> as unknown as string}
-      type={TypeButton.secondary}
-      size={SizeButton.small}
-      style ={{
-        backgroundColor: '#fff',
-        borderColor: '#003D42',
-        color: '#003D42',
-        fontSize: '15px'
-      }}
-      className="ds-mr-10"
-      onClick={()=>navigate(`/editConnector/${id}`)}
-      />
-      <Button
-      text ={<><TiDeleteOutline  className="ds-mr-2 ds-text-size-17" /> Supprimer</> as unknown as string}
-      type={TypeButton.secondary}
-      size={SizeButton.small}
-      style ={{
-        backgroundColor: '#fff',
-        borderColor: '#003D42',
-        color: '#003D42',
-        fontSize: '15px'
-      }}
-      onClick={()=>setShowDeleteModal(true)}
-      />
-    </div>
-*/

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
-import AuthState from '../../interfaces/AuthState';
+import AuthState from '../../interfaces/user/AuthState';
 import { typeState } from '@piximind/custom-hook/lib/esn/interfaces';
 
 const initialState = {
@@ -103,7 +103,7 @@ export const authenticateUser = createAsyncThunk(
   );
   
   export const authentificationSlice = createSlice({
-    name: 'auth',
+    name: 'authentication',
     initialState,
     reducers: {
       logOut: (state) => {

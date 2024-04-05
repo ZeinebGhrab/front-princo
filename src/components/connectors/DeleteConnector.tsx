@@ -11,7 +11,7 @@ export default function DeleteConnector({show,data,handleClose}: Props) {
 
 
     const dispatch = useAppDispatch();
-    const token = useAppSelector(state=>state.auth.data?.token);
+    const token = useAppSelector(state=>state.authentication.data?.token);
     const navigate = useNavigate();
 
 

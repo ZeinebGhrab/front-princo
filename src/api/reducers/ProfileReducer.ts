@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
-import User from "../../interfaces/User";
+import User from "../../interfaces/user/User";
 
 const initialState = {
     data:{} as User ,

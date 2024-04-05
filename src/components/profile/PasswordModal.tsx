@@ -18,7 +18,7 @@ export default function PasswordModal({ show, handleClose }: Props) {
 
     const validation = new Validation();
     const dispatch = useAppDispatch();
-    const data = useAppSelector(state=>state.auth.data);
+    const data = useAppSelector(state=>state.authentication.data);
 
     const handleChange = async() => {
         if (

@@ -18,6 +18,8 @@ import EditInvoice from './components/profile/EditInvoice'
 import EditProfile from './components/profile/EditProfile'
 import CreditsList from './components/credits/CreditsList'
 import InvoicesList from './components/invoices/InvoicesList'
+import SuccessfulPayment from './components/credits/payment/SuccessfulPayment'
+import FailedPayment from './components/credits/payment/FailedPayment'
 
 
 function App() {
@@ -42,6 +44,8 @@ function App() {
             <Route path='/invoiceDetails' element={<InvoiceDetails/>}/>
             <Route path='/EditInvoiceDetails' element={<EditInvoice/>}/>
             <Route path='/credit' element={<CreditsList/>}/>
+            <Route path='/successfulPayment' element={<SuccessfulPayment/>}/>
+            <Route path='/failedPayment' element={<FailedPayment/>}/>
             <Route path='/invoices' element={<InvoicesList/>}/>
             <Route path='*' element={<PageNotFound/>}/>
           </Route>

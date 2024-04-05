@@ -2,7 +2,7 @@ import { Avatar, Button, Col, Container, Datepicker, EDisplayType, Input,  Numbe
 import { ESizeInput, ETypesInput, Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { useState } from "react";
-import User from "../../interfaces/User";
+import User from "../../interfaces/user/User";
 import { Validation } from "@piximind/validation";
 import { updateUser } from "../../api/reducers/ProfileReducer";
 import userLogo from '../../assets/user.png';
@@ -17,7 +17,7 @@ export default function EditProfile(){
     const navigate = useNavigate();
     const [changeUser,setChangeUser] = useState<User>(useAppSelector(state => state.profile.data) || {} as User );
     const dispatch = useAppDispatch();
-    const dataAuth = useAppSelector(state => state.auth.data);
+    const dataAuth = useAppSelector(state => state.authentication.data);
     const validation = new Validation();
 
     const handleModify = async() =>{

@@ -18,7 +18,7 @@ export default function ProfileNav({handleModify} :Props) {
 
     const navigate  = useNavigate();
     const dispatch = useAppDispatch();
-    const dataAuth = useAppSelector(state=>state.auth.data)
+    const dataAuth = useAppSelector(state=>state.authentication.data)
 
     const fetchData =useCallback(()=> {
       try{

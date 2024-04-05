@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
-import ProfileInvoiceDetails from "../../interfaces/InvoiceDetails";
+import ProfileInvoiceDetails from "../../interfaces/user/InvoiceDetails";
 import { updateUser } from "../../api/reducers/ProfileReducer";
 import Navbar from "../nav/Navbar";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -12,7 +12,7 @@ export default function EditInvoice(){
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const authData= useAppSelector(state => state.auth.data);
+    const authData= useAppSelector(state => state.authentication.data);
     const [changeInvoice,setChangeInvoice] = useState<ProfileInvoiceDetails>(useAppSelector(state=>state.profile.data.invoiceDetails)|| {} as ProfileInvoiceDetails)
 
 

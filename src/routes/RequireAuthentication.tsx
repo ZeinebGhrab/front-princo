@@ -3,8 +3,8 @@ import { useAppSelector } from "../api/hooks";
 
 export default function RequireAuthentication() {
 
-    const token = useAppSelector(state => state.auth.data?.token);
-    const auth = useAppSelector(state => state.auth.auth);
+    const token = useAppSelector(state => state.authentication.data?.token);
+    const auth = useAppSelector(state => state.authentication.auth);
 
     return (
         <>

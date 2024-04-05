@@ -5,7 +5,7 @@ import { BsFillCreditCard2BackFill } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { LiaFileInvoiceDollarSolid } from 'react-icons/lia';
 import { TbLogout } from 'react-icons/tb';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import userLogo from '../../assets/user.png';
 import { Dropdown,  NavDropdown } from 'react-bootstrap';
 import { useAppDispatch } from '../../api/hooks';
@@ -17,6 +17,7 @@ export default function Navbar() {
 
    const dispatch = useAppDispatch();
    const [showDropdown, setShowDropdown] = useState(false);
+   const navigate = useNavigate();
 
   return (
     <>
@@ -27,6 +28,7 @@ export default function Navbar() {
            type={TypeButton.primary} 
            className="ds-mr-20" 
            size={Size.medium} 
+           onClick={()=>navigate('/credit')}
            />
           <div className="ds-flex-grow1 ds-flex ds-justify-start">
             <NavDropdown 

@@ -12,5 +12,7 @@ export default interface User {
     country?: string,
     profile?: string,
     password: string,
-    invoiceDetails? : ProfileInvoiceDetails
+    invoiceDetails? : ProfileInvoiceDetails,
+    tickets?: number,
+    ticketsExpirationDate: Date,
 }

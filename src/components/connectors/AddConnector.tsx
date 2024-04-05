@@ -15,7 +15,7 @@ export default function AddConnector () {
     
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const authData = useAppSelector(state => state.auth.data)
+    const authData = useAppSelector(state => state.authentication.data)
     const [connector, setConnector] = useState<Connector>({} as Connector)
     const [errors,setErrors]=useState<{ [key: string]: string }>({});
     const validation = new Validation();
