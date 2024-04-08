@@ -26,10 +26,6 @@ export default function Guide({ exportGuide }: { exportGuide: boolean }) {
         navigator.clipboard.writeText(cardContent);
       };
     
-     
-      
-
-    
     return(
         <>
        {
@@ -39,7 +35,9 @@ export default function Guide({ exportGuide }: { exportGuide: boolean }) {
                 <b>
                 <Text
                 text="Guide de mise en marche : "
-                className="ds-text-size-23 ds-text-neutral500 " />
+                className="ds-text-size-23" 
+                style ={{color:'#195054'}}
+                />
                 </b>
                 </Container>
         ) :
@@ -71,7 +69,7 @@ export default function Guide({ exportGuide }: { exportGuide: boolean }) {
        <div className={exportGuide ?  "" : "ds-ml-80 ds-w-50"}>
        <Container className="ds-mt-18"> 
         <>
-        <b className="ds-text-primary">Etape 1 : </b> <span className="ds-text-secondary900">Télécharger l'application desktop de votre imprimante</span>
+        <b className="ds-text-primary">Etape 1 : </b> <span className="ds-text-neutral700">Télécharger l'application desktop de votre imprimante</span>
         <div className="ds-flex ds-align-center ds-mt-13">
       <div>
       <Button
@@ -120,7 +118,7 @@ export default function Guide({ exportGuide }: { exportGuide: boolean }) {
     </Container>
     <Container> 
       <>
-        <b className="ds-text-primary">Etape 2 : </b> <span className="ds-text-secondary900">Connectez l'imprimante à votre ordinateur</span>
+        <b className="ds-text-primary">Etape 2 : </b> <span className='ds-text-neutral700'>Connectez l'imprimante à votre ordinateur</span>
         <Text
           text="Assurez-vous que l'imprimante est connectée à votre ordinateur. L'application peut utiliser plusieurs imprimantes à la fois."
           type={TextType["body-2"]}
@@ -131,7 +129,7 @@ export default function Guide({ exportGuide }: { exportGuide: boolean }) {
 
     <Container className="ds-mt-18"> 
       <>
-        <b className="ds-text-primary">Etape 3 : </b> <span className="ds-text-secondary900">Associer le site à votre ordinateur</span>
+        <b className="ds-text-primary">Etape 3 : </b> <span className="ds-text-neutral700">Associer le site à votre ordinateur</span>
         <Text
           text="Copier le token du connecteur dans votre espace manager et mettez le dans l'application. Choisissez l'imprimante dans laquelle vous allez imprimer votre ticket de caisse ou vos factures."
           type={TextType["body-2"]}

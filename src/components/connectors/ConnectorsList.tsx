@@ -96,7 +96,7 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
                 <Card.Title
                   style={{
                     display: "flex",
-                    color: "#6FB200",
+                    color: "#195054",
                     alignItems: "center",
                     margin: "10px",
                   }}
@@ -138,7 +138,7 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
                   onClick={() => addConnector()}
                 />
               </div>
-              <Card.Title style={{ textAlign: 'center', color : '#6FB200' }}>Ajouter un connecteur</Card.Title>
+              <Card.Title style={{ textAlign: 'center', color : '#195054' }}>Ajouter un connecteur</Card.Title>
             </Card.Body>
           </Card>
         </Col>
@@ -169,7 +169,7 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
                 onClick={() => addConnector()}
               />
             </div>
-            <Card.Title style={{ textAlign: 'center', color : '#536375' }}>Ajouter un connecteur</Card.Title>
+            <Card.Title style={{ textAlign: 'center', color : '#195054' }}>Ajouter un connecteur</Card.Title>
           </Card.Body>
         </Card>
       </Col>
@@ -179,10 +179,10 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
        
     {
        Array.isArray(connectorsData) && connectorsData.length !==0 && (
-        <Pagination  className="ds-mb-20 ds-flex ds-justify-center ds-text-neutral800 fixed-bottom">
+        <Pagination className="ds-mb-20 ds-flex ds-justify-center fixed-bottom">
               <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
               <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-              <Pagination.Item>{currentPage}</Pagination.Item>
+              <Pagination.Item ><span style = {{color : '#195054'}}>{currentPage}</span></Pagination.Item>
               <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages } />
               <Pagination.Last onClick={() => handlePageChange(totalPages)} />
           </Pagination>
@@ -224,7 +224,8 @@ const handlePageChange = async (pageNumber: number): Promise<void> => {
               <span className="ds-flex ds-justify-center ds-text-neutral500 ds-text-size-16">
                 Besoin d'aide ? 
                 <Link to='/guide'
-                 className='ds-ml-7 ds-text-primary900' 
+                 className='ds-ml-7' 
+                 style={{color : '#195054'}}
                  >
                     Consultez le guide
                     </Link>

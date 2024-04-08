@@ -38,7 +38,7 @@ export default function ConnectorDetails() {
     }
   };
 
-    const [active, setActive] = useState<boolean>(true)
+    const [active, setActive] = useState<boolean>(false)
 
     const fetchData = async ()=> {
       try {
@@ -74,16 +74,27 @@ export default function ConnectorDetails() {
     </div>
      <div className="ds-flex ds-align-center ds-mr-130">
       <Button
-      text ={<FaPencilAlt className="ds-text-size-19"/> as unknown as string}
+      text ={<><FaPencilAlt className="ds-text-size-17 ds-mr-2"/> Modifier</> as unknown as string}
       type={TypeButton.secondary}
       size={SizeButton.small}
-      className="ds-mr-10"
+      className="ds-mr-10 ds-w-35"
+      style={{
+        backgroundColor: '#fff',
+        borderColor: '#003D42',
+        color: '#003D42',
+      }}  
       onClick={()=>navigate(`/editConnector/${id}`)}
       />
       <Button
-      text ={<><TiDelete  className="ds-text-size-19" /></> as unknown as string}
+      text ={<><TiDelete  className="ds-text-size-25 ds-mr-2"/>Supprimer</> as unknown as string}
       type={TypeButton.secondary}
       size={SizeButton.small}
+      style={{
+        backgroundColor: '#fff',
+        borderColor: '#003D42',
+        color: '#003D42',
+      }}  
+      className="ds-w-35"
       onClick={()=>setShowDeleteModal(true)}
       />
     <Checkbox

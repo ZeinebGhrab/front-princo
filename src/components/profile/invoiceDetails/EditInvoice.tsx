@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../api/hooks";
-import ProfileInvoiceDetails from "../../interfaces/user/InvoiceDetails";
-import { updateUser } from "../../api/reducers/ProfileReducer";
-import Navbar from "../nav/Navbar";
+import { useAppDispatch, useAppSelector } from "../../../api/hooks";
+import ProfileInvoiceDetails from "../../../interfaces/user/InvoiceDetails";
+import { updateUser } from "../../../api/reducers/ProfileReducer";
+import Navbar from "../../nav/Navbar";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { Button, Col, Container, Input, Text } from "@piximind/ds-p-23";
 import { useNavigate } from "react-router-dom";

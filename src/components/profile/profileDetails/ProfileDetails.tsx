@@ -3,9 +3,9 @@ import { Button, Text, Avatar, Col, Row, Radio,  Container} from '@piximind/ds-p
 import PasswordModal from "./PasswordModal";
 import { useState } from "react";
 import moment from "moment";
-import ProfileNav from "./ProfileNav";
-import { useAppSelector } from "../../api/hooks";
-import userLogo from '../../assets/user.png';
+import ProfileNav from "../ProfileNav";
+import { useAppSelector } from "../../../api/hooks";
+import userLogo from "../../../assets/user.png";
 import { useNavigate } from "react-router-dom";
 
 export default function ProfileDetails() {
@@ -31,6 +31,7 @@ export default function ProfileDetails() {
                         <Text
                             text='Nom et prénom'
                             className='ds-mb-5 ds-text-size-16'
+                            style={{color: '#195054'}}
                         />
                         <Text
                             text= {data?.firstName + " " + data?.lastName}
@@ -47,6 +48,7 @@ export default function ProfileDetails() {
                         <Text
                             text='Adresse mail'
                             className='ds-mb-5 ds-text-size-16'
+                            style={{color: '#195054'}}
                         />
                         <Text
                             text={data?.email}
@@ -63,6 +65,7 @@ export default function ProfileDetails() {
                         <Text
                             text='Identité de genre'
                             className='ds-mb-5 ds-text-size-16'
+                            style={{color: '#195054'}}
                         />
                         <Radio
                             label='Identité de genre'
@@ -83,6 +86,7 @@ export default function ProfileDetails() {
                          <Text
                             text='Date de naissance'
                             className='ds-mb-5 ds-mt-14 ds-text-size-16'
+                            style={{color: '#195054'}}
                         />
                          <Text
                             text={moment(data?.birthDate as Date).format("DD/MM/YYYY")}
@@ -98,6 +102,7 @@ export default function ProfileDetails() {
                          <Text
                             text='N° de téléphone '
                             className='ds-mb-5 ds-text-size-16'
+                            style={{color: '#195054'}}
                         />
                         <Text
                             text={data?.tel}
@@ -115,6 +120,7 @@ export default function ProfileDetails() {
                          <Text
                             text='Pays / Région'
                             className='ds-mb-5 ds-text-size-16'
+                            style={{color: '#195054'}}
                         />
                         <Text
                             text={data?.country}
@@ -130,6 +136,7 @@ export default function ProfileDetails() {
                         <Text
                             text='Profil'
                             className='ds-mb-5 ds-text-size-16'
+                            style={{color: '#195054'}}
                         />
                         <Text
                             text={data?.profile}

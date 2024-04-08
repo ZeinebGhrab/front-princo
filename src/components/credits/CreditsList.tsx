@@ -91,23 +91,23 @@ export default function CreditsList() {
                 <div className="ds-flex ds-align-center ds-mr-40">
                 <Text
                 text="Mon crédit actuel : "
-                className="ds-text-neutral700"
-                style={{fontWeight:'600'}}
+                style={{color: '#195054', fontWeight:'600'}}
                 />
                 <Text
                 text= {userData?.tickets as unknown as string}
-                className="ds-text-neutral700 ds-ml-6"
+                className="ds-ml-6"
+                style={{color: '#195054'}}
                 />  
                 </div>
                 <div className="ds-flex ds-align-start">
                 <Text
                 text="Date d'expiration :"
-                className="ds-text-neutral700"
-                style={{fontWeight:'600'}}
+                style={{color: '#195054', fontWeight:'600'}}
                 />
                 <Text
                 text= {moment(userData?.ticketsExpirationDate as Date).format("DD/MM/YYYY")}
-                className="ds-text-neutral700 ds-ml-6"
+                className="ds-ml-6"
+                style={{color: '#195054'}}
                 />
                 </div>
                 </div>
@@ -115,29 +115,30 @@ export default function CreditsList() {
         }
         />
         <div className="ds-justify-center ds-flex ds-mt-25">
-        <div >
+        <div>
 
 {offers?.map((rowOffers: Offer[], rowIndex: number) => (
-<Row key={rowIndex} className="ds-mb-30">
+<Row key={rowIndex} className="ds-mb-20">
 {rowOffers.map((offer: Offer, colIndex: number) => (
 <Col key={colIndex}>
       <Card
         className='ds-box-shadow3'
         style={{
-          width: "23rem",
-          height: "10rem",
+          width: "24rem",
+          height: "11rem",
           borderWidth: "1px",
           borderStyle: "solid",
           borderColor: "#eaeeeb",
         }}
       >
-      
         <Card.Body>
-            <b className='ds-text-primary ds-text-size-17'>{offer.title}</b>
-            <div className='ds-text-size-13 ds-mt-7'>
+            <b className='ds-text-primary ds-text-size-18'>{offer.title}</b>
+            <div className='ds-mt-3' style={{borderTop: '2px solid #E3E3E6',color: '#195054'}}>
+            <div className="ds-mt-6 ds-text-size-14">
             {offer.description}
             </div>
-            <b className="ds-mt-7">{offer.unitPrice} Euro</b>
+            <b className="ds-mt-7 ds-text-size-15">{offer.unitPrice} Euro</b>
+            </div>
             <Payment offerId={offer._id}/>
         </Card.Body>
       </Card>
@@ -150,7 +151,7 @@ export default function CreditsList() {
         <Pagination  className="ds-mb-15 ds-flex ds-justify-center ds-text-neutral800 fixed-bottom">
               <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
               <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-              <Pagination.Item>{currentPage}</Pagination.Item>
+              <Pagination.Item><span style = {{color : '#195054'}}>{currentPage}</span></Pagination.Item>
               <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages } />
               <Pagination.Last onClick={() => handlePageChange(totalPages)} />
           </Pagination>

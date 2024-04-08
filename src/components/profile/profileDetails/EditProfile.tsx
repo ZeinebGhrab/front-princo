@@ -1,15 +1,15 @@
 import { Avatar, Button, Col, Container, Datepicker, EDisplayType, Input,  NumberInput, Radio, Row, Text } from "@piximind/ds-p-23";
 import { ESizeInput, ETypesInput, Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
-import { useAppDispatch, useAppSelector } from "../../api/hooks";
+import { useAppDispatch, useAppSelector } from "../../../api/hooks";
 import { useState } from "react";
-import User from "../../interfaces/user/User";
+import User from "../../../interfaces/user/User";
 import { Validation } from "@piximind/validation";
-import { updateUser } from "../../api/reducers/ProfileReducer";
-import userLogo from '../../assets/user.png';
+import { updateUser } from "../../../api/reducers/ProfileReducer";
+import userLogo from '../../../assets/user.png';
 import { IChangeDatePicker } from "@piximind/ds-p-23/lib/esn/Interfaces/Molecule/IMoleculeDatepicker/IMoleculeDatepicker";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../nav/Navbar";
+import Navbar from "../../nav/Navbar";
 
 
 export default function EditProfile(){

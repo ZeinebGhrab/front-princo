@@ -1,6 +1,6 @@
 import { Stripe, loadStripe } from '@stripe/stripe-js';
 import { useAppDispatch, useAppSelector } from '../../../api/hooks';
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { payment } from '../../../api/reducers/PaymentReducer';
 import { Button, SizeButton, TypeButton } from '@piximind/ds-p-23';
 
@@ -10,8 +10,7 @@ export default function Payment({offerId} : {offerId : string}) {
     const dataAuth = useAppSelector(state => state.authentication.data);
     const [stripe, setStripe] = useState<Stripe | null>(null);
 
-    const handlepayment = async (e: FormEvent) => {
-        e.preventDefault();
+    const handlepayment = async () => {
             try {
                 const session = await dispatch(payment({
                     cardPayment: {
@@ -37,10 +36,8 @@ export default function Payment({offerId} : {offerId : string}) {
 
     useEffect(() => {
         const fetchStripe = async () => {
-            
-                const stripe = await loadStripe('pk_test_51Ou1c1F4nw8iyxXdXgep5qajel1PmE3eYyagxpLHXcsqPcubuRDG8LRGHBTXaL67THZ460iLgYqARbo4eeUZ1y22008Y7UIgXW');
+                const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
                 setStripe(stripe);
-
         };
         fetchStripe();
     }, []);
@@ -52,7 +49,7 @@ export default function Payment({offerId} : {offerId : string}) {
             className="ds-mt-5"
             size={SizeButton.small}
             type={TypeButton.secondary}
-         onClick={(e: FormEvent) => handlepayment(e)}
+         onClick={() => handlepayment()}
           />
             
         </>

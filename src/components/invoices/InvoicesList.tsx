@@ -115,9 +115,9 @@ export default function InvoicesList (){
     >
       <Card.Body>
         <Container
-        className="ds-mb-3 ds-text-size-18"
+        className="ds-mb-3 ds-text-size-18 ds-text-primary"
         children ={
-          <b className='ds-text-primary ds-text-size-17'>
+          <b>
           Facture {invoice.ref}
           </b>
         }
@@ -126,12 +126,13 @@ export default function InvoicesList (){
         className="ds-text-size-15"
         style={{
           borderTop: '2px solid #E3E3E6',
+          color: '#195054'
         }}        
         children = {
             <>
-            <div className="ds-mt-2"> Pack Premium : <b>{invoice.premiumPack}</b> </div>
-            <div>Date : <b>{moment(invoice.date).format("DD/MM/YYYY")}</b></div> 
-            <div>Montant : <b>{invoice.amount} Euro</b></div>
+            <div className="ds-mt-2"> Pack Premium : <span style={{fontWeight:'600'}}>{invoice.premiumPack}</span> </div>
+            <div>Date : <span style={{fontWeight:'600'}}>{moment(invoice.date).format("DD/MM/YYYY")}</span></div> 
+            <div>Montant : <span style={{fontWeight:'600'}}>{invoice.amount} Euro</span></div>
             </>
         }
         />
@@ -162,18 +163,18 @@ export default function InvoicesList (){
 ))}
 </Row>
 ))} 
-    </div>
     {
        invoices?.length !==0 && (
         <Pagination  className="ds-mb-10 ds-flex ds-justify-center ds-text-neutral800 fixed-bottom">
               <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
               <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-              <Pagination.Item>{currentPage}</Pagination.Item>
+              <Pagination.Item><span style = {{color : '#195054'}}>{currentPage}</span></Pagination.Item>
               <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages } />
               <Pagination.Last onClick={() => handlePageChange(totalPages)} />
           </Pagination>
        )
-    }          
+    }  
+     </div>        
         </div>
 
         {

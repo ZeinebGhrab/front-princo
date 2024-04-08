@@ -1,6 +1,6 @@
 import { Text, Col, Container } from "@piximind/ds-p-23";
-import { useAppSelector } from "../../api/hooks";
-import ProfileNav from "./ProfileNav";
+import { useAppSelector } from "../../../api/hooks";
+import ProfileNav from "../ProfileNav";
 import { useNavigate } from "react-router-dom";
 
 export default function InvoiceDetails ()  {
@@ -20,6 +20,7 @@ export default function InvoiceDetails ()  {
                 <Text
                    text='Raison Sociale'
                    className='ds-mb-5 ds-text-size-16'
+                   style={{color: '#195054'}}
                  />
                 <Text
                    text={data?.legalName}
@@ -36,6 +37,7 @@ export default function InvoiceDetails ()  {
             <Text
             text='Matricule fiscale'
             className='ds-mb-5 ds-text-size-16'
+            style={{color: '#195054'}}
             />
             <Text
             text={data?.fiscalId}
@@ -51,6 +53,7 @@ export default function InvoiceDetails ()  {
             <Text
             text='Adresse du siège social'
             className='ds-mb-5 ds-text-size-16'
+            style={{color: '#195054'}}
         />
         <Text
             text={data?.adress}
@@ -66,6 +69,7 @@ export default function InvoiceDetails ()  {
              <Text
             text='Pays'
             className='ds-mb-5 ds-text-size-16'
+            style={{color: '#195054'}}
             />
         <Text
             text={data?.country}
@@ -81,6 +85,7 @@ export default function InvoiceDetails ()  {
             <Text
             text='Ville'
             className='ds-mb-5 ds-text-size-16'
+            style={{color: '#195054'}}
             />
         <Text
             text={data?.city}
@@ -96,6 +101,7 @@ export default function InvoiceDetails ()  {
             <Text
             text='Code postale'
             className='ds-mb-5 ds-text-size-16'
+            style={{color: '#195054'}}
         />
         <Text
             text={data?.postalCode}
