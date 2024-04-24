@@ -1,18 +1,16 @@
-import { Button, Checkbox, Container, Input, SizeButton, Text, TypeButton, TypeCheckbox } from "@piximind/ds-p-23";
-import Navbar from "../nav/Navbar";
-import { IoIosArrowRoundBack } from "react-icons/io";
-import { Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
+import { Checkbox, Container, Input, Text, TypeCheckbox } from "@piximind/ds-p-23";
+import NavApp from "../nav/NavApp";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
-import { getConnector } from "../../api/reducers/ConnectorsReducer";
+import { activeConnector, getConnector } from "../../api/reducers/ConnectorsReducer";
 import Guide from "./Guide";
 import { FaPencilAlt } from "react-icons/fa";
 import { TiDelete } from "react-icons/ti";
 import DeleteConnector from "./DeleteConnector";
-import { MdCopyAll } from "react-icons/md";
-import { LuCopyCheck } from "react-icons/lu";
-
+import ComponentTitle from "../../customComponent/ComponentTitle";
+import CopyButton from "../../customComponent/CopyButton";
+import TitleButton from "../../customComponent/TitleButton";
 
 
 export default function ConnectorDetails() {
@@ -24,7 +22,19 @@ export default function ConnectorDetails() {
     const data = useAppSelector(state=>state.connectors.data);
     const apiRef = useRef(null);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-    const [copy, setCopy] = useState<boolean>(false)
+    const [copy, setCopy] = useState<boolean>(false);
+
+    const buttons = [
+      {
+        text: <><FaPencilAlt className="ds-text-size-17 ds-mr-2"/> Modifier</>,
+        className: "ds-mr-12",
+        handle: ()=>navigate(`/editConnector/${id}`),
+      },
+      {
+        text: <><TiDelete  className="ds-text-size-17 ds-mr-2"/>Supprimer</>,
+        handle: ()=>setShowDeleteModal(true),
+      }
+    ]
    
 
   const handleCopyApi = () => {
@@ -38,68 +48,51 @@ export default function ConnectorDetails() {
     }
   };
 
-    const [active, setActive] = useState<boolean>(false)
-
-    const fetchData = async ()=> {
+    const fetchData =useCallback( async ()=> {
       try {
         await dispatch(getConnector({id,token})).unwrap()
       }
       catch(error){
         console.log(error);
       }
-    }
+    },[dispatch, id, token]);
+    
+    const [active, setActive]= useState(Array.isArray(data) ? data[0].isActive : data.isActive);
+    
+    useEffect(()=>{
+      const handleActive = async ()=> {
+        try {
+          await dispatch(activeConnector({id,active,token})).unwrap();      }
+        catch(error){
+          console.log(error);
+        }
+      }
+      handleActive();
+    },[active, dispatch, id, token]);
 
     useEffect(()=>{
       fetchData();
-    },[])
+    },[data,fetchData ]);
   
     return (
         <>
-        <Navbar/> 
-  <Container className="ds-flex ds-align-center ds-justify-between ds-ml-58 ds-mt-35">
-    <div className="ds-flex ds-align-center">
-    <Button
-      text={<IoIosArrowRoundBack /> as unknown as string}
-      type={Type.tertiary}
-      className="ds-text-size-55"
-      style = {{color : '#003D42'}}
-      size={Size.small}
-      onClick={() => navigate('/')}
-    />
-    <Text
-      text= {Array.isArray(data) ? data[0]?.connectorName : data?.connectorName}
-      className="ds-text-size-30"
-      style = {{color : '#003D42'}}
-    />
-    </div>
+        <NavApp/> 
+  <Container className="ds-flex ds-align-center ds-justify-between ds-mt-40">
+  <ComponentTitle title={Array.isArray(data) ? data[0]?.connectorName : data?.connectorName} navigatePage='/'/>
      <div className="ds-flex ds-align-center ds-mr-130">
-      <Button
-      text ={<><FaPencilAlt className="ds-text-size-17 ds-mr-2"/> Modifier</> as unknown as string}
-      type={TypeButton.secondary}
-      size={SizeButton.small}
-      className="ds-mr-10 ds-w-35"
-      style={{
-        backgroundColor: '#fff',
-        borderColor: '#003D42',
-        color: '#003D42',
-      }}  
-      onClick={()=>navigate(`/editConnector/${id}`)}
-      />
-      <Button
-      text ={<><TiDelete  className="ds-text-size-25 ds-mr-2"/>Supprimer</> as unknown as string}
-      type={TypeButton.secondary}
-      size={SizeButton.small}
-      style={{
-        backgroundColor: '#fff',
-        borderColor: '#003D42',
-        color: '#003D42',
-      }}  
-      className="ds-w-35"
-      onClick={()=>setShowDeleteModal(true)}
-      />
+      {
+        buttons.map((button, index)=>(
+          <TitleButton 
+            key={index}
+            text={button.text} 
+            handle={button.handle} 
+            className={button.className}        
+          />
+        ))
+      }
     <Checkbox
       checked = {active}
-      onClick={()=>setActive(!active)}
+      onClick={()=>{setActive(!active)}}
       type={TypeCheckbox.switch}  
       label="Activé"
       className="ds-ml-12" 
@@ -122,15 +115,14 @@ export default function ConnectorDetails() {
         className="ds-text-neutral800"
         ref={apiRef}
       />
-      <Button 
-      text={<>{copy ? <LuCopyCheck className="ds-text-size-19 ds-mr-3" /> :<MdCopyAll className="ds-text-size-19 ds-mr-3" />} Copier</> as unknown as string}
-      size = {Size.medium}
-      type = {TypeButton.secondary}
+      <CopyButton
+      copy={copy}
       className="ds-ml-15 ds-mt-24"
-      onClick={handleCopyApi}
+      type="secondary"
+      handleCopy={handleCopyApi}
       />
     </Container>
-    <Guide exportGuide={true}/>
+    <Guide exportGuide={true} apiKey={Array.isArray(data) ? data[0]?.apiKey : data?.apiKey}/>
   </div>
 </div>
 <DeleteConnector show={showDeleteModal} handleClose={()=>setShowDeleteModal(false)} data={id}/>

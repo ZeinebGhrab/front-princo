@@ -1,8 +1,11 @@
 export interface Offer {
-    _id: string,
+    _id?: string,
     title: string,
     description: string,
     unitPrice: number,
+    tva: number,
+    discount: number,
     ticketsNumber: number,
-    validity: number
+    validityPeriod: number,
+    admin: string | null | undefined,
 }

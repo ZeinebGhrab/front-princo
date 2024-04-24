@@ -1,24 +1,17 @@
-import { Button, Text } from '@piximind/ds-p-23';
-import { Size, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import Nav from 'react-bootstrap/Nav';
-import { IoIosArrowRoundBack } from 'react-icons/io';
-import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../nav/Navbar';
+import NavApp from '../nav/NavApp';
 import { FaPencilAlt } from 'react-icons/fa';
 import { useAppDispatch, useAppSelector } from '../../api/hooks';
 import { useCallback, useEffect } from 'react';
 import { getUser } from '../../api/reducers/ProfileReducer';
+import ComponentTitle from '../../customComponent/ComponentTitle';
+import { Link } from 'react-router-dom';
+import TitleButton from '../../customComponent/TitleButton';
 
+export default function ProfileNav({handleModify} :{handleModify: () => void}) {
 
-interface Props {
-    handleModify: () => void,
-}
-
-export default function ProfileNav({handleModify} :Props) {
-
-    const navigate  = useNavigate();
     const dispatch = useAppDispatch();
-    const dataAuth = useAppSelector(state=>state.authentication.data)
+    const dataAuth = useAppSelector(state=>state.authentication.data);
 
     const fetchData =useCallback(()=> {
       try{
@@ -29,48 +22,41 @@ export default function ProfileNav({handleModify} :Props) {
       }
   },[dataAuth?.id, dataAuth?.token, dispatch]);
 
-  
+  const tabs =[
+    {
+      title: "Informations du profil",
+      to:"/profileDetails",
+      className:'ds-mr-20'
+    },
+    {
+      title: "Informations de facturation",
+      to:"/invoiceDetails",
+    }
+  ]
+
   useEffect(()=>{
       fetchData()
   },[fetchData])
     
   return (
     <>
-    <Navbar/>
-           <div className="ds-flex ds-justify-between ds-mt-38 ">
-                <div className="ds-flex ds-align-center ds-ml-50">
-                    <Button 
-                        type={Type.tertiary}
-                        size={Size.small}
-                        text = {<IoIosArrowRoundBack />  as unknown as string}
-                        className="ds-text-size-55"
-                        onClick={()=>navigate('/')} />
-                    <Text
-                        text='Mon profil'
-                        className="ds-flex ds-justify-center ds-text-size-30"
-                        style = {{color : '#003D42'}}
-                         />
-                </div>
-                <Button
-                    type={Type.secondary}
-                    text={<><FaPencilAlt className="ds-mr-2" /> Modifier</> as unknown as string}
-                    className="ds-mr-160 ds-text-size-15"
-                    size={Size.medium}
-                    onClick={handleModify}
-                    style={{
-                      backgroundColor: '#fff',
-                      borderColor: '#003D42',
-                      color: '#003D42',
-                    }}    
-                />
+    <NavApp/>
+           <div className="ds-flex ds-justify-between ds-mt-40">
+           <ComponentTitle title="Mon profil" navigatePage='/'/>
+           <TitleButton
+            text={<><FaPencilAlt className="ds-mr-2" /> Modifier</>}
+            handle={handleModify}
+            className="ds-mr-160 ds-text-size-15"
+           />
             </div>
     <Nav variant="tabs" className="ds-ml-80 ds-text-size-18 ds-mt-11 ds-mr-150">
-      <Nav.Item>
-        <Nav.Link as={Link} to="/profileDetails" className='ds-mr-20' style={{ color: '#567388' }}>Informations du profil</Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link as={Link} to="/invoiceDetails" style={{ color: '#567388' }}>Informations de facturation</Nav.Link>
-      </Nav.Item>
+      {
+        tabs.map((tab,index)=>(
+          <Nav.Item key={index}>
+            <Nav.Link as={Link} to={tab.to} className={tab.className} style={{ color: '#567388' }}>{tab.title}</Nav.Link>
+          </Nav.Item>
+        ))
+      }
     </Nav>
     </>
   );

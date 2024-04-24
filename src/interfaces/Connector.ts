@@ -4,4 +4,5 @@ export default interface Connector {
     webSite : string,
     apiKey ?: string,
     userId? : string | null ,
+    isActive: boolean,
 }

@@ -2,6 +2,7 @@ import { EListFunction } from "@piximind/custom-hook";
 
 export const ValidationList = [
   {
+    label: 'Prénom',
     key: 'firstName',
     value: '',
     isRealTimeValidation: true,
@@ -14,6 +15,7 @@ export const ValidationList = [
     ],
   },
   {
+    label: 'Nom',
     key: 'lastName',
     value: '',
     isRealTimeValidation: true,
@@ -26,6 +28,7 @@ export const ValidationList = [
     ],
   },
   {
+    label: 'Adresse email',
     key: 'email',
     value: '',
     isRealTimeValidation: true,
@@ -38,6 +41,8 @@ export const ValidationList = [
     ],
   },
   {
+    label:'Mot de passe',
+    type : 'password',
     key: 'password',
     value: '',
     isRealTimeValidation: true,
@@ -50,6 +55,8 @@ export const ValidationList = [
     ],
   },
   {
+    label:'Confirmation de Mot de passe',
+    type : 'password',
     key: 'confirmPassword',
     value: '',
     isRealTimeValidation: true,
@@ -62,6 +69,8 @@ export const ValidationList = [
     ],
   },
   {
+    label: "J'accepte les conditions d'utilisation",
+    type:'check',
     key: 'confirm',
     value: '',
     isRealTimeValidation: false,

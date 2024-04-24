@@ -1,14 +1,15 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../api/hooks';
-import { Validation } from '@piximind/validation';
-import { Size, TextType, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
-import { Button, Container, Input, Text, TypeButton } from '@piximind/ds-p-23';
+import { TextType } from '@piximind/ds-p-23/lib/esn/Interfaces';
+import { Button, Input, Text, TypeButton } from '@piximind/ds-p-23';
 import { getConnector, updateConnector } from '../../api/reducers/ConnectorsReducer';
-import { IoIosArrowRoundBack } from 'react-icons/io';
 import { useNavigate, useParams } from 'react-router-dom';
-import Navbar from '../nav/Navbar';
+import Navbar from '../nav/NavApp';
 import { SlPrinter } from 'react-icons/sl';
 import Connector from '../../interfaces/Connector';
+import ComponentTitle from '../../customComponent/ComponentTitle';
+import { connectorValidation } from './helpers/ConnectorValidation';
+import { connectorFields } from './helpers/ConnectorFields';
 
 
 export default function EditConnector() {
@@ -20,11 +21,11 @@ export default function EditConnector() {
         webSite:"",
     });
 
-    const validation = new Validation();
     const dispatch = useAppDispatch();
     const authData= useAppSelector(state=>state.authentication.data);
     const [errors,setErrors]=useState<{ [key: string]: string }>({});
     const  {id} = useParams();
+    const fields = connectorFields(change);
 
     const fetchData = async ()=>{
         try {
@@ -38,13 +39,11 @@ export default function EditConnector() {
     const handleChange = async(e : FormEvent) => {
         e.preventDefault()
         setErrors({});
-        if (
-            validation.isEmpty(change.connectorName) || validation.isEmpty(change.webSite) ) {
-            setErrors({message : 'Veuillez remplir tous les champs!'});
-            return;
-        }
-        if(!validation.isUrl(change.webSite)) {
-            setErrors({message : 'Veuillez saisir une URL valide!'});
+        
+        const validateConnector = connectorValidation(change);
+
+        if (validateConnector !== true) {
+            setErrors({ message: validateConnector });
             return;
         }
 
@@ -68,44 +67,25 @@ export default function EditConnector() {
     return (
         <>
         <Navbar/>
-        <Container
-        children = {
-            <div className="ds-flex ds-align-center ds-mt-40">
-                <Button
-                text = {<IoIosArrowRoundBack /> as unknown as string}
-                type = {Type.tertiary}
-                className="ds-text-size-55 ds-ml-50"
-                style = {{color : '#003D42'}}
-                size = {Size.small}
-                onClick={()=>navigate(`/connectorDetails/${id}`)}
-                />
-                <Text
-                text = "Modifier connecteur"
-                className="ds-text-size-30"
-                style = {{color : '#003D42'}}
-                />
-            </div>
-        }
-        />
+        <div className='ds-mt-40'>
+            <ComponentTitle title="Modifier connecteur" navigatePage='/'/>
+        </div>    
         <div className="ds-flex ds-justify-center ds-m-50">
         <form className="ds-w-28 ds-flex-col ds-mt-10" onSubmit={(e: FormEvent)=>handleChange(e)}>
             <div className="ds-flex ds-justify-center">
             <SlPrinter className="ds-text-size-60 ds-mb-25 ds-flex ds-justify-center ds-text-primary700" />
             </div>
+              {
+                fields.map((field, index)=>(
                 <Input
-                label = "Nom du connecteur"
+                key={index}
+                label = {field.label}
                 containerClassName="ds-mb-20"
-                name='connectorName'
-                value = {change.connectorName}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setChange({...change, 'connectorName': e.target.value})}
+                value = {field.value}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setChange({...change, [field.name]: e.target.value})}
                 />
-                <Input
-                label = "Site web de l'application"
-                containerClassName="ds-mb-24"
-                name='webSite'
-                value = {change.webSite}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setChange({...change, 'webSite': e.target.value})}
-                />
+                ))
+               }
                  {
                       errors['message']&&                
                      
@@ -113,8 +93,7 @@ export default function EditConnector() {
                          text={errors['message']}
                          className="ds-text-error600"
                          type={TextType["body-2"]} 
-                    />
-                    
+                    />      
                  }
                 <Button 
                text="Modifier" 

@@ -1,5 +1,5 @@
 import { Container, Text } from "@piximind/ds-p-23";
-import Navbar from "../../nav/Navbar";
+import Navbar from "../../nav/NavApp";
 import { Link } from "react-router-dom";
 import { GiConfirmed } from "react-icons/gi";
 

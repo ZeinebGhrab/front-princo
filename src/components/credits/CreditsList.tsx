@@ -1,20 +1,19 @@
-import { Button, Col, Container, Row, Text } from "@piximind/ds-p-23";
-import { IoIosArrowRoundBack } from "react-icons/io";
-import Navbar from "../nav/Navbar";
-import { Size, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
-import { useNavigate } from "react-router-dom";
+import { Col, Container, Row, Text } from "@piximind/ds-p-23";
+import Navbar from "../nav/NavApp";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getOffers } from "../../api/reducers/OfferReducer";
 import { Offer } from "../../interfaces/Offer";
-import { Card, Pagination } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import Payment from "./payment/Payment";
 import moment from "moment";
 import { getUser } from "../../api/reducers/ProfileReducer";
+import ComponentPagination from "../../customComponent/ComponentPagination";
+import ComponentTitle from "../../customComponent/ComponentTitle";
+import { groupDataByRows } from "../helpers/GroupDataByRows";
 
 export default function CreditsList() {
 
-    const navigate = useNavigate();
     const offerData = useAppSelector(state=>state.offers.data);
     const authData = useAppSelector(state => state.authentication.data);
     const userData = useAppSelector(state => state.profile.data);
@@ -33,7 +32,7 @@ export default function CreditsList() {
     const limit = 6;
   
     const totalPages = useMemo(() : number =>{ 
-    return Math.floor((offerData?.length || 0) / limit) + 1
+    return Math.floor((Array.isArray(offerData) && offerData?.length || 0) / limit) + 1
   },[offerData, limit]);
 
   const handlePageChange = async (pageNumber: number): Promise<void> => {
@@ -50,16 +49,7 @@ export default function CreditsList() {
         }
     },[authData, currentPage, dispatch]);
 
-    const offers = offerData?.reduce((newOffersData: Offer[][], offer: Offer, index: number) => {
-      const RowIndex = Math.floor(index / 3);
-
-      if (!newOffersData[RowIndex]) {
-        newOffersData[RowIndex] = []; 
-      }
-
-      newOffersData[RowIndex].push(offer);
-      return newOffersData;
-    }, []);
+    const offers = Array.isArray(offerData) && groupDataByRows(offerData);
     
     useEffect(()=>{
         fetchOffers();
@@ -71,22 +61,8 @@ export default function CreditsList() {
          <Navbar/>
         <Container
         children = {
-            <div className="ds-flex ds-align-center ds-justify-between ds-mt-40 ds-mr-30">
-                <div className="ds-flex ds-align-center">
-                <Button
-                text = {<IoIosArrowRoundBack /> as unknown as string}
-                type = {Type.tertiary}
-                className="ds-text-size-55 ds-ml-50"
-                style = {{color : '#003D42'}}
-                size = {Size.small}
-                onClick={()=>navigate('/')}
-                />
-                <Text
-                text = "Achat crédit"
-                className="ds-text-size-30"
-                style = {{color : '#003D42'}}
-                />
-                </div>
+            <div className="ds-flex ds-align-center ds-mt-40 ds-justify-between ds-mr-30">
+              <ComponentTitle title="Achat crédit" navigatePage="/"/>
               <div className="ds-flex ds-justify-between ds-text-size-15">
                 <div className="ds-flex ds-align-center ds-mr-40">
                 <Text
@@ -114,10 +90,10 @@ export default function CreditsList() {
             </div>
         }
         />
-        <div className="ds-justify-center ds-flex ds-mt-25">
+        <div className="ds-justify-start ds-flex ds-mt-25 ds-ml-100">
         <div>
 
-{offers?.map((rowOffers: Offer[], rowIndex: number) => (
+{Array.isArray(offers) && offers.map((rowOffers: Offer[], rowIndex: number) => (
 <Row key={rowIndex} className="ds-mb-20">
 {rowOffers.map((offer: Offer, colIndex: number) => (
 <Col key={colIndex}>
@@ -146,19 +122,18 @@ export default function CreditsList() {
 ))}
 </Row>
 ))} 
+ </div>
+ </div>
  {
-       offerData?.length !==0 && (
-        <Pagination  className="ds-mb-15 ds-flex ds-justify-center ds-text-neutral800 fixed-bottom">
-              <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-              <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-              <Pagination.Item><span style = {{color : '#195054'}}>{currentPage}</span></Pagination.Item>
-              <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages } />
-              <Pagination.Last onClick={() => handlePageChange(totalPages)} />
-          </Pagination>
-       )
-    }     
- </div>
- </div>
+      <div className="ds-flex ds-center">
+      <ComponentPagination 
+       currentPage={currentPage}
+       totalPages={totalPages} 
+       length={Array.isArray(offers) && offers?.length || 0}
+       text="Pas d'offres" 
+       handlePageChange={handlePageChange}/>
+      </div>
+ }   
         </>
     )
 

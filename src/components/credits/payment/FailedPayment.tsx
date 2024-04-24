@@ -1,5 +1,5 @@
 import { FcCancel } from "react-icons/fc";
-import Navbar from "../../nav/Navbar";
+import Navbar from "../../nav/NavApp";
 import { Container, Text } from "@piximind/ds-p-23";
 import { Link } from "react-router-dom";
 

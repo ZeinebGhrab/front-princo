@@ -5,7 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { profileSlice } from './reducers/ProfileReducer';
 import { connectorsSlice } from './reducers/ConnectorsReducer';
 import { offerSlice } from './reducers/OfferReducer';
-import { InvoiceSlice } from './reducers/InvoiceReducer';
+import { invoiceSlice } from './reducers/InvoiceReducer';
 import { paymentSlice } from './reducers/PaymentReducer';
 
 
@@ -23,7 +23,7 @@ export const store = configureStore({
       connectors : connectorsSlice.reducer,
       offers: offerSlice.reducer,
       payment: paymentSlice.reducer,
-      invoices : InvoiceSlice.reducer,
+      invoices : invoiceSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
       if (process.env.NODE_ENV === 'development') {

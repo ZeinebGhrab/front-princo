@@ -12,7 +12,7 @@ const initialState = {
     '/getUser',
     async ( { id ,token }: {id: string | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:3000/users/${id}`,{
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/users/${id}`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -33,7 +33,7 @@ const initialState = {
     '/updateUser',
     async ({ id, updateUser, token }: { id: string | null | undefined, updateUser: Partial<User> | null | undefined, token: string | null | undefined }, thunkAPI) => {
       try {
-        await axios.put(`http://localhost:3000/users/${id}`, updateUser, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.put(`${import.meta.env.VITE_SERVER_URL}/users/${id}`, updateUser, { headers: { Authorization: `Bearer ${token}` } });
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           return thunkAPI.rejectWithValue(error.response.data);

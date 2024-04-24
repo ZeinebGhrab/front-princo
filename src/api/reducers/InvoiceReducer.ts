@@ -13,7 +13,7 @@ export const getInvoices =createAsyncThunk(
     '/invoices',
     async ( {id, skip, limit, token }: {id: string | null | undefined,skip: number, limit: number, token : string | undefined | null} , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:3000/invoice/${id}?skip=${skip}&limit=${limit}`, {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/invoice/${id}?skip=${skip}&limit=${limit}`, {
         headers : {
             Authorization: `Bearer ${token}`,
         }
@@ -34,7 +34,7 @@ export const getInvoices =createAsyncThunk(
     '/downloadInvoice',
     async ( {id,ref, token }: {id: string | null | undefined,ref: string | null | undefined ,token : string | undefined | null} , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:3000/invoice/download/${id}`, {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/invoice/download/${id}`, {
         headers : {
             Authorization: `Bearer ${token}`,
         },
@@ -57,7 +57,7 @@ export const getInvoices =createAsyncThunk(
     '/openInvoice',
     async ( {id, token }: {id: string | null | undefined, token : string | undefined | null} , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:3000/invoice/open/${id}`, {
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/invoice/open/${id}`, {
         headers : {
             Authorization: `Bearer ${token}`,
         },
@@ -77,7 +77,7 @@ export const getInvoices =createAsyncThunk(
     }
   );
 
-  export const InvoiceSlice = createSlice({
+  export const invoiceSlice = createSlice({
     name: 'invoice',
     initialState,
     reducers: {
@@ -118,4 +118,4 @@ export const getInvoices =createAsyncThunk(
     }
   });
 
-  export default InvoiceSlice.reducer;
+  export default invoiceSlice.reducer;

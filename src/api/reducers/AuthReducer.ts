@@ -11,9 +11,11 @@ const initialState = {
 };
 export const authenticateUser = createAsyncThunk(
     'auth/login',
-    async ( { email, password }: { email: string, password: string } , thunkAPI ) => {
+    async ( { email, password,rememberMe }: { email: string, password: string, rememberMe: boolean } , thunkAPI ) => {
     try{
-      const response = await axios.post('http://localhost:3000/auth/login', { email, password });
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/login`, 
+      { email, password, rememberMe },
+      );
       thunkAPI.dispatch(setData(response.data));
     }
     catch(error){
@@ -22,6 +24,18 @@ export const authenticateUser = createAsyncThunk(
         return thunkAPI.rejectWithValue(error.response.data);
       }
       throw error;
+    }
+    }
+  );
+
+  export const logout = createAsyncThunk(
+    'auth/logout',
+    async () => {
+    try{
+       await axios.get(`${import.meta.env.VITE_SERVER_URL}/auth/logout`);
+    }
+    catch(error){
+      return error;
     }
     }
   );
@@ -35,7 +49,7 @@ export const authenticateUser = createAsyncThunk(
         password :  typeState | undefined} 
         , thunkAPI ) => {
     try{
-      const response = await axios.post('http://localhost:3000/users/signup', { firstName,lastName,email,password});
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/users/signup`, { firstName,lastName,email,password});
       thunkAPI.dispatch(setData(response.data));
       return response.data;
     }
@@ -53,8 +67,9 @@ export const authenticateUser = createAsyncThunk(
     '/validate',
     async ( {token }: { token : string | undefined | null} , thunkAPI ) => {
     try{
-      const response = await axios.post('http://localhost:3000/users/verify', { token});
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/users/verify`, { token});
       thunkAPI.dispatch(setData(response.data));
+      console.log(response.data);
       return response.data;
     }
     catch(error){
@@ -71,7 +86,7 @@ export const authenticateUser = createAsyncThunk(
     '/forgetPassword',
     async ( { email }: { email : string | undefined | null} , thunkAPI ) => {
     try{
-      await axios.post('http://localhost:3000/users/forgotPassword',{email});
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/users/forgotPassword`,{email});
     }
     catch(error){
       console.log(error);
@@ -87,7 +102,7 @@ export const authenticateUser = createAsyncThunk(
     '/resetPassword',
     async ( { email, password }: { email : string | undefined | null, password:string | undefined | null } , thunkAPI ) => {
     try{
-      const response = await axios.post('http://localhost:3000/users/resetPassword',{email: email, password: password});
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/users/resetPassword`,{email: email, password: password});
       console.log(response.data)
       thunkAPI.dispatch(setData(response.data));
       return response.data;
@@ -106,12 +121,6 @@ export const authenticateUser = createAsyncThunk(
     name: 'authentication',
     initialState,
     reducers: {
-      logOut: (state) => {
-        state.data = null;
-        state.auth = false;
-        state.error={}
-
-      },
      setData: (state,action)=>{
       state.data= action.payload;
       state.auth = true;
@@ -127,6 +136,16 @@ export const authenticateUser = createAsyncThunk(
         state.error={}
       })
       .addCase(authenticateUser.rejected, (state, action) => {
+        state.error = action.error.message || 'error occurred';
+      })
+      .addCase(logout.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.status = 'succeeded';
+        state.error={}
+      })
+      .addCase(logout.rejected, (state, action) => {
         state.error = action.error.message || 'error occurred';
       })
       .addCase(signup.pending, (state) => {
@@ -173,5 +192,5 @@ export const authenticateUser = createAsyncThunk(
     }
   });
   
-  export const { logOut, setData} = authentificationSlice.actions;
+  export const {setData} = authentificationSlice.actions;
   export default authentificationSlice.reducer;

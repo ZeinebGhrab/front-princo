@@ -1,14 +1,15 @@
-import { Button, Container, Input, Text, TypeButton } from "@piximind/ds-p-23";
-import { Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
-import { IoIosArrowRoundBack } from "react-icons/io";
-import Navbar from "../nav/Navbar";
+import { Button, Input, Text, TypeButton } from "@piximind/ds-p-23";
+import { TextType } from "@piximind/ds-p-23/lib/esn/Interfaces";
+import NavApp from "../nav/NavApp";
 import { SlPrinter } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { createConnector } from "../../api/reducers/ConnectorsReducer";
 import { FormEvent, useState } from "react";
 import Connector from "../../interfaces/Connector";
-import { Validation } from "@piximind/validation";
+import ComponentTitle from "../../customComponent/ComponentTitle";
+import { connectorValidation } from "./helpers/ConnectorValidation";
+import { connectorFields } from "./helpers/ConnectorFields";
 
 export default function AddConnector () {
 
@@ -18,21 +19,20 @@ export default function AddConnector () {
     const authData = useAppSelector(state => state.authentication.data)
     const [connector, setConnector] = useState<Connector>({} as Connector)
     const [errors,setErrors]=useState<{ [key: string]: string }>({});
-    const validation = new Validation();
+    const fields = connectorFields(connector);
     
-
 
     const handleGenerate = async (e : FormEvent) => {
         setErrors({})
         e.preventDefault();
-        if (validation.isEmpty(connector.connectorName) || validation.isEmpty(connector.webSite)) {
-            setErrors({message : 'Veuillez remplir tous les champs!'});
+
+        const validateConnector = connectorValidation(connector);
+
+        if (validateConnector !== true) {
+            setErrors({ message: validateConnector });
             return;
         }
-        if(!validation.isUrl(connector.webSite)) {
-            setErrors({message : 'Veuillez saisir une URL valide!'});
-            return;
-        }
+        
         try {
             const response = await dispatch(createConnector(
                 {
@@ -50,45 +50,28 @@ export default function AddConnector () {
 
     return (
         <>
-        <Navbar/>
-        <Container
-        children = {
-            <div className="ds-flex ds-align-center ds-mt-40">
-                <Button
-                text = {<IoIosArrowRoundBack /> as unknown as string}
-                type = {Type.tertiary}
-                className="ds-text-size-55 ds-ml-50"
-                style = {{color : '#003D42'}}
-                size = {Size.small}
-                onClick={()=>navigate('/')}
-                />
-                <Text
-                text = "Nouveau connecteur"
-                className="ds-text-size-30"
-                style = {{color : '#003D42'}}
-                />
-            </div>
-        }
-        />
+        <NavApp/>
+        <div className="ds-mt-40">
+            <ComponentTitle title="Nouveau connecteur" navigatePage='/'/>
+        </div>
+       
         <div className="ds-flex ds-justify-center ds-m-50">
         <form className="ds-w-28 ds-flex-col ds-mt-10" onSubmit={(e: FormEvent)=>handleGenerate(e)}>
             <div className="ds-flex ds-justify-center">
             <SlPrinter className="ds-text-size-60 ds-mb-25 ds-flex ds-justify-center ds-text-primary700" />
             </div>
+               {
+                fields.map((field, index)=>(
                 <Input
-                label = "Nom du connecteur"
+                key={index}
+                label = {field.label}
                 containerClassName="ds-mb-20"
-                name='connectorName'
-                value = {connector.connectorName}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setConnector({...connector, 'connectorName': e.target.value})}
+                value = {field.value}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setConnector({...connector, [field.name]: e.target.value})}
                 />
-                <Input
-                label = "Site web de l'application"
-                containerClassName="ds-mb-24"
-                name='webSite'
-                value = {connector.webSite}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setConnector({...connector, 'webSite': e.target.value})}
-                />
+
+                ))
+               }
                  {
                       errors['message']&&                
                      
@@ -96,7 +79,7 @@ export default function AddConnector () {
                          text={errors['message']}
                          className="ds-text-error600"
                          type={TextType["body-2"]} 
-                    />
+                />
                     
                  }
                 <Button 

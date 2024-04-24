@@ -12,7 +12,7 @@ const initialState = {
     '/createConnector',
     async ( { createConnector ,token }: {createConnector: Connector | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
     try{
-      const response = await axios.post(`http://localhost:3000/connector`, 
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/connector`, 
       {
         connectorName: createConnector?.connectorName,
         webSite : createConnector?.webSite,
@@ -38,7 +38,7 @@ const initialState = {
     '/getConnectors',
     async ( { id, skip, limit ,token }: {id: string | null | undefined, skip: number, limit: number ,token: string | null | undefined } , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:3000/connector/connectors/${id}?skip=${skip}&limit=${limit}`,{
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/connector/connectors/${id}?skip=${skip}&limit=${limit}`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -58,7 +58,7 @@ const initialState = {
     '/getConnector',
     async ( {id ,token }: {id: string | null | undefined ,token: string | null | undefined } , thunkAPI ) => {
     try{
-      const response = await axios.get(`http://localhost:3000/connector/${id}`,{
+      const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/connector/${id}`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -74,12 +74,27 @@ const initialState = {
     }
   );
 
-
   export const updateConnector = createAsyncThunk(
     '/updateConnector',
     async ({ id, updateConnector, token }: { id: string | null | undefined, updateConnector: Connector| null | undefined, token: string | null | undefined }, thunkAPI) => {
       try {
-        await axios.put(`http://localhost:3000/connector/${id}`, updateConnector, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.put(`${import.meta.env.VITE_SERVER_URL}/connector/${id}`, updateConnector, { headers: { Authorization: `Bearer ${token}` } });
+      } catch (error) {
+        if (error instanceof AxiosError && error.response) {
+          return thunkAPI.rejectWithValue(error.response.data);
+        }
+        throw error;
+      }
+    }
+  );
+
+  export const activeConnector = createAsyncThunk(
+    '/activeConnector',
+    async ({ id, active, token }: { id: string | null | undefined, active: boolean, token: string | null | undefined }, thunkAPI) => {
+      try {
+        await axios.put(`${import.meta.env.VITE_SERVER_URL}/connector/isActive/${id}`,
+         {isActive: active},
+          { headers: { Authorization: `Bearer ${token}` } });
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           return thunkAPI.rejectWithValue(error.response.data);
@@ -93,7 +108,7 @@ const initialState = {
     '/deleteConnector',
     async ({ id, token }: { id: string | null | undefined, token: string | null | undefined }, thunkAPI) => {
       try {
-        await axios.delete(`http://localhost:3000/connector/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.delete(`${import.meta.env.VITE_SERVER_URL}/connector/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       } catch (error) {
         if (error instanceof AxiosError && error.response) {
           return thunkAPI.rejectWithValue(error.response.data);

@@ -1,20 +1,18 @@
-import { Button, Container, Row, SizeButton, Text, TypeButton } from "@piximind/ds-p-23";
-import { IoIosArrowRoundBack } from "react-icons/io";
-import Navbar from "../nav/Navbar";
-import { Size, TextType, Type } from "@piximind/ds-p-23/lib/esn/Interfaces";
-import { useNavigate } from "react-router-dom";
+import { Button, Container, Row, SizeButton, TypeButton } from "@piximind/ds-p-23";
+import Navbar from "../nav/NavApp";
 import { useAppDispatch, useAppSelector } from "../../api/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { downloadInvoice, getInvoices, openInvoice } from "../../api/reducers/InvoiceReducer";
 import Invoice from "../../interfaces/Invoice";
-import { Card, Col, Pagination } from "react-bootstrap";
+import { Card, Col } from "react-bootstrap";
 import { MdOpenInNew, MdOutlineFileDownload } from "react-icons/md";
 import moment from "moment";
-import { LuCircleOff } from "react-icons/lu";
+import ComponentPagination from "../../customComponent/ComponentPagination";
+import ComponentTitle from "../../customComponent/ComponentTitle";
+import { groupDataByRows } from "../helpers/GroupDataByRows";
 
 export default function InvoicesList (){
 
-    const navigate = useNavigate();
     const invoicesData = useAppSelector(state=>state.invoices.data);
     const authData = useAppSelector(state => state.authentication.data);
     const dispatch = useAppDispatch();
@@ -58,16 +56,7 @@ export default function InvoicesList (){
         }
     }
 
-    const invoices = invoicesData?.reduce((newInvoicesData: Invoice[][], invoice: Invoice, index: number) => {
-      const RowIndex = Math.floor(index / 3);
-
-      if (!newInvoicesData[RowIndex]) {
-        newInvoicesData[RowIndex] = []; 
-      }
-
-      newInvoicesData[RowIndex].push(invoice);
-      return newInvoicesData;
-    }, []);
+    const invoices = Array.isArray(invoicesData) ? groupDataByRows(invoicesData) : [];
 
     useEffect(()=>{
         fetchInvoices();
@@ -76,43 +65,28 @@ export default function InvoicesList (){
     return(
         <>
         <Navbar/>
-        <Container
-        children = {
+ 
             <div className="ds-flex ds-align-center ds-mt-40 ds-mr-40">
-                <Button
-                text = {<IoIosArrowRoundBack /> as unknown as string}
-                type = {Type.tertiary}
-                className="ds-text-size-55 ds-ml-50"
-                style = {{color : '#003D42'}}
-                size = {Size.small}
-                onClick={()=>navigate('/')}
-                />
-                <Text
-                text = "Mes factures"
-                className="ds-text-size-30"
-                style = {{color : '#003D42'}}
-                />
+            <ComponentTitle title="Mes factures" navigatePage='/'/>
             </div>
-        }
-        />
-        <div className="ds-justify-center ds-flex ds-mt-19">
+            <div className="ds-justify-start ds-flex ds-mt-12 ds-ml-100">
             <div >
             {invoices?.map((rowInvoices: Invoice[], rowIndex: number) => (
-<Row key={rowIndex}>
-{rowInvoices.map((invoice: Invoice, colIndex: number) => (
-<Col key={colIndex}>
-          <Card
-      key={colIndex}
-      className='ds-box-shadow3'
-      style={{
-        width: "24rem",
-        height: "11rem",
-        borderWidth: "1px",
-        borderStyle: "solid",
-        borderColor: "#eaeeeb",
-        margin:'10px',
-      }}
-    >
+              <Row key={rowIndex}>
+                  {rowInvoices.map((invoice: Invoice, colIndex: number) => (
+                <Col key={colIndex}>
+                 <Card
+                  key={colIndex}
+                  className='ds-box-shadow3'
+                  style={{
+                  width: "24rem",
+                  height: "11rem",
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: "#eaeeeb",
+                  margin:'10px',
+                  }}
+                >
       <Card.Body>
         <Container
         className="ds-mb-3 ds-text-size-18 ds-text-primary"
@@ -164,42 +138,16 @@ export default function InvoicesList (){
 </Row>
 ))} 
     {
-       invoices?.length !==0 && (
-        <Pagination  className="ds-mb-10 ds-flex ds-justify-center ds-text-neutral800 fixed-bottom">
-              <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-              <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-              <Pagination.Item><span style = {{color : '#195054'}}>{currentPage}</span></Pagination.Item>
-              <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages } />
-              <Pagination.Last onClick={() => handlePageChange(totalPages)} />
-          </Pagination>
-       )
+      <ComponentPagination
+         currentPage={currentPage}
+         totalPages={totalPages}
+         length={invoicesData?.length || 0}
+         text="Pas de factures" 
+         handlePageChange={handlePageChange}
+         />
     }  
      </div>        
         </div>
-
-        {
-      invoices?.length ===0 && (
-        <div className="ds-m-50">
-              <div className="ds-mt-60 ds-flex ds-center">
-                <Container
-                children = {
-                  <>
-                  <div className='ds-text-size-90 ds-flex ds-justify-center' style = {{color : '#2D5F63'}}>
-                  <LuCircleOff />
-                  </div>
-                  <Text
-                  text='Pas de factures'
-                  type={TextType["type-4"]}
-                  style = {{color : '#2D5F63'}}
-                  className='ds-flex ds-justify-center'
-                  />
-                  </>
-                }
-                />
-                </div>
-              </div>
-      )
-    } 
         </>
     )
 }

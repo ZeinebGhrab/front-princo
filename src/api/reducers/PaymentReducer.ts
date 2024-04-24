@@ -12,7 +12,7 @@ export const payment =createAsyncThunk(
     '/payment',
     async ( {cardPayment,token }: {cardPayment: CardPayment,token : string | undefined | null} , thunkAPI ) => {
     try{
-      const response = await axios.post(`http://localhost:3000/payment`,{
+      const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/payment`,{
         userId: cardPayment.userId,
         offerId: cardPayment.offerId,
       },{

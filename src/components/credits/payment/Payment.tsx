@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { payment } from '../../../api/reducers/PaymentReducer';
 import { Button, SizeButton, TypeButton } from '@piximind/ds-p-23';
 
-export default function Payment({offerId} : {offerId : string}) {
+export default function Payment({offerId} : {offerId : string | undefined}) {
 
     const dispatch = useAppDispatch();
     const dataAuth = useAppSelector(state => state.authentication.data);
@@ -12,6 +12,7 @@ export default function Payment({offerId} : {offerId : string}) {
 
     const handlepayment = async () => {
             try {
+               if (offerId) {
                 const session = await dispatch(payment({
                     cardPayment: {
                         userId: dataAuth?.id,
@@ -28,7 +29,7 @@ export default function Payment({offerId} : {offerId : string}) {
                         console.error('Erreur lors de la redirection vers la page de paiement :', error);
                     }
                 }
-    
+               }
             } catch (error) {
                 console.log(error)
             }

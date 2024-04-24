@@ -20,7 +20,10 @@ import CreditsList from './components/credits/CreditsList'
 import InvoicesList from './components/invoices/InvoicesList'
 import SuccessfulPayment from './components/credits/payment/SuccessfulPayment'
 import FailedPayment from './components/credits/payment/FailedPayment'
-
+import RequiredAuthorization from './routes/RequiredAuthorization'
+import OffersList from './components/offers/OffersList';
+import EditOffer from './components/offers/EditOffer';
+import AddOffer from './components/offers/AddOffer';
 
 function App() {
   return (
@@ -47,6 +50,11 @@ function App() {
             <Route path='/successfulPayment' element={<SuccessfulPayment/>}/>
             <Route path='/failedPayment' element={<FailedPayment/>}/>
             <Route path='/invoices' element={<InvoicesList/>}/>
+            <Route element={<RequiredAuthorization/>}>
+                 <Route path='/offers' element={<OffersList/>}/>
+                 <Route path='/editOffer/:id' element={<EditOffer/>}/>
+                 <Route path='/addOffer' element={<AddOffer/>}/>
+            </Route>
             <Route path='*' element={<PageNotFound/>}/>
           </Route>
         </Routes>

@@ -6,6 +6,7 @@ import { useAppDispatch } from "../../api/hooks";
 import { useState } from "react";
 import { resetPassword } from "../../api/reducers/AuthReducer";
 import { useNavigate } from "react-router-dom";
+import { emptyField } from "../helpers/ErrorMsg";
 
 export default function ResetPassword ({email}: {email?: string | undefined}) {
 
@@ -27,7 +28,7 @@ export default function ResetPassword ({email}: {email?: string | undefined}) {
         || validation.isEmpty(change.confirmPass) 
         )
          { 
-            setErrors({message : 'Veuillez remplir tous les champs'});
+            setErrors({message :  emptyField});
             return;
          }
          if (

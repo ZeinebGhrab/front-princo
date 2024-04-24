@@ -6,7 +6,7 @@ import { Validation } from '@piximind/validation';
 import { ETypesInput, Size, TextType, Type } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import { Button, Checkbox, Container, Input, Text } from '@piximind/ds-p-23';
 import { Type as TypeCheck } from "@piximind/ds-p-23/lib/esn/Interfaces/Atoms/IAtomCheckbox/IAtomCheckbox";
-import Props from '../../../interfaces/Props';
+import Props from '../../../interfaces/props/Props';
 
 
 export default function PasswordModal({ show, handleClose }: Props) {

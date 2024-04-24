@@ -1,28 +1,29 @@
-import { Button, TypeButton, Text, Avatar } from '@piximind/ds-p-23';
+import { Button, TypeButton, Avatar } from '@piximind/ds-p-23';
 import { Size, SizeAvatar } from '@piximind/ds-p-23/lib/esn/Interfaces';
 import { useState } from 'react';
 import { BsFillCreditCard2BackFill } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { LiaFileInvoiceDollarSolid } from 'react-icons/lia';
+import { MdOutlineLocalOffer } from "react-icons/md";
 import { TbLogout } from 'react-icons/tb';
 import { Link, useNavigate } from 'react-router-dom';
 import userLogo from '../../assets/user.png';
-import { Dropdown,  NavDropdown } from 'react-bootstrap';
-import { useAppDispatch } from '../../api/hooks';
-import { logOut } from '../../api/reducers/AuthReducer';
+import { Dropdown,  NavDropdown, Navbar } from 'react-bootstrap';
+import { useAppDispatch, useAppSelector } from '../../api/hooks';
+import { logout } from '../../api/reducers/AuthReducer';
 
-
-export default function Navbar() {
-
+export default function NavApp() {
 
    const dispatch = useAppDispatch();
    const [showDropdown, setShowDropdown] = useState(false);
    const navigate = useNavigate();
+   const roles = useAppSelector(state => state.authentication.data?.roles);
+   const isAdmin = roles?.includes('admin');
 
   return (
     <>
       <div className="ds-flex ds-px-12 ds-hp-65 ds-align-center ds-mt-10  ds-justify-between ds-w-100 ds-box-shadow3">
-        <b><Text text="Princo" className="ds-ml-20 ds-text-primary ds-text-size-33" /></b>
+        <Navbar.Brand as={Link} to="/"className="ds-ml-20 ds-text-primary ds-text-size-33"> <b>Princo</b></Navbar.Brand>
         <div className="ds-flex ds-align-center">
           <Button text="Acheter Crédit"
            type={TypeButton.primary} 
@@ -50,8 +51,15 @@ export default function Navbar() {
               <Dropdown.Item eventKey="3" as={Link}  to='/invoices'>
                 <LiaFileInvoiceDollarSolid className="ds-mr-3" /> Mes factures
                 </Dropdown.Item>
+                {
+                  isAdmin && (
+                    <Dropdown.Item eventKey="4" as={Link}  to='/offers'>
+                       <MdOutlineLocalOffer className="ds-mr-3" /> Mes offres
+                    </Dropdown.Item>
+                  )
+                }
               <Dropdown.Divider />
-              <Dropdown.Item eventKey="4" as={Link}  to='login' onClick={()=>dispatch(logOut())}>
+              <Dropdown.Item eventKey={isAdmin ? "5" : "4"} as={Link}  to='/login' onClick={()=>dispatch(logout())}>
                 <TbLogout className="ds-mr-3" /> Déconnexion
                  </Dropdown.Item>
             </NavDropdown>  
